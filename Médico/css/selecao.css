@@ -1,0 +1,64 @@
+body, html {
+    height: 100%;
+    margin: 0;
+    font-family: Montserrat;
+    background-color: #2CABAA;
+    color: #FFF;
+    display: flex;
+    align-items: flex-start; /* Alinhando o conteúdo ao topo */
+    justify-content: center;
+}
+
+.container {
+    text-align: center;
+    margin-top: 90px; /* Ajustando a margem superior do contêiner */
+}
+
+h1 {
+    font-size: 45px;
+    font-weight: 600;
+    line-height: normal;
+    margin: 0 0 20px; /* Removendo a margem superior */
+}
+
+p {
+    font-size: 32px;
+    font-weight: 500;
+    line-height: normal;
+    margin-bottom: 20px;
+}
+
+input[type="radio"] {
+    margin: 0 10px 20px 10px;
+    accent-color: #3498db;
+}
+
+label {
+    cursor: pointer;
+}
+
+.or {
+    font-size: 24px; /* Adiciona um estilo apropriado para o 'ou' */
+}
+
+button {
+    width: 237px;
+    height: 60px;
+    flex-shrink: 0;
+    border-radius: 12px;
+    background: #FFF;
+    color: #2CABAA;
+    text-align: center;
+    font-family: Montserrat;
+    font-size: 24px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+    border: none;
+    cursor: pointer;
+    margin-top: 20px;
+}
+
+button:hover {
+    background-color: #b0ecde;
+}
