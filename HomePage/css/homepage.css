@@ -1,0 +1,322 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    background-color: #EBEAEA;
+    color: #333;
+    margin: 0;
+    padding: 0;
+}
+
+/* Cabeçalho */
+header {
+    position: absolute; /* Posiciona o header sobre a imagem */
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 10; /* Garante que o header fique sobre a imagem */
+    padding: 20px 0;
+}
+
+header .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 10px;
+}
+
+header .logo img {
+    width: 200px;
+}
+
+header nav ul {
+    display: flex;
+    list-style: none;
+}
+
+header nav ul li {
+    margin-right: 20px;
+}
+
+header nav ul li a {
+    color: white;
+    font-size: 16px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: color 0.3s;
+}
+
+header nav ul li a:hover {
+    color: #00c0a5;
+}
+
+header .btn {
+    padding: 10px 20px;
+    background-color: #00c0a5;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: bold;
+    transition: background-color 0.3s;
+}
+
+header .btn:hover {
+    background-color: #007f66;
+}
+
+/* Seção da imagem */
+.image-section {
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+    position: relative;
+}
+
+.image-section img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+/* Seção de informações (ícones) */
+.info-section {
+    background-color: #2CABAA;
+    padding: 40px 20px;
+    text-align: center;
+}
+
+.info-section h2 {
+    color: white;
+    font-size: 2.0em;
+    margin-bottom: 30px;
+}
+
+.info-boxes {
+    display: flex;
+    justify-content: center;
+    gap: 40px; /* Ajuste o espaçamento entre os ícones */
+}
+
+.info-box {
+    background-color: white;
+    padding: 40px;
+    border-radius: 10px;
+    width: 250px;
+    height: 250px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: transform 0.3s ease-in-out;
+}
+
+.info-box:hover {
+    transform: scale(1.1); /* Efeito de hover */
+}
+
+.info-box img {
+    width: 100px;
+    height: 100px;
+}
+
+/* Seção "Por que nós cuidamos de você" */
+.about-section {
+    background-color: #2CABAA;
+    padding: 50px 20px;
+    text-align: center;
+    color: white;
+}
+
+.about-section h2 {
+    font-size: 2.5em;
+    margin-bottom: 30px;
+}
+
+.about-section p {
+    max-width: 700px;
+    margin: 0 auto;
+    font-size: 1.2em;
+}
+
+/* Seção "Como funciona" */
+.how-it-works {
+    background-color: #ffffff;
+    padding: 50px 20px;
+    text-align: center;
+}
+
+.how-it-works h2 {
+    font-size: 2.5em;
+    margin-bottom: 30px;
+    color: #2CABAA;
+}
+
+.roles {
+    display: flex;
+    justify-content: space-between;
+    gap: 40px;
+    flex-wrap: wrap;
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.role {
+    background-color: #ffffff;
+    padding: 30px;
+    border: 2px solid #2CABAA;
+    border-radius: 10px;
+    width: 100%;
+    max-width: 400px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.role h3 {
+    font-size: 1.8em;
+    color: #2CABAA;
+    margin-bottom: 20px;
+}
+
+.role p {
+    font-size: 1.1em;
+    color: #555;
+}
+
+/* Missão, Visão e Valores */
+.mission-section {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #EBEAEA;
+    padding: 50px 20px;
+}
+
+.mission-image {
+    display: flex;
+    justify-content: center;
+    width: 40%;
+}
+
+.mission-image img {
+    width: 65%;
+    height: 75%;
+    display: block;
+}
+
+.mission-text {
+    width: 50%;
+    padding-left: 40px;
+}
+
+.mission-text h3 {
+    font-size: 2em;
+    color: #2CABAA;
+    margin-bottom: 20px;
+}
+
+.mission-text p {
+    font-size: 1.2em;
+    color: #333;
+    line-height: 1.6;
+    margin-bottom: 20px;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+    .info-boxes {
+        flex-direction: column;
+    }
+
+    .mission-section {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .mission-image, .mission-text {
+        width: 100%;
+        padding-left: 0;
+    }
+
+    .roles {
+        flex-direction: column;
+    }
+
+    .role {
+        width: 100%;
+        margin-bottom: 20px;
+    }
+}
+
+/* Footer */
+footer {
+    background-color: #161F48;
+    color: white;
+    padding: 40px 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.footer-container {
+    width: 80%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.footer-left img {
+    width: 150px;
+}
+
+.footer-center {
+    text-align: center;
+}
+
+.footer-center .social-icons {
+    margin-bottom: 10px;
+}
+
+.footer-center .social-icons a img {
+    width: 30px;
+    margin: 0 10px;
+    vertical-align: middle;
+}
+
+.footer-center p {
+    font-size: 14px;
+    margin-top: 10px;
+}
+
+.footer-right {
+    width: 30%;
+    text-align: right;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.footer-right p {
+    margin: 0;
+}
+
+@media (max-width: 768px) {
+    .footer-container {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .footer-left, .footer-center, .footer-right {
+        width: 100%;
+        margin-bottom: 20px;
+    }
+
+    .footer-right p {
+        text-align: center;
+    }
+}
