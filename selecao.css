@@ -5,40 +5,50 @@ body, html {
     background-color: #2CABAA;
     color: #FFF;
     display: flex;
-    align-items: flex-start; /* Alinhando o conteúdo ao topo */
+    align-items: flex-start;
     justify-content: center;
 }
 
 .container {
     text-align: center;
-    margin-top: 90px; /* Ajustando a margem superior do contêiner */
+    margin-top: 90px;
 }
 
 h1 {
     font-size: 45px;
     font-weight: 600;
     line-height: normal;
-    margin: 0 0 20px; /* Removendo a margem superior */
+    margin: 0 0 190px;
 }
 
 p {
     font-size: 32px;
     font-weight: 500;
     line-height: normal;
-    margin-bottom: 20px;
+    margin-bottom: 40px;
 }
 
 input[type="radio"] {
     margin: 0 10px 20px 10px;
-    accent-color: #3498db;
+    accent-color: #CAD5DE;
+    -webkit-transform: scale(2); /* Aumenta ainda mais o tamanho dos botões */
+    transform: scale(2); /* Aumenta ainda mais o tamanho dos botões */
+    cursor: pointer;
 }
 
 label {
     cursor: pointer;
+    font-size: 28px; /* Tamanho da fonte mantido */
+    font-weight: 500;
+    color: #FFF; /* Cor do texto mantida */
+    margin: 0 15px; /* Espaçamento lateral mantido */
+    transition: transform 0.3s; /* Efeito de transição suave */
 }
 
 .or {
-    font-size: 24px; /* Adiciona um estilo apropriado para o 'ou' */
+    font-size: 24px;
+    display: inline-block;
+    margin: 0 10px;
 }
 
 button {
@@ -56,9 +66,9 @@ button {
     line-height: normal;
     border: none;
     cursor: pointer;
-    margin-top: 20px;
+    margin-top: 150px;
 }
 
 button:hover {
-    background-color: #b0ecde;
+    background-color: #CAD5DE;
 }
