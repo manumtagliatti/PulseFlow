@@ -14,13 +14,9 @@ body {
 }
 
 h2 {
-    color: #2CABAA;
+    color: #2A9D8F;
+    margin-bottom: 20px;
     text-align: center;
-    font-family: Montserrat;
-    font-size: 45px;
-    font-style: normal;
-    font-weight: 600;
-    line-height: normal;
 }
 
 form {
@@ -36,7 +32,7 @@ form {
 
 input {
     width: 508px;
-    height: 73px;
+    height: 60px;
     flex-shrink: 0;
     border-radius: 12px;
     background: #E1E0E0;
