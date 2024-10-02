@@ -1,3 +1,4 @@
+/* Estilos globais */
 * {
     margin: 0;
     padding: 0;
@@ -7,76 +8,120 @@
 body {
     font-family: Arial, sans-serif;
     background-color: #f0f0f0;
+    padding-top: 100px; /* Mantém o espaço no topo */
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding-top: 50px;
 }
 
-h2 {
-    color: #2A9D8F;
-    margin-bottom: 20px;
+header h2 {
+    color: #2CABAA;
     text-align: center;
+    font-family: Montserrat;
+    font-size: 45px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+    margin-top: -10px; /* Ajusta a posição do título para cima */
+}
+
+main {
+    width: 100%; /* Para ocupar toda a largura */
+    max-width: 1040px; /* Limite máximo para grandes telas */
+    padding: 0 20px; /* Espaçamento lateral */
 }
 
 form {
+    width: 100%;
+}
+
+.form-sections {
     display: flex;
-    flex-wrap: wrap;
     justify-content: space-between;
-    max-width: 1040px;
+    width: 100%;
+    margin-top: 40px; /* Adiciona espaço acima das seções */
 }
 
 .personal-info, .professional-info {
-    width: 48%;
+    width: 48%; /* Ajuste para manter as colunas */
+}
+
+h3 {
+    color: #2CABAA;
+    text-align: center;
+    font-family: Montserrat, sans-serif;
+    font-size: 24px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    margin-bottom: 15px; /* Espaço abaixo do título */
 }
 
 input {
-    width: 508px;
-    height: 60px;
-    flex-shrink: 0;
+    width: 100%; /* Mantém a largura total do campo dentro da coluna */
+    height: 50px;
     border-radius: 12px;
     background: #E1E0E0;
     border: none;
     padding: 0 20px;
-    color: #B3B3B3;
-    font-family: 'Montserrat', sans-serif;
-    font-size: 24px;
-    font-style: normal;
-    font-weight: 500;
-    line-height: normal;
-    margin-bottom: 20px;
+    color: #333; /* Cor do texto dentro do input */
+    font-family: 'Montserrat', sans-serif; /* Fonte do texto */
+    font-size: 24px; /* Tamanho do texto dentro do input */
+    font-weight: 500; /* Peso da fonte dentro do input */
+    line-height: normal; /* Altura da linha do texto dentro do input */
+    margin-bottom: 15px;
     outline: none;
 }
 
 input::placeholder {
-    color: #B3B3B3;
-    font-family: 'Montserrat', sans-serif;
-    font-size: 24px;
-    font-weight: 500;
+    color: #B3B3B3; /* Cor do placeholder */
+    font-family: 'Montserrat', sans-serif; /* Fonte do placeholder */
+    font-size: 16px; /* Tamanho do placeholder */
+    font-weight: 500; /* Peso da fonte do placeholder */
+    line-height: normal; /* Altura da linha do placeholder */
 }
 
+.termos {
+    color: #2CABAA;
+    text-align: center;
+    font-family: Montserrat, sans-serif;
+    font-size: 18px; /* Diminui o tamanho da fonte */
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    margin-top: 10px; /* Ajusta espaço acima do texto */
+}
+
+/* Atualização do botão para as dimensões fornecidas */
 button {
-    background-color: #2A9D8F;
+    width: 237px;
+    height: 60px;
+    flex-shrink: 0;
+    border-radius: 12px;
+    background: #2CABAA;
     color: white;
     border: none;
-    padding: 12px;
-    border-radius: 12px;
-    font-size: 16px;
+    font-size: 14px;
     cursor: pointer;
     transition: background-color 0.3s ease;
-    width: 100%;
-    max-width: 200px;
-    margin-top: 20px;
+    display: block;
+    margin: 20px auto 0 auto; /* Centraliza o botão */
 }
 
 button:hover {
     background-color: #21867A;
 }
 
-p {
-    font-size: 12px;
-    color: #666;
-    text-align: center;
-    width: 100%;
-    margin-top: 10px;
+/* Estilos para o logo */
+/* Estilos para o logo */
+.logo-container {
+    position: fixed;
+    bottom: 10px; /* Ajuste a distância do logo em relação à parte inferior */
+    right: 10px;  /* Ajuste a distância do logo em relação à parte direita */
 }
+
+.logo-container img {
+    width: 160px; /* Ajuste o tamanho do logo conforme necessário */
+    height: auto;
+}
+

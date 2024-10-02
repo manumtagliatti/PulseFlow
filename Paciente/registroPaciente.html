@@ -5,28 +5,49 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pulse Flow - Criar Conta</title>
     <link rel="stylesheet" href="css/registroPaciente.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet"> <!-- Carregando a fonte Montserrat -->
 </head>
 <body>
-    <h2>Preencha as Informações</h2>
-    <form>
-        <div class="personal-info">
-            <h3>Informações Pessoais</h3>
-            <input type="text" placeholder="Nome Completo" required>
-            <input type="text" placeholder="CPF" required>
-            <input type="tel" placeholder="Telefone Pessoal" required>
-            <input type="email" placeholder="Email" required>
-            <input type="password" placeholder="Senha" required>
+    <header>
+        <h2>PREENCHA AS INFORMAÇÕES</h2>
+    </header>
+    <main>
+        <form>
+            <div class="form-sections">
+                <div class="personal-info">
+                    <h3>Informações Pessoais</h3>
+                    <input type="text" placeholder="NOME COMPLETO" required>
+                    <input type="text" placeholder="CPF" required>
+                    <input type="tel" placeholder="TELEFONE PESSOAL" required>
+                    <input type="email" placeholder="EMAIL" required>
+                    <input type="password" placeholder="SENHA" required>
+                </div>
+
+                <div class="professional-info">
+                    <h3>Informações Profissionais</h3>
+                    <input type="text" placeholder="CRM" required>
+                    <input type="text" placeholder="ÁREA DE ATUAÇÃO" required>
+                    <input type="text" placeholder="ENDEREÇO DO CONSULTÓRIO 1" required>
+                    <input type="text" placeholder="ENDEREÇO DO CONSULTÓRIO 2">
+                    <input type="tel" placeholder="TELEFONE CONSULTÓRIO" required>
+                </div>
+            </div>
+
+            <!-- Atualizei a formatação da mensagem dos termos -->
+            <p class="termos">
+                Criando a conta você automaticamente aceita os 
+                <br>
+                termos de segurança de dados e utilização de informações
+            </p>
+
+            <!-- Atualizei o botão para as dimensões pedidas -->
+            <button type="submit">Criar Conta</button>
+        </form>
+        
+        <!-- Adicionando o logo na mesma posição que o logo Pulse Flow na imagem fornecida -->
+        <div class="logo-container">
+            <img src="imagens/LogoRegistro.png" alt="Logo Pulse Flow">
         </div>
-        <div class="professional-info">
-            <h3>Informações Profissionais</h3>
-            <input type="text" placeholder="CRM" required>
-            <input type="text" placeholder="Área de Atuação" required>
-            <input type="text" placeholder="Endereço do Consultório 1" required>
-            <input type="text" placeholder="Endereço do Consultório 2">
-            <input type="tel" placeholder="Telefone Consultório" required>
-        </div>
-        <p>Criando a conta você automaticamente aceita os termos de segurança de dados e utilização de informações</p>
-        <button type="submit">Criar Conta</button>
-    </form>
+    </main>
 </body>
 </html>

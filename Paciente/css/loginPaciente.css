@@ -114,6 +114,7 @@ body, html {
 }
 
 .login-panel input {
+    color: #B3B3B3; /* Cor do placeholder */
     width: 100%;
     height: 100%;
     border: none;
