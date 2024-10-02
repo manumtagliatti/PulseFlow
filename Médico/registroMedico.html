@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pulse Flow - Criar Conta</title>
-    <link rel="stylesheet" href="css/registroPaciente.css">
+    <link rel="stylesheet" href="css/registroMedico.css">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet">
 </head>
 <body>
@@ -13,18 +13,23 @@
     </header>
     <main>
         <form>
-            <h3 class="info-title">Informações Pessoais</h3>
             <div class="form-sections">
                 <div class="personal-info">
+                    <h3>Informações Pessoais</h3>
                     <input type="text" placeholder="NOME COMPLETO" required>
-                    <input type="text" placeholder="DATA DE NASCIMENTO" required>
                     <input type="text" placeholder="CPF" required>
-                </div>
-
-                <div class="info">
                     <input type="tel" placeholder="TELEFONE PESSOAL" required>
                     <input type="email" placeholder="EMAIL" required>
                     <input type="password" placeholder="SENHA" required>
+                </div>
+
+                <div class="professional-info">
+                    <h3>Informações Profissionais</h3>
+                    <input type="text" placeholder="CRM" required>
+                    <input type="text" placeholder="ÁREA DE ATUAÇÃO" required>
+                    <input type="text" placeholder="ENDEREÇO DO CONSULTÓRIO 1" required>
+                    <input type="text" placeholder="ENDEREÇO DO CONSULTÓRIO 2">
+                    <input type="tel" placeholder="TELEFONE CONSULTÓRIO" required>
                 </div>
             </div>
 
