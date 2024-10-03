@@ -121,6 +121,12 @@ body, html {
     background: transparent;
     font-size: 16px;
     padding: 10px;
+    outline: none; /* Remove o quadrado ao redor do input */
+}
+
+.input-container input:focus {
+    background: transparent; /* Mantém o fundo transparente ao focar */
+    color: #B3B3B3; /* Cor do texto */
 }
 
 .login-panel button {
@@ -156,4 +162,17 @@ body, html {
 
 .login-panel .click-here::after {
     display: none;
+}
+
+.alert-message {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+    border-radius: 8px;
+    padding: 10px;
+    margin-top: 10px;
+    width: 508px; /* Deve corresponder à largura do input */
+    display: none; /* Inicialmente escondido */
+    text-align: center;
+    font-size: 16px;
 }

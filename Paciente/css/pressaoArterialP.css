@@ -1,0 +1,94 @@
+/* Estilos para o header */
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #4ec6b3; /* Cor de fundo do header */
+    padding: 15px;
+    font-family: Arial, sans-serif;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+}
+
+.logo img {
+    height: 40px;
+    margin-right: 10px;
+}
+
+.logo span {
+    font-size: 24px;
+    font-weight: bold;
+    color: white;
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+    color: white;
+    font-size: 18px;
+}
+
+.user-info span {
+    margin-right: 10px;
+}
+
+.dropdown-button {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 18px;
+    cursor: pointer;
+}
+
+/* Estilos para o corpo da página */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+}
+
+.content {
+    padding: 20px;
+    text-align: center;
+}
+
+.instructions {
+    text-align: left;
+    margin-bottom: 20px;
+}
+
+.instructions ol {
+    padding-left: 20px;
+}
+
+.chart {
+    margin: 20px auto;
+    width: 80%;
+}
+
+.measurement-form {
+    margin-top: 30px;
+}
+
+.measurement-form input {
+    padding: 10px;
+    font-size: 16px;
+    margin-right: 10px;
+}
+
+.measurement-form button {
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #4ec6b3;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+.measurement-form button:hover {
+    background-color: #3ca493;
+}
