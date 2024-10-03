@@ -1,0 +1,201 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Arial', sans-serif;
+}
+
+html, body {
+    height: 100%;
+    overflow: hidden; /* Esconde a rolagem */
+}
+
+body {
+    background-color: #EBEAEA;
+}
+
+.header {
+    background-color: #2CABAA;
+    display: flex;
+    justify-content: space-between;
+    padding: 20px;
+    align-items: center;
+    color: white;
+}
+
+.logo img {
+    width: 150px;
+    height: auto;
+}
+
+.user-info {
+    position: relative;
+}
+
+.user-info p {
+    font-size: 18px;
+    margin-right: 10px;
+}
+
+.menu-icon {
+    cursor: pointer;
+    margin-left: 10px;
+}
+
+.menu-dropdown {
+    display: none; /* Menu inicialmente escondido */
+    position: absolute;
+    top: 50px;
+    right: 10px;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+}
+
+.menu-dropdown ul {
+    list-style-type: none;
+    padding: 10px;
+    margin: 0;
+}
+
+.menu-dropdown ul li {
+    display: flex;
+    align-items: center; /* Alinha os ícones com o texto verticalmente */
+    padding: 10px;
+    cursor: pointer;
+    font-size: 16px;
+    color: #333;
+}
+
+.menu-dropdown ul li span {
+    margin-right: 10px; /* Adiciona um espaço entre o ícone e o texto */
+}
+
+.menu-dropdown ul li:hover {
+    background-color: #f5f5f5;
+}
+
+.profile-icon,
+.logout-icon {
+    width: 30px;
+    height: 30px;
+    display: inline-block;
+}
+
+.meu-perfil {
+    color: #161F48;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+
+.sair {
+    color: #161F48;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+
+.container {
+    height: 100%;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center; /* Centraliza todo o conteúdo */
+    padding: 0 20px; /* Garante que não haja nenhum deslocamento nas margens */
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 40px 80px; /* Espaçamento entre colunas e linhas */
+    justify-items: center;
+    max-width: 1100px; /* Aumentei o max-width para ter mais controle */
+    width: 100%; /* Garante que a grid ocupe 100% do espaço disponível */
+    margin: 0 auto; /* Centraliza a grid horizontalmente */
+}
+
+h2 {
+    color: #2CABAA;
+    text-align: center;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 40px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+    margin-bottom: 40px;
+    margin-top: 15px; /* Adicionei essa linha para aumentar o espaço acima do h2 */
+}
+
+.card {
+    background-color: #e0e7e9;
+    border-radius: 10px;
+    width: 205px;
+    height: 205.679px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    transition: transform 0.3s ease;
+}
+
+.card img {
+    width: 170.182px;
+    height: 128.409px;
+    flex-shrink: 0; /* Impede que a imagem seja redimensionada */
+}
+
+.card p {
+    margin-top: 10px;
+    font-size: 20px; /* Alterado de 16px para 20px */
+    color: #FFF; /* Alterado de #333 para #FFF */
+    text-align: center; /* Adicionado para centralizar o texto */
+    font-family: 'Montserrat', sans-serif; /* Alterado para Montserrat */
+    font-style: normal; /* Garantido que o estilo é normal */
+    font-weight: 400; /* Alterado para 400 */
+    line-height: normal; /* Mantido como normal */
+}
+
+.card:hover {
+    transform: scale(1.05);
+}
+
+/* Cores específicas para cada card */
+.card:nth-child(1) {
+    background-color: #161F48;;
+}
+
+.card:nth-child(2) {
+    background-color: #417571;
+}
+
+.card:nth-child(3) {
+    background-color: #D1DEBA;
+}
+
+.card:nth-child(4) {
+    background-color: #CAD5DE;
+}
+
+.card:nth-child(5) {
+    background-color: #D1DEBA;
+}
+
+.card:nth-child(6) {
+    background-color: #CAD5DE;
+}
+
+.card:nth-child(7) {
+    background-color: #417571;
+}
+
+.card:nth-child(8) {
+    background-color:  #161F48;;
+}
