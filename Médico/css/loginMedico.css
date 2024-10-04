@@ -95,7 +95,7 @@ body, html {
     align-items: center;
     width: 508px;
     height: 60px;
-    background: #E1E0E0;
+    background: #E1E0E0;;
     border-radius: 12px;
     padding: 0 10px;
     margin: 10px 0;
@@ -114,12 +114,23 @@ body, html {
 }
 
 .login-panel input {
+    font-family: Montserrat;
+    color: #B3B3B3; /* Cor do placeholder */
     width: 100%;
     height: 100%;
     border: none;
     background: transparent;
-    font-size: 16px;
+    font-size: 20px;
     padding: 10px;
+    outline: none; /* Remove o quadrado ao redor do input */
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+}
+
+.input-container input:focus {
+    background: transparent; /* Mantém o fundo transparente ao focar */
+    color: #B3B3B3; /* Cor do texto */
 }
 
 .login-panel button {
@@ -155,4 +166,21 @@ body, html {
 
 .login-panel .click-here::after {
     display: none;
+}
+
+.alert-message {
+    background-color: #FFFFFF; /* Fundo branco */
+    color: #2CABAA; /* Cor do texto */
+    border-radius: 8px;
+    padding: 10px;
+    width: 508px;
+    display: none; /* Inicialmente escondido */
+    text-align: center;
+    font-size: 16px;
+    position: absolute; /* Define posição absoluta */
+    top: 55%; /* Ajusta a posição logo abaixo do input de senha */
+}
+
+.form-container {
+    position: relative; /* Necessário para o position absoluto do alerta */
 }
