@@ -5,6 +5,11 @@
     font-family: 'Arial', sans-serif;
 }
 
+html, body {
+    width: 100%;
+    overflow-x: hidden; /* Remove o scroll horizontal */
+}
+
 .header {
     background-color: #2CABAA;
     display: flex;
@@ -34,7 +39,7 @@
 }
 
 .menu-dropdown {
-    display: none; /* Menu inicialmente escondido */
+    display: none;
     position: absolute;
     top: 50px;
     right: 10px;
@@ -82,4 +87,79 @@
     font-family: 'Montserrat', sans-serif;
     font-size: 18px;
     font-weight: 400;
+}
+
+/* Estilo do título */
+.title {
+    color: #2CABAA;
+    text-align: center;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 45px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+    margin-top: 40px; /* Distância do header */
+}
+
+/* Layout da área de conteúdo */
+.container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 40px;
+    padding-bottom: 40px; /* Margem inferior adicionada */
+    max-width: 100%; /* Garante que o conteúdo não exceda a largura da tela */
+}
+
+.left-content {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start; /* Garante que a imagem fique à esquerda */
+    margin-right: 20px; /* Espaço entre a imagem e o gráfico */
+}
+
+.dicas-imagem {
+    width: 747px; /* Tamanho da imagem especificado */
+    height: 281px;
+    flex-shrink: 0;
+    margin-top: 20px; /* Move a imagem mais para baixo */
+}
+
+/* Estilo do input */
+.input-container {
+    display: flex;
+    justify-content: center;
+    gap: 20px; /* Espaçamento entre os inputs */
+    margin-top: 80px; /* Aumenta o espaçamento para empurrar os inputs para baixo */
+}
+
+#input-pressao-sistolica,
+#input-pressao-diastolica {
+    width: 300px;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    text-align: center;
+}
+
+/* Estilo do gráfico */
+.right-content img {
+    width: 450px;
+    height: auto;
+}
+
+/* Margem inferior para ajustar a distância do final da tela */
+body {
+    padding-bottom: 50px;
+}
+
+.right-content {
+    margin-right: 40px; /* Adiciona um espaço à direita do gráfico */
+    max-width: 100%;
+}
+
+#grafico-pressao {
+    width: 600px;
+    height: 400px;
 }
