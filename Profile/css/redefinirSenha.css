@@ -1,7 +1,7 @@
 body, html {
     margin: 0;
     padding: 0;
-    font-family: 'Montserrat', sans-serif;
+    font-family: 'montserrat', sans-serif;
     height: 100vh;  /* Altura total da viewport */
     overflow: hidden; /* Esconde qualquer conteúdo que ultrapasse a altura da viewport */
 }
@@ -28,8 +28,8 @@ body, html {
     font-size: 42px;
     font-weight: normal;
     padding: 0 20px;
-    line-height: 1.5;
-    margin-bottom: 20px;
+    line-height: 1;
+    margin-bottom: 100px;
 }
 
 .description {
@@ -40,25 +40,12 @@ body, html {
     line-height: 1.6;
 }
 
-.register-btn {
-    width: 282px;
-    height: 60px;
-    border-radius: 12px;
-    background: #EBEAEA;
-    color: #000;
-    font-size: 24px;
-    font-weight: 500;
-    margin-top: 30px;
-    border: none;
-    cursor: pointer;
-}
-
 .logo {
     width: 250px;
     margin-top: 50px;
 }
 
-.login-panel {
+.redefinir-panel {
     background: #FFF;
     width: 65%;
     display: flex;
@@ -69,21 +56,21 @@ body, html {
     padding-top: 12vh;
 }
 
-.login-panel h2 {
+.redefinir-panel h2 {
     color: #2CABAA;
     font-size: 45px;
     font-weight: 600;
     margin-bottom: 5px;
 }
 
-.login-panel p {
+.redefinir-panel p {
     font-size: 18px;
     color: #2CABAA;
     margin-bottom: 20px;
     margin-top: 5px;
 }
 
-.login-panel form {
+.redefinir-panel form {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -113,7 +100,7 @@ body, html {
     margin-right: 10px;
 }
 
-.login-panel input {
+.redefinir-panel input {
     font-family: Montserrat;
     color: #B3B3B3; /* Cor do placeholder */
     width: 100%;
@@ -133,7 +120,7 @@ body, html {
     color: #B3B3B3; /* Cor do texto */
 }
 
-.login-panel button {
+.redefinir-panel button {
     width: 237px;
     height: 60px;
     border-radius: 12px;
@@ -150,7 +137,7 @@ body, html {
     text-align: center;
 }
 
-.login-panel a {
+.redefinir-panel a {
     color: #2CABAA;
     text-decoration: none;
     margin-top: 60px;
@@ -159,12 +146,12 @@ body, html {
     text-align: center;
 }
 
-.login-panel .click-here {
+.redefinir-panel .click-here {
     text-decoration: underline;
     position: relative;
 }
 
-.login-panel .click-here::after {
+.redefinir-panel .click-here::after {
     display: none;
 }
 
