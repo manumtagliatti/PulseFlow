@@ -1,103 +1,132 @@
-* {
+body, html {
     margin: 0;
     padding: 0;
-    box-sizing: border-box;
-    font-family: 'Arial', sans-serif;
-}
-
-body {
-    background-color: #f0f0f0;
+    font-family: 'Montserrat', sans-serif;
+    height: 100vh;
+    overflow: hidden;
+    background-color: #f9f9f9;
 }
 
 .container {
     display: flex;
-    justify-content: space-between;
-    padding: 50px;
-    background-color: #ffffff;
-    max-width: 1200px;
-    margin: 50px auto;  /* Margem adicional para centralizar melhor */
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    height: 100vh;
 }
 
-.profile-section {
-    background-color: #f9f9f9;
-    padding: 40px;  /* Aumentado para dar mais espaço ao redor dos inputs */
-    width: 50%;
-    text-align: center;
-    border-radius: 10px; /* Borda arredondada para suavizar o design */
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Adicionado para realçar o card */
-}
-
-.profile-photo img {
-    width: 120px;
-    height: 120px;
-    border-radius: 50%;
-    border: 2px solid #ccc;
-    margin-bottom: 20px;  /* Espaçamento entre a imagem e o nome */
-}
-
-.profile-section h2 {
-    color: #2c3e50;
-    margin: 20px 0 5px;
-}
-
-.profile-section p {
-    color: #7f8c8d;
-    margin-bottom: 30px;
-}
-
-.profile-form input {
-    display: block;
-    width: 80%;  /* Diminui um pouco a largura para equilibrar o design */
-    padding: 15px;
-    margin: 10px auto;  /* Alinhado centralmente e espaçado */
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    font-size: 16px;
-    background-color: #f1f1f1;
-}
-
-.profile-form button {
-    padding: 15px;
-    width: 80%;  /* Correspondente aos inputs */
-    background-color: #1abc9c;
-    color: white;
-    font-size: 16px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    margin-top: 20px;  /* Espaçamento adicional acima do botão */
-}
-
-.profile-form button:hover {
-    background-color: #16a085;
-}
-
-.info-section {
-    background-color: #1abc9c;
-    color: white;
-    padding: 60px; /* Aumentado para balancear com a seção de perfil */
-    text-align: center;
-    width: 45%;
-    border-radius: 10px; /* Arredondamento para suavizar o design */
+.side-panel {
+    background: #2CABAA;
+    color: #FFF;
+    width: 40%;
     display: flex;
     flex-direction: column;
+    align-items: center;
     justify-content: center;
+    padding: 20px;
 }
 
-.info-section h2 {
-    font-size: 22px;
-    margin-bottom: 20px;
+.title {
+    text-align: center;
+    font-size: 30px;
+    line-height: 1.0;
+    padding: 0 40px;
+    margin-bottom: 110px;
 }
 
-.info-section p {
-    font-size: 16px;
-    margin-bottom: 30px;
-    line-height: 1.5; /* Melhor espaçamento entre linhas para leitura */
+.description {
+    text-align: center;
+    font-size: 20px;
+    margin: 20px;
+    padding: 0 40px;
+    line-height: 1.4;
 }
 
-.logo img {
+.logo {
+    width: 250px;
+    margin-top: 110px;
+}
+
+.profile-panel {
+    background: #FFF;
+    width: 65%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 130px;
+}
+
+.profile-info {
+    display: flex;
+    align-items: center;
+    margin-bottom: 30px;  /* Espaçamento entre a foto e o formulário */
+}
+
+.photo-container {
+    background-color: #E5E5E5;
+    border-radius: 50%;
     width: 100px;
-    height: auto;
-    margin-top: 20px;
+    height: 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 20px; /* Espaçamento entre a foto e o nome */
+}
+
+.photo {
+    width: 50px;
+    height: 50px;
+}
+
+.name-info h2 {
+    color: #2C3E50;
+    font-size: 22px;
+    font-weight: 500;
+}
+
+.name-info p {
+    font-size: 14px;
+    color: #7F8C8D;
+}
+
+.profile-panel form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+
+.input-container {
+    display: flex;
+    align-items: center;
+    width: 508px;
+    height: 60px;
+    background: #E1E0E0;
+    border-radius: 12px;
+    padding: 0 10px;
+    margin: 10px 0;
+}
+
+.input-container input {
+    font-family: Montserrat;
+    color: #B3B3B3; /* Placeholder color */
+    width: 100%;
+    height: 100%;
+    border: none;
+    background: transparent;
+    font-size: 18px;
+    padding: 10px;
+    outline: none;
+}
+
+.profile-panel button {
+    width: 250px;
+    height: 50px;
+    border-radius: 10px;
+    background: #2CABAA;
+    color: #FFF;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 18px;
+    font-weight: 500;
+    border: none;
+    cursor: pointer;
+    margin-top: 50px;
 }
