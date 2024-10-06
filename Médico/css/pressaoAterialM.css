@@ -1,0 +1,85 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Arial', sans-serif;
+}
+
+.header {
+    background-color: #2CABAA;
+    display: flex;
+    justify-content: space-between;
+    padding: 20px;
+    align-items: center;
+    color: white;
+}
+
+.logo img {
+    width: 150px;
+    height: auto;
+}
+
+.user-info {
+    position: relative;
+}
+
+.user-info p {
+    font-size: 18px;
+    margin-right: 10px;
+}
+
+.menu-icon {
+    cursor: pointer;
+    margin-left: 10px;
+}
+
+.menu-dropdown {
+    display: none; /* Menu inicialmente escondido */
+    position: absolute;
+    top: 50px;
+    right: 10px;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    width: 184px;
+}
+
+.menu-dropdown ul {
+    list-style-type: none;
+    padding: 10px;
+    margin: 0;
+}
+
+.menu-dropdown ul li {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    cursor: pointer;
+    font-size: 16px;
+    color: #333;
+}
+
+.menu-dropdown ul li span {
+    margin-right: 10px;
+}
+
+.menu-dropdown ul li:hover {
+    background-color: #f5f5f5;
+}
+
+.profile-icon,
+.logout-icon {
+    width: 30px;
+    height: 30px;
+    display: inline-block;
+}
+
+.meu-perfil,
+.sair {
+    color: #161F48;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 18px;
+    font-weight: 400;
+}

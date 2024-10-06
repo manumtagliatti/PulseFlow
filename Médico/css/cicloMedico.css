@@ -5,11 +5,6 @@
     font-family: 'Arial', sans-serif;
 }
 
-html, body {
-    width: 100%;
-    overflow-x: hidden; /* Remove o scroll horizontal */
-}
-
 .header {
     background-color: #2CABAA;
     display: flex;
@@ -17,6 +12,7 @@ html, body {
     padding: 20px;
     align-items: center;
     color: white;
+    margin-bottom: 40px;
 }
 
 .logo img {
@@ -89,8 +85,7 @@ html, body {
     font-weight: 400;
 }
 
-/* Estilo do título */
-.title {
+.custom-text {
     color: #2CABAA;
     text-align: center;
     font-family: 'Montserrat', sans-serif;
@@ -98,68 +93,68 @@ html, body {
     font-style: normal;
     font-weight: 600;
     line-height: normal;
-    margin-top: 40px; /* Distância do header */
+    margin-top: 20px;
 }
 
-/* Layout da área de conteúdo */
-.container {
+.calendar-navigation {
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-end; /* Posiciona o mês no canto direito */
     align-items: center;
-    margin-top: 40px;
-    padding-bottom: 40px; /* Margem inferior adicionada */
-    max-width: 100%; /* Garante que o conteúdo não exceda a largura da tela */
+    margin-bottom: 10px; /* Espaçamento entre o mês e o calendário */
+    margin-top: 10px; /* Espaçamento entre o título e o mês */
+    width: 90%; /* Largura igual à do calendário */
+    margin-left: auto;
+    margin-right: auto;
 }
 
-.left-content {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start; /* Garante que a imagem fique à esquerda */
-    margin-right: 20px; /* Espaço entre a imagem e o gráfico */
+.nav-button {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    margin: 0 5px;
 }
 
-.dicas-imagem {
-    width: 747px; /* Tamanho da imagem especificado */
-    height: 281px;
-    flex-shrink: 0;
-    margin-top: 20px; /* Move a imagem mais para baixo */
+#current-month {
+    font-size: 17px; /* Tamanho da fonte do mês */
+    font-weight: bold;
+    margin: 0 10px;
+    color: #161F48;
 }
 
-/* Estilo do input */
-.input-container {
-    display: flex;
-    justify-content: center;
-    gap: 20px; /* Espaçamento entre os inputs */
-    margin-top: 80px; /* Aumenta o espaçamento para empurrar os inputs para baixo */
+.calendar {
+    width: 90%; /* Largura do calendário */
+    border-collapse: collapse;
+    font-family: 'Montserrat', sans-serif;
+    margin: 0 auto;
 }
 
-#input-pressao-sistolica,
-#input-pressao-diastolica {
-    width: 300px;
-    padding: 10px;
-    font-size: 16px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
+.calendar th, .calendar td {
+    border: 1px solid #ddd;
+    padding: 15px;
     text-align: center;
 }
 
-/* Estilo do gráfico */
-.right-content img {
-    width: 450px;
-    height: auto;
+.calendar th {
+    background-color: #2CABAA;
+    color: white;
+    font-weight: bold;
 }
 
-/* Margem inferior para ajustar a distância do final da tela */
-body {
-    padding-bottom: 50px;
+.calendar td {
+    height: 60px;
+    width: 60px;
+    background-color: white;
+    position: relative;
 }
 
-.right-content {
-    margin-right: 40px; /* Adiciona um espaço à direita do gráfico */
-    max-width: 100%;
+.calendar .day-menstruacao {
+    background-color: #2CABAA;
+    border-radius: 50%;
+    width: 25px;
+    height: 25px;
+    margin: 0 auto;
 }
 
-#grafico-pressao {
-    width: 600px;
-    height: 400px;
+.calendar .today {
+    background-color: #E6E6E6;
 }
