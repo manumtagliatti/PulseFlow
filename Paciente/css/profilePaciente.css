@@ -1,0 +1,103 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Arial', sans-serif;
+}
+
+body {
+    background-color: #f0f0f0;
+}
+
+.container {
+    display: flex;
+    justify-content: space-between;
+    padding: 50px;
+    background-color: #ffffff;
+    max-width: 1200px;
+    margin: 50px auto;  /* Margem adicional para centralizar melhor */
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+}
+
+.profile-section {
+    background-color: #f9f9f9;
+    padding: 40px;  /* Aumentado para dar mais espaço ao redor dos inputs */
+    width: 50%;
+    text-align: center;
+    border-radius: 10px; /* Borda arredondada para suavizar o design */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Adicionado para realçar o card */
+}
+
+.profile-photo img {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    border: 2px solid #ccc;
+    margin-bottom: 20px;  /* Espaçamento entre a imagem e o nome */
+}
+
+.profile-section h2 {
+    color: #2c3e50;
+    margin: 20px 0 5px;
+}
+
+.profile-section p {
+    color: #7f8c8d;
+    margin-bottom: 30px;
+}
+
+.profile-form input {
+    display: block;
+    width: 80%;  /* Diminui um pouco a largura para equilibrar o design */
+    padding: 15px;
+    margin: 10px auto;  /* Alinhado centralmente e espaçado */
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+    background-color: #f1f1f1;
+}
+
+.profile-form button {
+    padding: 15px;
+    width: 80%;  /* Correspondente aos inputs */
+    background-color: #1abc9c;
+    color: white;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 20px;  /* Espaçamento adicional acima do botão */
+}
+
+.profile-form button:hover {
+    background-color: #16a085;
+}
+
+.info-section {
+    background-color: #1abc9c;
+    color: white;
+    padding: 60px; /* Aumentado para balancear com a seção de perfil */
+    text-align: center;
+    width: 45%;
+    border-radius: 10px; /* Arredondamento para suavizar o design */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.info-section h2 {
+    font-size: 22px;
+    margin-bottom: 20px;
+}
+
+.info-section p {
+    font-size: 16px;
+    margin-bottom: 30px;
+    line-height: 1.5; /* Melhor espaçamento entre linhas para leitura */
+}
+
+.logo img {
+    width: 100px;
+    height: auto;
+    margin-top: 20px;
+}

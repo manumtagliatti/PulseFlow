@@ -30,3 +30,10 @@ document.addEventListener("DOMContentLoaded", function() {
     });
 });
 
+document.getElementById('forgot-password').addEventListener('click', function(event) {
+    window.location.href = '../Redefinir/redefinirSenha.html'; // Redireciona para a nova página
+});
+
+document.getElementById('register-btn').addEventListener('click', function(event) {
+    window.location.href = '../Médico/registroMedico.html'; // Redireciona para a nova página
+});

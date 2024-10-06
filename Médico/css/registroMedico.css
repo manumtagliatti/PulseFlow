@@ -86,13 +86,13 @@ input::placeholder {
 }
 
 button {
-    width: 237px;
+    width: 240px;
     height: 60px;
     border-radius: 12px;
     background: #2CABAA;
     color: white;
     border: none;
-    font-size: 14px;
+    font-size: 20px;
     cursor: pointer;
     transition: background-color 0.3s ease;
     display: block;
