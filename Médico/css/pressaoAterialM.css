@@ -83,3 +83,14 @@
     font-size: 18px;
     font-weight: 400;
 }
+
+.container {
+    width: 85%;  /* Aumentei mais um pouco */
+    margin: 50px auto;
+}
+
+#grafico-pressao {
+    width: 100%; /* Ajuste para responsividade */
+    height: 500px; /* Altura aumentada */
+    max-width: 100%; /* Garante responsividade */
+}
