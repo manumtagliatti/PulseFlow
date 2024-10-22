@@ -6,6 +6,7 @@
     <title>Pulse Flow - Médico</title>
     <link rel="stylesheet" href="css/pressaoAterialM.css">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
     <header>
@@ -14,7 +15,7 @@
                 <img src="imagens/LogoVerde.png" alt="Logo Pulse Flow">
             </div>
             <div class="user-info">
-                <p> <span id="nome-medico"></span>
+                <p> Drº <span id="nome-medico">Dimas Augusto</span>
                     <span id="icon-toggle" class="menu-icon">
                         <svg xmlns="http://www.w3.org/2000/svg" width="25" height="10" viewBox="0 0 25 10" fill="none">
                             <path fill-rule="evenodd" clip-rule="evenodd" d="M24.4219 0.393687C25.1927 0.918603 25.1927 1.76966 24.4219 2.29458L13.8956 9.46328C13.1248 9.98819 11.8752 9.98819 11.1044 9.46328L0.578079 2.29458C-0.192693 1.76966 -0.192693 0.918604 0.578079 0.393688C1.34885 -0.131228 2.59852 -0.131228 3.36929 0.393688L12.5 6.61194L21.6307 0.393687C22.4015 -0.131229 23.6511 -0.131229 24.4219 0.393687Z" fill="white"/>
@@ -46,6 +47,28 @@
             </div>
         </div>
     </header>
+
+    <main>
+        <div class="container">
+            <div class="title">Pressão Arterial</div>
+            <div class="right-content">
+                <div class="month-navigation">
+                    <button id="prev-month" class="nav-button">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                            <path fill-rule="evenodd" clip-rule="evenodd" d="M14.0303 7.46967C14.3232 7.76256 14.3232 8.23744 14.0303 8.53033L10.5607 12L14.0303 15.4697C14.3232 15.7626 14.3232 16.2374 14.0303 16.5303C13.7374 16.8232 13.2626 16.8232 12.9697 16.5303L8.96967 12.5303C8.67678 12.2374 8.67678 11.7626 8.96967 11.4697L12.9697 7.46967C13.2626 7.17678 13.7374 7.17678 14.0303 7.46967Z" fill="#161F48"/>
+                        </svg>
+                    </button>
+                    <span id="current-month">Outubro 2024</span>
+                    <button id="next-month" class="nav-button">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                            <path fill-rule="evenodd" clip-rule="evenodd" d="M9.96967 7.46967C9.67678 7.76256 9.67678 8.23744 9.96967 8.53033L13.4393 12L9.96967 15.4697C9.67678 15.7626 9.67678 16.2374 9.96967 16.5303C10.2626 16.8232 10.7374 16.8232 11.0303 16.5303L15.0303 12.5303C15.3232 12.2374 15.3232 11.7626 15.0303 11.4697L11.0303 7.46967C10.7374 7.17678 10.2626 7.17678 9.96967 7.46967Z" fill="#161F48"/>
+                        </svg>
+                    </button>
+                </div>
+                <canvas id="grafico-pressao"></canvas>
+            </div>
+        </div>
+    </main>
 
     <script src="js/pressaoArterialM.js"></script>
 </body>

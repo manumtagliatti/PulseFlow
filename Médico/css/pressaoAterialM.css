@@ -5,6 +5,11 @@
     font-family: 'Arial', sans-serif;
 }
 
+html, body {
+    height: 100%; /* Garante que a altura do body ocupe 100% da tela */
+    overflow: hidden; /* Remove o scroll da tela */
+}
+
 .header {
     background-color: #2CABAA;
     display: flex;
@@ -33,8 +38,40 @@
     margin-left: 10px;
 }
 
+.container {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    padding-top: 20px; /* Espaço para o título */
+    max-width: 100%;
+    height: calc(100vh - 60px); /* Ajusta para a altura total da viewport, considerando o header */
+    box-sizing: border-box;
+}
+
+#grafico-pressao {
+    width: 100%; /* Aumenta a largura para ocupar mais espaço */
+    max-width: 1600px; /* Permite uma largura maior */
+    height: 70vh; /* Define a altura do gráfico com base na altura da viewport */
+    max-height: 92%; /* Limita a altura máxima */
+}
+
+
+.title {
+    color: #2CABAA;
+    text-align: center;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 45px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+    margin: 0; /* Remove margens extras */
+    padding-bottom: 20px; /* Espaço entre o título e o gráfico */
+    width: 100%; /* Faz com que o título ocupe toda a largura disponível */
+}
+
 .menu-dropdown {
-    display: none; /* Menu inicialmente escondido */
+    display: none;
     position: absolute;
     top: 50px;
     right: 10px;
@@ -84,13 +121,28 @@
     font-weight: 400;
 }
 
-.container {
-    width: 85%;  /* Aumentei mais um pouco */
-    margin: 50px auto;
+.month-navigation {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    margin-bottom: 10px; /* Espaçamento entre a navegação e o gráfico */
+    width: 100%;
 }
 
-#grafico-pressao {
-    width: 100%; /* Ajuste para responsividade */
-    height: 500px; /* Altura aumentada */
-    max-width: 100%; /* Garante responsividade */
+#prev-month,
+#next-month {
+    background: none;
+    border: none;
+    cursor: pointer;
+    margin: 0 5px; /* Espaçamento entre as setas e o texto do mês */
 }
+
+#current-month {
+    color: #161F48;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 17px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+

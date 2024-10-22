@@ -1,5 +1,5 @@
 // Simulando o nome do médico logado
-const medicoLogado = "Dimas Augusto";  // Aqui você pode pegar o nome real de uma fonte como API ou localStorage
+const medicoLogado = "Dimas Augusto"; // Aqui você pode pegar o nome real de uma fonte como API ou localStorage
 
 // Função que só executa quando o DOM está totalmente carregado
 document.addEventListener('DOMContentLoaded', () => {
@@ -65,7 +65,7 @@ function updateChart(month) {
             fill: true,
             pointRadius: dadosMes.data.length > 0 ? 5 : 0, // Remove pontos se não houver dados
             pointHoverRadius: 7,
-            tension: 0.3,  // Suaviza as linhas
+            tension: 0.3 // Suaviza as linhas
         }]
     };
 
@@ -74,7 +74,7 @@ function updateChart(month) {
         data: chartData,
         options: {
             responsive: true,
-            maintainAspectRatio: false,  // Ajusta o gráfico dinamicamente
+            maintainAspectRatio: false, // Ajusta o gráfico dinamicamente
             plugins: {
                 legend: {
                     display: false // Não exibir a legenda
@@ -104,5 +104,32 @@ function updateChart(month) {
         }
     };
 
+    // Cria o novo gráfico
     chartInstance = new Chart(ctx, configGrafico);
 }
+
+// Navegação entre meses
+document.getElementById('prev-month').addEventListener('click', () => {
+    const months = Object.keys(dadosPressaoPorMes);
+    const currentIndex = months.indexOf(currentMonth);
+    if (currentIndex > 0) {
+        currentMonth = months[currentIndex - 1];
+        document.getElementById('current-month').textContent = currentMonth;
+        updateChart(currentMonth);
+    }
+});
+
+document.getElementById('next-month').addEventListener('click', () => {
+    const months = Object.keys(dadosPressaoPorMes);
+    const currentIndex = months.indexOf(currentMonth);
+    if (currentIndex < months.length - 1) {
+        currentMonth = months[currentIndex + 1];
+        document.getElementById('current-month').textContent = currentMonth;
+        updateChart(currentMonth);
+    }
+});
+
+// Inicializa o gráfico com o mês atual
+window.onload = function() {
+    updateChart(currentMonth);
+};
