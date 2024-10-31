@@ -6,7 +6,7 @@
 }
 
 body {
-    font-family: Arial, sans-serif;
+    font-family: 'Montserrat', sans-serif;
     background-color: #f0f0f0;
     padding-top: 100px;
     display: flex;
@@ -17,7 +17,6 @@ body {
 header h2 {
     color: #2CABAA;
     text-align: center;
-    font-family: Montserrat;
     font-size: 45px;
     font-weight: 600;
     margin-top: -10px;
@@ -31,22 +30,22 @@ main {
 
 form {
     width: 100%;
+    position: relative; /* Para posicionamento absoluto dos alertas */
 }
 
 .info-title {
     color: #2CABAA;
     text-align: center;
-    font-family: Montserrat, sans-serif;
     font-size: 24px;
     font-weight: 400;
-    margin: 60px 0; /* Espaço acima e abaixo do título */
+    margin: 60px 0;
 }
 
 .form-sections {
     display: flex;
     justify-content: space-between;
     width: 100%;
-    margin-top: -20px; /* Espaço acima da seção de inputs */
+    margin-top: -20px;
 }
 
 .personal-info, .info {
@@ -61,17 +60,15 @@ input {
     border: none;
     padding: 0 20px;
     color: #333;
-    font-family: 'Montserrat', sans-serif;
     font-size: 24px;
     font-weight: 500;
     line-height: normal;
-    margin-bottom: 20px; /* Aumenta o espaço entre os inputs */
+    margin-bottom: 20px;
     outline: none;
 }
 
 input::placeholder {
     color: #B3B3B3;
-    font-family: 'Montserrat', sans-serif;
     font-size: 16px;
     font-weight: 500;
 }
@@ -79,10 +76,9 @@ input::placeholder {
 .termos {
     color: #2CABAA;
     text-align: center;
-    font-family: Montserrat, sans-serif;
     font-size: 18px;
     font-weight: 400;
-    margin-top: 50px; /* Ajusta o espaço acima do texto */
+    margin-top: 50px;
 }
 
 button {
@@ -96,12 +92,9 @@ button {
     cursor: pointer;
     transition: background-color 0.3s ease;
     display: block;
-    margin: 20px auto 0; /* Centraliza o botão */
+    margin: 20px auto 0;
 }
 
-button:hover {
-    background-color: #21867A;
-}
 
 .logo-container {
     position: fixed;
@@ -112,4 +105,17 @@ button:hover {
 .logo-container img {
     width: 160px;
     height: auto;
+}
+
+/* Estilo da mensagem de alerta */
+.alert-message {
+    color: #2CABAA;
+    font-size: 18px;
+    font-weight: 400;
+    text-align: center;
+    display: none; /* Inicialmente escondido */
+    margin: 20px auto; /* Centraliza e adiciona espaço em cima e embaixo */
+    width: 100%;
+    max-width: 1040px;
+    font-family: 'Montserrat', sans-serif;
 }
