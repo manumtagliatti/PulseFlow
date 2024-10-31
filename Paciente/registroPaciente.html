@@ -12,21 +12,24 @@
         <h2>PREENCHA AS INFORMAÇÕES</h2>
     </header>
     <main>
-        <form>
+        <form id="registrationForm">
             <h3 class="info-title">Informações Pessoais</h3>
             <div class="form-sections">
                 <div class="personal-info">
-                    <input type="text" placeholder="NOME COMPLETO" required>
-                    <input type="text" placeholder="DATA DE NASCIMENTO" required>
-                    <input type="text" placeholder="CPF" required>
+                    <input type="text" id="nomeCompleto" placeholder="NOME COMPLETO">
+                    <input type="text" id="dataNascimento" placeholder="DATA DE NASCIMENTO">
+                    <input type="text" id="cpf" placeholder="CPF">
                 </div>
 
                 <div class="info">
-                    <input type="tel" placeholder="TELEFONE PESSOAL" required>
-                    <input type="email" placeholder="EMAIL" required>
-                    <input type="password" placeholder="SENHA" required>
+                    <input type="tel" id="telefone" placeholder="TELEFONE PESSOAL">
+                    <input type="email" id="email" placeholder="EMAIL">
+                    <input type="password" id="senha" placeholder="SENHA">
                 </div>
             </div>
+
+            <!-- Alerta logo acima dos termos de uso -->
+            <div class="alert-message" id="alertMessage">Por favor, preencha todos os campos corretamente.</div>
 
             <p class="termos">
                 Criando a conta, você automaticamente aceita os 
@@ -41,5 +44,7 @@
             <img src="imagens/LogoRegistro.png" alt="Logo Pulse Flow">
         </div>
     </main>
+
+    <script src="js/registroPaciente.js"></script>
 </body>
 </html>
