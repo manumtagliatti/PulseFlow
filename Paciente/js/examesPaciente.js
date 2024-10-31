@@ -30,7 +30,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const examCard = document.createElement('div');
         examCard.classList.add('exam-card');
         examCard.innerHTML = `
-            <i class="icon">&#8681;</i> <!-- Ícone de download -->
+            <i class="icon"><img src="imagens/Download.png" alt="exam-icon"></i> <!-- Ícone de download -->
             <p>Exame ${i + 1}</p>
         `;
         examCard.addEventListener('click', () => {
