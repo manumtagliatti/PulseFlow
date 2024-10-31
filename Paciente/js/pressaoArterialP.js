@@ -33,7 +33,7 @@ const dadosPressaoPorMes = {
     },
     'Novembro 2024': {
         labels: ['1 Nov', '5 Nov', '10 Nov', '15 Nov', '20 Nov', '25 Nov', '30 Nov'],
-        data: []
+        data: [120, 115, 118, 121, 119, 122, 120]
     }
 };
 
