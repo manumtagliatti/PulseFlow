@@ -1,5 +1,9 @@
-document.addEventListener('DOMContentLoaded', () => {
-    document.getElementById('nome-medico').textContent = "Dimas Augusto";
+const baseURL = 'http://localhost:3000'; 
+let chartInstance;
+const dadosGlicemiaPorMes = {}; 
+
+document.addEventListener('DOMContentLoaded', async () => {
+    await fetchInfoPaciente(); 
 
     const menuIcon = document.getElementById('icon-toggle');
     const dropdownMenu = document.getElementById('menu-dropdown');
@@ -17,40 +21,80 @@ document.addEventListener('DOMContentLoaded', () => {
     updateChart();
 });
 
-const meses = ['Junho 2024', 'Julho 2024', 'Agosto 2024', 'Setembro 2024', 'Outubro 2024'];
-let mesAtualIndex = 0; // Iniciar no índice 0 que representa 'Junho 2024'
+const perfilLink = document.querySelector('.meu-perfil');
+perfilLink.addEventListener('click', () => {
+    window.location.href = "profilePaciente.html";
+});
 
-const dadosHormonalPorMes = {
-    'Junho 2024': {
-        labels: ['1', '5', '10', '15', '20', '25', '30'],
-        data: [3, 5, 6, 8, 6, 4, 7]
-    },
-    'Julho 2024': {
-        labels: ['1', '5', '10', '15', '20', '25', '30'],
-        data: [4, 6, 7, 5, 6, 7, 6]
-    },
-    'Agosto 2024': {
-        labels: ['1', '5', '10', '15', '20', '25', '30'],
-        data: [5, 4, 6, 7, 5, 4, 6]
-    },
-    'Setembro 2024': {
-        labels: ['1', '5', '10', '15', '20', '25', '30'],
-        data: [6, 5, 4, 6, 5, 7, 6]
-    },
-    'Outubro 2024': {
-        labels: ['1', '5', '10', '15', '20', '25', '30'],
-        data: [7, 6, 5, 7, 6, 8, 7]
+const sairLink = document.querySelector('.sair');
+sairLink.addEventListener('click', () => {
+    window.location.href = "../HomePage/homepage.html";
+});
+
+async function fetchInfoPaciente() {
+    try {
+        const response = await fetch(`${baseURL}/api/paciente/info`);
+        if (response.ok) {
+            const paciente = await response.json();
+            document.getElementById('nome-paciente').textContent = paciente.nome || "Cliente";
+            window.pacienteEmail = paciente.email;
+            await fetchDadosDiabetes(window.pacienteEmail); 
+        } else {
+            console.error('Erro ao buscar as informações do paciente');
+        }
+    } catch (error) {
+        console.error('Erro na requisição:', error);
     }
-};
+}
 
-let chartInstance;
+async function enviarDadosHormonal() {
+    const data = document.getElementById('input-data').value;
+    const hormonio = document.getElementById('input-hormonio').value;
+    const dosagem = document.getElementById('input-dosagem').value;
 
-function updateChart() {
-    const month = meses[mesAtualIndex];
-    document.getElementById('current-month').textContent = month;
+    if (!data || !hormonio || !dosagem) {
+        alert("Por favor, preencha todos os campos antes de enviar.");
+        return;
+    }
 
+    try {
+        const response = await fetch(`${baseURL}/api/hormonal`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ data, hormonio, dosagem, email: window.pacienteEmail })
+        });
+
+        if (!response.ok) throw new Error('Erro ao enviar dados');
+        const novoRegistro = await response.json();
+        console.log('Dados enviados com sucesso:', novoRegistro);
+
+        await fetchDadosDiabetes(window.pacienteEmail);
+    } catch (error) {
+        console.error('Erro ao enviar dados:', error);
+    }
+}
+
+async function fetchDadosDiabetes(email) {
+    try {
+        const response = await fetch(`${baseURL}/api/hormonal/${email}`);
+        if (!response.ok) throw new Error('Erro ao buscar dados');
+        const registros = await response.json();
+
+        const labels = registros.map(registro => registro.data);
+        const data = registros.map(registro => registro.nivelGlicemia);
+
+        dadosGlicemiaPorMes['Outubro 2024'] = { labels, data };
+        updateChart('Outubro 2024');
+    } catch (error) {
+        console.error('Erro ao buscar dados:', error);
+    }
+}
+
+document.getElementById('salvar-medicao').addEventListener('click', enviarDadosHormonal);
+
+function updateChart(month) {
     const ctx = document.getElementById('grafico-glicemia').getContext('2d');
-    const dadosMes = dadosHormonalPorMes[month];
+    const dadosMes = dadosGlicemiaPorMes[month];
 
     if (chartInstance) {
         chartInstance.destroy();
@@ -81,17 +125,3 @@ function updateChart() {
         }
     });
 }
-
-document.getElementById('prev-month').addEventListener('click', () => {
-    if (mesAtualIndex > 0) {
-        mesAtualIndex--;
-        updateChart();
-    }
-});
-
-document.getElementById('next-month').addEventListener('click', () => {
-    if (mesAtualIndex < meses.length - 1) {
-        mesAtualIndex++;
-        updateChart();
-    }
-});
