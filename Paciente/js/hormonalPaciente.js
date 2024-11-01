@@ -53,7 +53,7 @@ async function enviarDadosHormonal() {
     const dosagem = document.getElementById('input-dosagem').value;
 
     if (!data || !hormonio || !dosagem) {
-        alert("Por favor, preencha todos os campos antes de enviar.");
+        alert("Por favor, preencha todos os campos antes de enviar .");
         return;
     }
 
