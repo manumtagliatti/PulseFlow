@@ -8,15 +8,13 @@ document.addEventListener("DOMContentLoaded", function () {
     const email = document.getElementById("email");
     const senha = document.getElementById("senha");
 
-    // Impede a inserção de números no campo de nome
     nomeCompleto.addEventListener("input", function () {
         nomeCompleto.value = nomeCompleto.value.replace(/[^a-zA-Z\s]/g, "");
     });
 
-    // Formata automaticamente a data de nascimento enquanto o usuário digita (DD/MM/AAAA)
     dataNascimento.addEventListener("input", function () {
         let input = dataNascimento.value;
-        input = input.replace(/\D/g, ""); // Remove tudo que não é dígito
+        input = input.replace(/\D/g, ""); 
 
         if (input.length > 2 && input.length <= 4) {
             input = input.slice(0, 2) + '/' + input.slice(2);
@@ -27,10 +25,10 @@ document.addEventListener("DOMContentLoaded", function () {
         dataNascimento.value = input;
     });
 
-    // Formata automaticamente o CPF enquanto o usuário digita (XXX.XXX.XXX-XX)
+    
     cpf.addEventListener("input", function () {
         let input = cpf.value;
-        input = input.replace(/\D/g, ""); // Remove tudo que não é dígito
+        input = input.replace(/\D/g, "");
 
         if (input.length > 3 && input.length <= 6) {
             input = input.slice(0, 3) + '.' + input.slice(3);
@@ -43,10 +41,10 @@ document.addEventListener("DOMContentLoaded", function () {
         cpf.value = input;
     });
 
-    // Formata automaticamente o telefone enquanto o usuário digita ((XX) XXXXX-XXXX)
+
     telefone.addEventListener("input", function () {
         let input = telefone.value;
-        input = input.replace(/\D/g, ""); // Remove tudo que não é dígito
+        input = input.replace(/\D/g, "");
 
         if (input.length > 2 && input.length <= 7) {
             input = '(' + input.slice(0, 2) + ') ' + input.slice(2);
@@ -62,7 +60,7 @@ document.addEventListener("DOMContentLoaded", function () {
     form.addEventListener("submit", async function (event) {
         event.preventDefault();
 
-        // Validação dos campos do formulário
+ 
         if (!nomeCompleto.value) {
             showAlert("Por favor, insira seu nome completo.");
             return;
@@ -83,18 +81,18 @@ document.addEventListener("DOMContentLoaded", function () {
             return;
         }
 
-        // Dados do formulário para envio ao backend
+
         const pacienteData = {
             nome: nomeCompleto.value,
             dataNascimento: dataNascimento.value,
-            cpf: cpf.value.replace(/[^\d]/g, ""), // Remove a formatação para enviar apenas os dígitos
-            telefonePessoal: telefone.value.replace(/[^\d]/g, ""), // Remove a formatação para enviar apenas os dígitos
+            cpf: cpf.value.replace(/[^\d]/g, ""), 
+            telefonePessoal: telefone.value.replace(/[^\d]/g, ""), 
             email: email.value,
             senha: senha.value
         };
 
         try {
-            // Envio dos dados via fetch
+
             const response = await fetch("http://localhost:3000/paciente/registro", {
                 method: "POST",
                 headers: {
@@ -106,7 +104,7 @@ document.addEventListener("DOMContentLoaded", function () {
             if (response.ok) {
                 alertMessage.style.display = "none";
                 alert("Conta criada com sucesso!");
-                window.location.href = "menuPaciente.html"; // Redireciona para a página desejada
+                window.location.href = "menuPaciente.html"; 
             } else {
                 const errorText = await response.text();
                 showAlert(errorText);

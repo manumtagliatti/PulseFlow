@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // Fazer a requisição para o backend para obter o nome do cliente
+
     fetch('/api/cliente')
         .then(response => {
             if (!response.ok) {
@@ -8,15 +8,14 @@ document.addEventListener('DOMContentLoaded', () => {
             return response.json();
         })
         .then(data => {
-            // Definir o nome do cliente no elemento
-            document.getElementById('nome-medico').textContent = data.nome;
+
+            document.getElementById('nome-paciente').textContent = data.nome;
         })
         .catch(error => {
             console.error('Erro:', error);
-            document.getElementById('nome-medico').textContent = 'Cliente';
+            document.getElementById('nome-paciente').textContent = 'Cliente';
         });
 
-    // Toggle para exibir/ocultar o menu
     const menuIcon = document.getElementById('icon-toggle');
     const dropdownMenu = document.getElementById('menu-dropdown');
     
@@ -24,27 +23,27 @@ document.addEventListener('DOMContentLoaded', () => {
         dropdownMenu.style.display = dropdownMenu.style.display === 'block' ? 'none' : 'block';
     });
     
-    // Fecha o menu se clicar fora dele
+
     document.addEventListener('click', (event) => {
         if (!menuIcon.contains(event.target) && !dropdownMenu.contains(event.target)) {
             dropdownMenu.style.display = 'none';
         }
     });
 
-    // Redireciona para a página do perfil ao clicar em "Meu Perfil"
+  
     const perfilLink = document.querySelector('.meu-perfil');
     perfilLink.addEventListener('click', () => {
         window.location.href = "profilePaciente.html";
     });
 
-    // Redireciona para a homepage ao clicar em "Sair"
+
     const sairLink = document.querySelector('.sair');
     sairLink.addEventListener('click', () => {
         window.location.href = "../HomePage/homepage.html";
     });
 });
 
-// Seleciona todos os cards
+
 document.querySelectorAll('.card').forEach(card => {
     card.addEventListener('click', () => {
         const imgAlt = card.querySelector('img').alt;
@@ -80,7 +79,7 @@ document.querySelectorAll('.card').forEach(card => {
                 return;
         }
 
-        // Redireciona para a página definida
+
         window.location.href = targetPage;
     });
 });
