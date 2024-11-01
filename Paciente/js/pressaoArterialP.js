@@ -1,19 +1,27 @@
-// Simulando o nome do médico logado
-const medicoLogado = "Dimas Augusto";  // Aqui você pode pegar o nome real de uma fonte como API ou localStorage
+document.getElementById('nome-paciente').textContent = "Cliente";
 
-// Definindo o nome no campo correto
+async function fetchInfoPaciente() {
+    try {
+        const response = await fetch('http://localhost:3000/paciente/info');
+        if (response.ok) {
+            const paciente = await response.json();
+            document.getElementById('nome-paciente').textContent = paciente.nome || "Cliente";
+            window.pacienteEmail = paciente.email;
+        } else {
+            console.error('Erro ao buscar as informações do paciente');
+        }
+    } catch (error) {
+        console.error('Erro na requisição:', error);
+    }
+}
+
 document.addEventListener('DOMContentLoaded', () => {
-    document.getElementById('nome-medico').textContent = medicoLogado;
-    
-    // Toggle para exibir/ocultar o menu
+    fetchInfoPaciente();
     const menuIcon = document.getElementById('icon-toggle');
     const dropdownMenu = document.getElementById('menu-dropdown');
-    
     menuIcon.addEventListener('click', () => {
         dropdownMenu.style.display = dropdownMenu.style.display === 'block' ? 'none' : 'block';
     });
-    
-    // Fecha o menu se clicar fora dele
     document.addEventListener('click', (event) => {
         if (!menuIcon.contains(event.target) && !dropdownMenu.contains(event.target)) {
             dropdownMenu.style.display = 'none';
@@ -21,106 +29,137 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
-// Simulando dados de medições da pressão arterial por mês
-const dadosPressaoPorMes = {
-    'Junho 2024': {
-        labels: ['1 Jun', '5 Jun', '10 Jun', '15 Jun', '20 Jun', '25 Jun', '30 Jun'],
-        data: [120, 115, 118, 121, 119, 122, 120]
-    },
-    'Outubro 2024': {
-        labels: ['1 Out', '5 Out', '10 Out', '15 Out', '20 Out', '25 Out', '30 Out'],
-        data: [125, 122, 124, 121, 126, 123, 125]
-    },
-    'Novembro 2024': {
-        labels: ['1 Nov', '5 Nov', '10 Nov', '15 Nov', '20 Nov', '25 Nov', '30 Nov'],
-        data: [120, 115, 118, 121, 119, 122, 120]
+let chartInstance;
+let currentMonthIndex = 0;
+const months = ['Janeiro 2024', 'Fevereiro 2024', 'Março 2024', 'Abril 2024', 'Maio 2024', 'Junho 2024', 'Julho 2024', 'Agosto 2024', 'Setembro 2024', 'Outubro 2024', 'Novembro 2024', 'Dezembro 2024'];
+let currentMonth = months[currentMonthIndex];
+
+document.getElementById('meu-botao').addEventListener('click', async () => {
+    const dataMedição = document.getElementById('input-data').value;
+    const pressaoArterial = document.getElementById('input-pressao').value;
+    if (!dataMedição || !pressaoArterial) {
+        alert('Por favor, insira a data da medição e a pressão arterial.');
+        return;
     }
-};
-
-let currentMonth = 'Outubro 2024'; // Começa no mês atual
-let chartInstance; // Variável para armazenar a instância do gráfico
-
-function updateChart(month) {
-    const ctx = document.getElementById('grafico-pressao').getContext('2d');
-    const dadosMes = dadosPressaoPorMes[month] || { labels: [], data: [] }; // Se não houver dados, exibe vazio
-
-    if (chartInstance) {
-        chartInstance.destroy(); // Destrói o gráfico anterior antes de criar um novo
-    }
-
-    const chartData = {
-        labels: dadosMes.labels.length > 0 ? dadosMes.labels : ['Sem dados'],
-        datasets: [{
-            label: 'Pressão Arterial (mmHg)',
-            data: dadosMes.data.length > 0 ? dadosMes.data : [0], // Exibe 0 caso não tenha dados
-            borderColor: dadosMes.data.length > 0 ? 'rgba(44, 171, 170, 1)' : 'rgba(200, 200, 200, 1)',
-            backgroundColor: dadosMes.data.length > 0 ? 'rgba(44, 171, 170, 0.2)' : 'rgba(200, 200, 200, 0.2)',
-            fill: true,
-            pointRadius: dadosMes.data.length > 0 ? 5 : 0, // Remove pontos se não houver dados
-            pointHoverRadius: 7,
-            tension: 0.3,  // Suaviza as linhas
-        }]
+    const data = {
+        data: dataMedição,
+        pressao: pressaoArterial,
+        email: window.pacienteEmail
     };
-
-    const configGrafico = {
-        type: 'line',
-        data: chartData,
-        options: {
-            responsive: true,
-            plugins: {
-                legend: {
-                    display: false // Não exibir a legenda
-                }
+    try {
+        const response = await fetch('http://localhost:3000/pressao', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
             },
-            scales: {
-                y: {
-                    beginAtZero: false,
-                    title: {
-                        display: true,
-                        text: 'Pressão Arterial (mmHg)'
-                    },
-                    ticks: {
-                        display: dadosMes.data.length > 0 // Exibe eixo Y apenas se houver dados
+            body: JSON.stringify(data)
+        });
+        if (response.ok) {
+            alert('Pressão registrada com sucesso!');
+            fetchDadosDePressao(currentMonth);
+        } else {
+            alert('Erro ao registrar a pressão. Tente novamente.');
+        }
+    } catch (error) {
+        console.error('Erro na requisição:', error);
+        alert('Erro na conexão com o servidor.');
+    }
+});
+
+async function fetchDadosDePressao(mes) {
+    try {
+        const response = await fetch(`http://localhost:3000/pressao/${window.pacienteEmail}?mes=${mes}`);
+        if (response.ok) {
+            const dados = await response.json();
+            const labels = dados.map((item) => new Date(item.data).toLocaleDateString());
+            const dataValues = dados.map((item) => item.pressao);
+            updateChartData(labels, dataValues);
+        } else {
+            alert('Nenhum registro de pressão arterial encontrado.');
+        }
+    } catch (error) {
+        console.error('Erro na requisição:', error);
+    }
+}
+
+function updateChartData(labels, data) {
+    if (chartInstance) {
+        chartInstance.data.labels = labels;
+        chartInstance.data.datasets[0].data = data;
+        chartInstance.update();
+    } else {
+        const ctx = document.getElementById('grafico-pressao').getContext('2d');
+        chartInstance = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Pressão Arterial (mmHg)',
+                    data: data,
+                    borderColor: 'rgba(44, 171, 170, 1)',
+                    backgroundColor: 'rgba(44, 171, 170, 0.2)',
+                    fill: true,
+                    pointRadius: 5,
+                    pointHoverRadius: 7,
+                    tension: 0.3
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        display: false
                     }
                 },
-                x: {
-                    title: {
-                        display: true,
-                        text: `Dias de ${month}`
+                scales: {
+                    y: {
+                        beginAtZero: false,
+                        title: {
+                            display: true,
+                            text: 'Pressão Arterial (mmHg)'
+                        }
                     },
-                    ticks: {
-                        display: dadosMes.data.length > 0 // Exibe eixo X apenas se houver dados
+                    x: {
+                        title: {
+                            display: true,
+                            text: `Dias de ${currentMonth}`
+                        }
                     }
                 }
             }
-        }
-    };
-
-    chartInstance = new Chart(ctx, configGrafico);
+        });
+    }
 }
 
-// Navegação entre meses
 document.getElementById('prev-month').addEventListener('click', () => {
-    const months = Object.keys(dadosPressaoPorMes);
-    const currentIndex = months.indexOf(currentMonth);
-    if (currentIndex > 0) {
-        currentMonth = months[currentIndex - 1];
+    if (currentMonthIndex > 0) {
+        currentMonthIndex--;
+        currentMonth = months[currentMonthIndex];
         document.getElementById('current-month').textContent = currentMonth;
-        updateChart(currentMonth);
+        fetchDadosDePressao(currentMonth);
     }
 });
 
 document.getElementById('next-month').addEventListener('click', () => {
-    const months = Object.keys(dadosPressaoPorMes);
-    const currentIndex = months.indexOf(currentMonth);
-    if (currentIndex < months.length - 1) {
-        currentMonth = months[currentIndex + 1];
+    if (currentMonthIndex < months.length - 1) {
+        currentMonthIndex++;
+        currentMonth = months[currentMonthIndex];
         document.getElementById('current-month').textContent = currentMonth;
-        updateChart(currentMonth);
+        fetchDadosDePressao(currentMonth);
     }
 });
 
-// Inicializa o gráfico com o mês atual
+const perfilLink = document.querySelector('.meu-perfil');
+perfilLink.addEventListener('click', () => {
+    window.location.href = "profilePaciente.html";
+});
+
+const sairLink = document.querySelector('.sair');
+sairLink.addEventListener('click', () => {
+    window.location.href = "../HomePage/homepage.html";
+});
+
 window.onload = function() {
-    updateChart(currentMonth);
+    fetchInfoPaciente();
+    fetchDadosDePressao(currentMonth);
 };

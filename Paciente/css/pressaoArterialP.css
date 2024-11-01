@@ -1,4 +1,4 @@
-* {
+* { 
     margin: 0;
     padding: 0;
     box-sizing: border-box;
@@ -129,20 +129,19 @@ html, body {
     justify-content: center;
     gap: 20px;
     margin-top: 30px;
-    margin-left: 0; /* Remove a margem esquerda */
-    width: 100%; /* Faz com que o container ocupe toda a largura disponível */
+    margin-left: 0;
+    width: 100%;
 }
 
 .button-container {
     display: flex;
-    justify-content: center; /* Centraliza o botão */
-    margin-top: 20px; /* Adiciona espaçamento acima do botão */
-    width: 100%; /* Faz com que o container ocupe toda a largura disponível */
+    justify-content: center;
+    margin-top: 20px;
+    width: 100%;
 }
 
-
-#input-pressao-sistolica,
-#input-pressao-diastolica {
+#input-data,
+#input-pressao {
     width: 294px;
     height: 60px;
     flex-shrink: 0;
@@ -178,7 +177,7 @@ html, body {
     display: flex;
     align-items: center;
     justify-content: flex-end;
-    margin-bottom: 10px; /* Espaçamento entre a navegação e o gráfico */
+    margin-bottom: 10px;
     width: 100%;
 }
 
@@ -187,7 +186,7 @@ html, body {
     background: none;
     border: none;
     cursor: pointer;
-    margin: 0 5px; /* Espaçamento entre as setas e o texto do mês */
+    margin: 0 5px;
 }
 
 #current-month {
@@ -203,7 +202,7 @@ html, body {
     width: 680px;
     height: 420px;
     position: relative;
-    top: 0; /* Posição do gráfico restaurada */
+    top: 0;
 }
 
 body {
@@ -212,6 +211,5 @@ body {
 html, body {
     width: 100%;
     height: 100%;
-    overflow: hidden; /* Impede o scroll */
+    overflow: hidden;
 }
-
