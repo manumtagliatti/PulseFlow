@@ -119,16 +119,16 @@
 
 .calendar {
     width: 100%;
-    border-collapse: collapse;
-    font-family: 'Montserrat', sans-serif;
     margin: 20px auto;
+    font-family: 'Montserrat', sans-serif;
+    border-collapse: collapse;
 }
-
-.calendar th, .calendar td {
-    border: 1px solid #ddd;
+.calendar td, .calendar th {
     padding: 10px;
     text-align: center;
+    border: 1px solid #ddd;
 }
+
 
 .calendar th {
     background-color: #2CABAA;
