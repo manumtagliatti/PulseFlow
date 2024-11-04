@@ -1,13 +1,13 @@
-* {
+* { 
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: 'Arial', sans-serif;
+    font-family: 'Montserrat', sans-serif;
 }
 
 html, body {
     width: 100%;
-    overflow-x: hidden; /* Remove o scroll horizontal */
+    overflow-x: hidden;
 }
 
 .header {
@@ -89,7 +89,6 @@ html, body {
     font-weight: 400;
 }
 
-/* Estilo do título */
 .title {
     color: #2CABAA;
     text-align: center;
@@ -98,70 +97,100 @@ html, body {
     font-style: normal;
     font-weight: 600;
     line-height: normal;
-    margin-top: 40px; /* Distância do header */
-}
-
-/* Layout da área de conteúdo */
-.container {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
     margin-top: 40px;
-    padding-bottom: 40px; /* Margem inferior adicionada */
-    max-width: 100%; /* Garante que o conteúdo não exceda a largura da tela */
 }
-
-.left-content {
+main {
     display: flex;
     flex-direction: column;
-    align-items: flex-start; /* Garante que a imagem fique à esquerda */
-    margin-right: 20px; /* Espaço entre a imagem e o gráfico */
-}
-
-.dicas-imagem {
-    width: 674px; /* Tamanho da imagem especificado */
-    height: 281px;
-    flex-shrink: 0;
-    margin-left: 30px;
-    margin-top: 20px; /* Move a imagem mais para baixo */
-}
-
-/* Estilo do input */
-.input-container {
-    display: flex;
-    justify-content: center;
-    gap: 20px; /* Espaçamento entre os inputs */
-    margin-top: 80px; /* Aumenta o espaçamento para empurrar os inputs para baixo */
-    margin-left: 50px;
-}
-
-#input-pressao-sistolica,
-#input-pressao-diastolica {
-    width: 300px;
-    padding: 10px;
-    font-size: 16px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
+    align-items: center;
     text-align: center;
 }
 
-/* Estilo do gráfico */
-.right-content img {
-    width: 450px;
+h1 {
+    color: #2CABAA;
+    margin: 30px;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    width: 90%;
+    max-width: 1100px;
+    margin: 10px;
+}
+
+.chart-section {
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 500px;
+    display: flex;
+    justify-content: center;
+}
+
+.chart-section canvas {
+    width: 100%;
     height: auto;
 }
 
-/* Margem inferior para ajustar a distância do final da tela */
-body {
-    padding-bottom: 50px;
+.input-section {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    width: 100%;
+    max-width: 800px;
 }
 
-.right-content {
-    margin-right: 40px; /* Adiciona um espaço à direita do gráfico */
-    max-width: 100%;
+.input-section input[type="text"] {
+    padding: 15px;
+    flex: 1;
+    font-size: 16px;
+    background-color: #E0E0E0;
+    border: none;
+    border-radius: 5px;
+    color: #9E9E9E;
+    text-align: center;
+    transition: background-color 0.3s ease;
 }
 
-#grafico-pressao {
-    width: 600px;
-    height: 400px;
+.input-section input[type="text"]:focus {
+    background-color: #d4d4d4;
+    outline: none;
+}
+
+.save-button {
+    margin-top: 5px;
+    padding: 15px 30px;
+    font-size: 16px;
+    background-color: #2CABAA;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: transform 0.2s ease, background-color 0.3s ease;
+}
+
+.save-button:hover {
+    background-color: #249994;
+    transform: scale(1.05);
+}
+
+.save-button.clicked {
+    animation: buttonClick 0.3s ease;
+}
+
+@keyframes buttonClick {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(0.9);
+    }
+    100% {
+        transform: scale(1);
+    }
 }
