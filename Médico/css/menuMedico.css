@@ -2,7 +2,7 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: 'Arial', sans-serif;
+    font-family: 'Montserrat', sans-serif;
 }
 
 html, body {
@@ -132,7 +132,7 @@ h2 {
     font-weight: 600;
     line-height: normal;
     margin-bottom: 40px;
-    margin-top: 15px; /* Adicionei essa linha para aumentar o espaço acima do h2 */
+    margin-top: 50px; /* Adicionei essa linha para aumentar o espaço acima do h2 */
 }
 
 .card {
