@@ -1,27 +1,19 @@
-document.getElementById('nome-paciente').textContent = "Cliente";
+// Simulando o nome do médico logado
+const paciente = "Dimas Augusto";  // Aqui você pode pegar o nome real de uma fonte como API ou localStorage
 
-async function fetchInfoPaciente() {
-    try {
-        const response = await fetch('http://localhost:3000/paciente/info');
-        if (response.ok) {
-            const paciente = await response.json();
-            document.getElementById('nome-paciente').textContent = paciente.nome || "Cliente";
-            window.pacienteEmail = paciente.email;
-        } else {
-            console.error('Erro ao buscar as informações do paciente');
-        }
-    } catch (error) {
-        console.error('Erro na requisição:', error);
-    }
-}
-
+// Definindo o nome no campo correto
 document.addEventListener('DOMContentLoaded', () => {
-    fetchInfoPaciente();
+    document.getElementById('nome-paciente').textContent = pacienteLogado;
+    
+    // Toggle para exibir/ocultar o menu
     const menuIcon = document.getElementById('icon-toggle');
     const dropdownMenu = document.getElementById('menu-dropdown');
+    
     menuIcon.addEventListener('click', () => {
         dropdownMenu.style.display = dropdownMenu.style.display === 'block' ? 'none' : 'block';
     });
+    
+    // Fecha o menu se clicar fora dele
     document.addEventListener('click', (event) => {
         if (!menuIcon.contains(event.target) && !dropdownMenu.contains(event.target)) {
             dropdownMenu.style.display = 'none';
@@ -39,20 +31,20 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Dados de exemplo para os meses
     const monthlyData = [
-        { label: "Janeiro", data: [1, 2, 3, 4, 3, 2, 1, 3, 4, 2, 1, 4, 3, 2, 1, 3, 4, 1, 2, 3, 1, 3, 2, 4, 1, 3, 2, 4, 3, 1] },
-        { label: "Fevereiro", data: [2, 3, 4, 3, 2, 1, 4, 2, 3, 1, 4, 3, 2, 1, 3, 4, 2, 3, 1, 3, 2, 1, 4, 3, 1, 2, 4, 3] },
+        { label: "Janeiro", data: [1, 2, 1, 3, 2, 4, 3, 2, 1, 3, 4, 2, 1, 4, 3, 2, 1, 3, 4, 1, 2, 3, 1, 3, 2, 4, 1, 3, 2, 4] },
+        { label: "Fevereiro", data: [2, 3, 2, 4, 1, 2, 4, 2, 3, 1, 3, 4, 2, 1, 3, 4, 2, 3, 1, 3, 2, 1, 4, 3, 1, 2, 4, 3] },
         // Adicione mais meses conforme necessário
     ];
 
     // Função para criar o gráfico com os dados do mês atual
     const createChart = (data) => {
-        const ctx = document.getElementById("insoniaChart").getContext("2d");
+        const ctx = document.getElementById("asmaChart").getContext("2d");
         return new Chart(ctx, {
             type: 'line',
             data: {
                 labels: Array.from({ length: data.data.length }, (_, i) => i + 1),
                 datasets: [{
-                    label: `Qualidade do Sono em ${data.label}`,
+                    label: data.label,
                     data: data.data,
                     borderColor: '#2CABAA',
                     backgroundColor: 'rgba(44, 171, 170, 0.2)',
@@ -104,12 +96,12 @@ document.addEventListener("DOMContentLoaded", () => {
     };
 
     // Inicializa o gráfico com os dados do primeiro mês
-    let insoniaChart = createChart(monthlyData[currentMonth]);
+    let asmaChart = createChart(monthlyData[currentMonth]);
 
     // Função para atualizar o gráfico com os dados do mês selecionado
     const updateChart = () => {
-        insoniaChart.destroy(); // Destroi o gráfico atual para evitar sobreposição
-        insoniaChart = createChart(monthlyData[currentMonth]); // Cria um novo gráfico com os dados do mês atualizado
+        asmaChart.destroy(); // Destroi o gráfico atual para evitar sobreposição
+        asmaChart = createChart(monthlyData[currentMonth]); // Cria um novo gráfico com os dados do mês atualizado
     };
 
     // Event Listener para a seta esquerda (mês anterior)
