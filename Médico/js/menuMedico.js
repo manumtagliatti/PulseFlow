@@ -30,12 +30,10 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-  
     const perfilLink = document.querySelector('.meu-perfil');
     perfilLink.addEventListener('click', () => {
         window.location.href = "profileMedico.html";
     });
-
 
     const sairLink = document.querySelector('.sair');
     sairLink.addEventListener('click', () => {
