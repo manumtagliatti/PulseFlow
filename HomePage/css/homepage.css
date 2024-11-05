@@ -3,23 +3,33 @@
     padding: 0;
     box-sizing: border-box;
     font-family: Arial, sans-serif;
+    scroll-behavior: smooth;
 }
 
 body {
     background-color: #EBEAEA;
     color: #333;
-    margin: 0;
-    padding: 0;
 }
 
-/* Cabeçalho */
+@keyframes fadeIn {
+    0% { opacity: 0; transform: translateY(-20px); }
+    100% { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes scaleUp {
+    0% { transform: scale(0.8); opacity: 0; }
+    100% { transform: scale(1); opacity: 1; }
+}
+
 header {
-    position: absolute; /* Posiciona o header sobre a imagem */
+    position: fixed;
     top: 0;
     left: 0;
     width: 100%;
-    z-index: 10; /* Garante que o header fique sobre a imagem */
-    padding: 20px 0;
+    background-color: rgba(0, 0, 0, 0.7);
+    padding: 15px 0;
+    z-index: 10;
+    animation: fadeIn 0.8s ease-out;
 }
 
 header .container {
@@ -32,7 +42,12 @@ header .container {
 }
 
 header .logo img {
-    width: 200px;
+    width: 180px;
+    transition: transform 0.3s ease;
+}
+
+header .logo img:hover {
+    transform: scale(1.1); /* Efeito ao passar o mouse */
 }
 
 header nav ul {
@@ -49,25 +64,28 @@ header nav ul li a {
     font-size: 16px;
     text-decoration: none;
     font-weight: bold;
-    transition: color 0.3s;
+    transition: color 0.3s, transform 0.3s;
 }
 
 header nav ul li a:hover {
     color: #00c0a5;
+    transform: translateY(-2px);
 }
 
 header .btn {
-    padding: 10px 20px;
+    padding: 12px 24px;
     background-color: #00c0a5;
     color: white;
     text-decoration: none;
     border-radius: 5px;
     font-weight: bold;
-    transition: background-color 0.3s;
+    transition: background-color 0.3s, transform 0.3s;
+    animation: scaleUp 1s ease forwards;
 }
 
 header .btn:hover {
     background-color: #007f66;
+    transform: translateY(-3px);
 }
 
 /* Seção da imagem */
@@ -83,46 +101,51 @@ header .btn:hover {
     height: 100%;
     object-fit: cover;
     display: block;
+    opacity: 0.85; /* Leve transparência */
+    animation: fadeIn 1.2s ease forwards;
 }
 
 /* Seção de informações (ícones) */
 .info-section {
     background-color: #2CABAA;
-    padding: 40px 20px;
+    padding: 60px 20px;
     text-align: center;
+    animation: fadeIn 1s ease forwards;
 }
 
 .info-section h2 {
     color: white;
-    font-size: 2.0em;
+    font-size: 2.5em;
     margin-bottom: 30px;
 }
 
 .info-boxes {
     display: flex;
     justify-content: center;
-    gap: 40px; /* Ajuste o espaçamento entre os ícones */
+    gap: 40px;
 }
 
 .info-box {
     background-color: white;
-    padding: 40px;
+    padding: 30px;
     border-radius: 10px;
     width: 250px;
     height: 250px;
     display: flex;
     justify-content: center;
     align-items: center;
-    transition: transform 0.3s ease-in-out;
+    transition: transform 0.3s ease;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .info-box:hover {
-    transform: scale(1.1); /* Efeito de hover */
+    transform: scale(1.1);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Sombra ao passar o mouse */
 }
 
 .info-box img {
-    width: 100px;
-    height: 100px;
+    width: 80px;
+    height: 80px;
 }
 
 /* Seção "Por que nós cuidamos de você" */
@@ -131,6 +154,7 @@ header .btn:hover {
     padding: 50px 20px;
     text-align: center;
     color: white;
+    animation: fadeIn 1s ease forwards;
 }
 
 .about-section h2 {
@@ -149,6 +173,7 @@ header .btn:hover {
     background-color: #ffffff;
     padding: 50px 20px;
     text-align: center;
+    animation: fadeIn 1s ease forwards;
 }
 
 .how-it-works h2 {
@@ -174,6 +199,11 @@ header .btn:hover {
     width: 100%;
     max-width: 400px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+}
+
+.role:hover {
+    transform: translateY(-5px); /* Eleva o card ao passar o mouse */
 }
 
 .role h3 {
@@ -194,6 +224,7 @@ header .btn:hover {
     align-items: center;
     background-color: #EBEAEA;
     padding: 50px 20px;
+    animation: fadeIn 1s ease forwards;
 }
 
 .mission-image {
@@ -206,6 +237,11 @@ header .btn:hover {
     width: 65%;
     height: 75%;
     display: block;
+    transition: transform 0.3s ease;
+}
+
+.mission-image img:hover {
+    transform: scale(1.05); /* Leve zoom ao passar o mouse */
 }
 
 .mission-text {
@@ -224,32 +260,6 @@ header .btn:hover {
     color: #333;
     line-height: 1.6;
     margin-bottom: 20px;
-}
-
-/* Responsividade */
-@media (max-width: 768px) {
-    .info-boxes {
-        flex-direction: column;
-    }
-
-    .mission-section {
-        flex-direction: column;
-        text-align: center;
-    }
-
-    .mission-image, .mission-text {
-        width: 100%;
-        padding-left: 0;
-    }
-
-    .roles {
-        flex-direction: column;
-    }
-
-    .role {
-        width: 100%;
-        margin-bottom: 20px;
-    }
 }
 
 /* Footer */
@@ -305,18 +315,13 @@ footer {
     margin: 0;
 }
 
+/* Responsividade */
 @media (max-width: 768px) {
+    .info-boxes {
+        flex-direction: column;
+    }
     .footer-container {
         flex-direction: column;
-        text-align: center;
-    }
-
-    .footer-left, .footer-center, .footer-right {
-        width: 100%;
-        margin-bottom: 20px;
-    }
-
-    .footer-right p {
         text-align: center;
     }
 }
