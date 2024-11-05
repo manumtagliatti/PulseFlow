@@ -1,3 +1,4 @@
+/* Estilos gerais */
 body, html {
     margin: 0;
     padding: 0;
@@ -7,11 +8,34 @@ body, html {
     background-color: #f9f9f9;
 }
 
+/* Botão de Voltar */
+.back-button {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    background-color: #2CABAA;
+    color: #FFF;
+    font-size: 18px;
+    font-family: 'Montserrat', sans-serif;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.back-button:hover {
+    background-color: #218f90;
+    transform: translateY(-3px);
+}
+
+/* Container e estilo do painel */
 .container {
     display: flex;
     height: 100vh;
 }
 
+/* Estilos do painel lateral */
 .side-panel {
     background: #2CABAA;
     color: #FFF;
@@ -27,7 +51,7 @@ body, html {
     text-align: center;
     font-size: 30px;
     line-height: 1.0;
-    padding: 0 50px;
+    padding: 0 40px;
     margin-bottom: 110px;
 }
 
@@ -44,6 +68,7 @@ body, html {
     margin-top: 110px;
 }
 
+/* Estilos do painel de perfil */
 .profile-panel {
     background: #FFF;
     width: 65%;
@@ -51,13 +76,13 @@ body, html {
     flex-direction: column;
     align-items: center;
     justify-content: flex-start;
-    padding: 90px;
+    padding: 130px;
 }
 
 .profile-info {
     display: flex;
     align-items: center;
-    margin-bottom: 30px;
+    margin-bottom: 10px;
 }
 
 .photo-container {
@@ -117,7 +142,6 @@ body, html {
     outline: none;
 }
 
-/* Botão com animação de hover */
 .profile-panel button {
     width: 250px;
     height: 50px;
@@ -129,12 +153,33 @@ body, html {
     font-weight: 500;
     border: none;
     cursor: pointer;
-    margin-top: 50px;
+    margin-top: 20px;
     transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
-/* Animação ao passar o mouse no botão */
 .profile-panel button:hover {
     background-color: #218f90;
-    transform: translateY(-3px); /* Elevação suave */
+    transform: translateY(-3px);
+}
+
+/* Estilo para mensagens */
+.message {
+    display: none;
+    padding: 10px;
+    margin-bottom: 15px;
+    border-radius: 5px;
+    font-weight: bold;
+    text-align: center;
+}
+
+.message.success {
+    color: #155724;
+    background-color: #d4edda;
+    border: 1px solid #c3e6cb;
+}
+
+.message.error {
+    color: #721c24;
+    background-color: #f8d7da;
+    border: 1px solid #f5c6cb;
 }

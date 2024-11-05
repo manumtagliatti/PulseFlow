@@ -8,18 +8,24 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet">
 </head>
 <body>
+    <!-- Botão de Voltar -->
+    <button class="back-button" onclick="goBack()">← Voltar</button>
+
     <div class="container">
         <div class="profile-panel">
             <div class="profile-info">
                 <div class="photo-container">
-                    <img src="imagens/Camera.png" class="photo" alt="Foto do perfil">
+                    <img src="imagens/Camera.png" class="photo" alt="Foto do perfil" id="camera-icon">
+                    <input type="file" accept="image/*" id="photo-input" style="display: none;">
                 </div>
                 <div class="name-info">
                     <h2><span id="nome-medico"></span></h2>
-                    <p><span id="crm-medico"></span></p>
+                    <p><span id="cpf-medico"></span></p>
                 </div>
             </div>
             <div class="form-container">
+                <!-- Adiciona a div para mensagens -->
+                <div id="message" class="message"></div> <!-- Elemento para exibir as mensagens -->
                 <form>
                     <div class="input-container">
                         <input type="text" placeholder="NOME COMPLETO">
