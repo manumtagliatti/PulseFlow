@@ -113,7 +113,7 @@ function updateChartData(labels, data) {
                 },
                 scales: {
                     y: {
-                        beginAtZero: false,
+                        beginAtZero: true,
                         title: {
                             display: true,
                             text: 'Pressão Arterial (mmHg)'
@@ -162,4 +162,46 @@ sairLink.addEventListener('click', () => {
 window.onload = function() {
     fetchInfoPaciente();
     fetchDadosDePressao(currentMonth);
+
+    // Inicializa o gráfico com eixos visíveis, mas sem dados
+    const ctx = document.getElementById('grafico-pressao').getContext('2d');
+    chartInstance = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: Array(12).fill(""), // Cria um array com placeholders
+            datasets: [{
+                label: 'Pressão Arterial (mmHg)',
+                data: [], // Sem dados iniciais
+                borderColor: 'rgba(44, 171, 170, 1)',
+                backgroundColor: 'rgba(44, 171, 170, 0.2)',
+                fill: true,
+                pointRadius: 5,
+                pointHoverRadius: 7,
+                tension: 0.3
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    display: false
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    title: {
+                        display: true,
+                        text: 'Pressão Arterial (mmHg)'
+                    }
+                },
+                x: {
+                    title: {
+                        display: true,
+                        text: 'Data'
+                    }
+                }
+            }
+        }
+    });
 };

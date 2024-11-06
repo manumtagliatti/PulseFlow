@@ -3,7 +3,6 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: 'Montserrat', sans-serif;
 }
 
 body {
@@ -20,7 +19,7 @@ header h2 {
     text-align: center;
     font-size: 45px;
     font-weight: 600;
-    margin-top: 40px;
+    margin-top: -10px;
 }
 
 main {
@@ -66,32 +65,12 @@ input {
     line-height: normal;
     margin-bottom: 20px;
     outline: none;
-    transition: all 0.3s ease;
 }
 
 input::placeholder {
     color: #B3B3B3;
     font-size: 16px;
     font-weight: 500;
-}
-
-/* Animações de foco e alerta para os inputs */
-input:focus {
-    border: 2px solid #2CABAA;
-    background-color: #f2fcfc;
-}
-
-input.warning {
-    border: 2px solid red;
-    animation: shake 0.3s ease;
-}
-
-@keyframes shake {
-    0% { transform: translateX(0); }
-    25% { transform: translateX(-5px); }
-    50% { transform: translateX(5px); }
-    75% { transform: translateX(-5px); }
-    100% { transform: translateX(0); }
 }
 
 .termos {
@@ -111,19 +90,11 @@ button {
     border: none;
     font-size: 14px;
     cursor: pointer;
-    transition: background-color 0.3s ease, transform 0.2s ease;
+    transition: background-color 0.3s ease;
     display: block;
     margin: 20px auto 0;
 }
 
-button:hover {
-    background-color: #21867A;
-    transform: scale(1.05);
-}
-
-button:active {
-    transform: scale(0.95);
-}
 
 .logo-container {
     position: fixed;
@@ -138,28 +109,13 @@ button:active {
 
 /* Estilo da mensagem de alerta */
 .alert-message {
-    color: #ff4d4f;
-    background-color: rgba(255, 77, 79, 0.1);
+    color: #2CABAA;
     font-size: 18px;
     font-weight: 400;
     text-align: center;
     display: none; /* Inicialmente escondido */
-    margin: 20px auto;
+    margin: 20px auto; /* Centraliza e adiciona espaço em cima e embaixo */
     width: 100%;
     max-width: 1040px;
-    padding: 10px 20px;
-    border-radius: 5px;
-    border: 1px solid #ff4d4f;
     font-family: 'Montserrat', sans-serif;
-    transition: opacity 0.3s ease;
-}
-
-.alert-message.show {
-    display: block;
-    animation: fadeIn 0.3s ease;
-}
-
-@keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
 }
