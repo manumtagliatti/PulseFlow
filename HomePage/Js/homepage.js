@@ -1,7 +1,7 @@
 // Botão "Entrar na Plataforma" com redirecionamento
 document.getElementById('entrarBtn').addEventListener('click', function(event) {
     event.preventDefault();
-    window.location.href = '../selecao.html';
+    window.location.href = '../Seleção/selecao.html';
 });
 
 // Navegação suave para seções
