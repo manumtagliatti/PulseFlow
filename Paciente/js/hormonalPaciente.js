@@ -1,9 +1,5 @@
-const baseURL = 'http://localhost:3000'; 
-let chartInstance;
-const dadosGlicemiaPorMes = {}; 
-
 document.addEventListener('DOMContentLoaded', async () => {
-    await fetchInfoPaciente(); 
+    await fetchInfoPaciente();
 
     const menuIcon = document.getElementById('icon-toggle');
     const dropdownMenu = document.getElementById('menu-dropdown');
@@ -18,17 +14,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     });
 
-    updateChart();
-});
-
-const perfilLink = document.querySelector('.meu-perfil');
-perfilLink.addEventListener('click', () => {
-    window.location.href = "profilePaciente.html";
-});
-
-const sairLink = document.querySelector('.sair');
-sairLink.addEventListener('click', () => {
-    window.location.href = "../HomePage/homepage.html";
+    initializeChart(); // Inicializa o gráfico com eixos e labels, mas sem dados
 });
 
 async function fetchInfoPaciente() {
@@ -44,33 +30,6 @@ async function fetchInfoPaciente() {
         }
     } catch (error) {
         console.error('Erro na requisição:', error);
-    }
-}
-
-async function enviarDadosHormonal() {
-    const data = document.getElementById('input-data').value;
-    const hormonio = document.getElementById('input-hormonio').value;
-    const dosagem = document.getElementById('input-dosagem').value;
-
-    if (!data || !hormonio || !dosagem) {
-        alert("Por favor, preencha todos os campos antes de enviar .");
-        return;
-    }
-
-    try {
-        const response = await fetch(`${baseURL}/api/hormonal`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ data, hormonio, dosagem, email: window.pacienteEmail })
-        });
-
-        if (!response.ok) throw new Error('Erro ao enviar dados');
-        const novoRegistro = await response.json();
-        console.log('Dados enviados com sucesso:', novoRegistro);
-
-        await fetchDadosDiabetes(window.pacienteEmail);
-    } catch (error) {
-        console.error('Erro ao enviar dados:', error);
     }
 }
 
@@ -90,7 +49,33 @@ async function fetchDadosDiabetes(email) {
     }
 }
 
-document.getElementById('salvar-medicao').addEventListener('click', enviarDadosHormonal);
+function initializeChart() {
+    const ctx = document.getElementById('grafico-glicemia').getContext('2d');
+    chartInstance = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: Array(10).fill(''), // Cria um array com labels vazios
+            datasets: [{
+                label: 'Nível de Hormônios',
+                data: [],
+                borderColor: 'rgba(44, 171, 170, 1)',
+                backgroundColor: 'rgba(44, 171, 170, 0.2)',
+                fill: true,
+                pointRadius: 4,
+                pointHoverRadius: 6,
+                tension: 0.2
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: { legend: { display: false }},
+            scales: {
+                y: { title: { display: true, text: 'Média de Hormônios' }},
+                x: { title: { display: true, text: 'Dias do Mês' }}
+            }
+        }
+    });
+}
 
 function updateChart(month) {
     const ctx = document.getElementById('grafico-glicemia').getContext('2d');
