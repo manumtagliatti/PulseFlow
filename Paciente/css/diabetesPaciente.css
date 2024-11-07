@@ -16,13 +16,13 @@ html, body {
     background-color: #2CABAA;
     display: flex;
     justify-content: space-between;
-    padding: 15px;
+    padding: 14.25px;
     align-items: center;
     color: white;
 }
 
 .logo img {
-    width: 150px;
+    width: 142.5px;
     height: auto;
 }
 
@@ -31,39 +31,39 @@ html, body {
 }
 
 .user-info p {
-    font-size: 16px;
-    margin-right: 10px;
+    font-size: 15.2px;
+    margin-right: 9.5px;
 }
 
 .menu-icon {
     cursor: pointer;
-    margin-left: 10px;
+    margin-left: 9.5px;
 }
 
 .menu-dropdown {
     display: none;
     position: absolute;
-    top: 40px;
-    right: 10px;
+    top: 38px;
+    right: 9.5px;
     background-color: #fff;
     border: 1px solid #ccc;
-    border-radius: 5px;
+    border-radius: 4.75px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     z-index: 1000;
-    width: 184px;
+    width: 175px;
 }
 
 .menu-dropdown ul {
     list-style-type: none;
-    padding: 8px;
+    padding: 7.6px;
 }
 
 .menu-dropdown ul li {
     display: flex;
     align-items: center;
-    padding: 8px;
+    padding: 7.6px;
     cursor: pointer;
-    font-size: 15px;
+    font-size: 14.25px;
 }
 
 .menu-dropdown ul li:hover {
@@ -72,15 +72,15 @@ html, body {
 
 .profile-icon,
 .logout-icon {
-    width: 30px;
-    height: 30px;
+    width: 28.5px;
+    height: 28.5px;
     display: inline-block;
 }
 
 .meu-perfil,
 .sair {
     color: #161F48;
-    font-size: 16px;
+    font-size: 15.2px;
     font-weight: 400;
 }
 
@@ -89,30 +89,22 @@ html, body {
     justify-content: center;
     align-items: center;
     width: 100%;
-    max-width: 840px;
-    margin: 40px auto 0;
+    max-width: 798px;
+    margin: 38px auto 0;
     flex-direction: column;
-}
-
-.title-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    width: 100%;
 }
 
 .title {
     color: #2CABAA;
-    font-size: 34px;
+    font-size: 32.3px;
     font-weight: 600;
-    margin-bottom: 20px;
+    margin-bottom: 19px;
 }
 
 .month-navigation {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 9.5px;
 }
 
 #prev-month,
@@ -125,7 +117,7 @@ html, body {
 
 #current-month {
     color: #161F48;
-    font-size: 17px;
+    font-size: 16.15px;
     font-weight: 400;
 }
 
@@ -133,21 +125,21 @@ html, body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 10px;
-    padding: 10px 0;
+    gap: 9.5px;
+    padding: 9.5px 0;
 }
 
 .chart-section {
     width: 100%;
-    max-width: 840px;
+    max-width: 798px;
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
 #grafico-glicemia {
-    max-width: 840px;
-    max-height: 440px;
+    max-width: 798px;
+    max-height: 418px;
     width: 100%;
     height: auto;
 }
@@ -162,31 +154,31 @@ html, body {
 .inputs-row {
     display: flex;
     justify-content: center;
-    gap: 5px;
+    gap: 4.75px;
     width: 100%;
-    max-width: 800px;
+    max-width: 760px;
 }
 
 .input-field {
-    width: 286px;
-    height: 60px;
+    width: 271.7px;
+    height: 57px;
     flex-shrink: 0;
-    border-radius: 12px;
+    border-radius: 11.4px;
     background: #E1E0E0;
     border: none;
-    padding: 10px;
-    font-size: 16px;
+    padding: 9.5px;
+    font-size: 15.2px;
     color: #161F48;
 }
 
 .salvar-medicao {
-    width: 336px;
-    height: 60px;
+    width: 319.2px;
+    height: 57px;
     flex-shrink: 0;
-    border-radius: 12px;
+    border-radius: 11.4px;
     background: #2CABAA;
     border: none;
     color: white;
-    font-size: 16px;
+    font-size: 15.2px;
     cursor: pointer;
 }
