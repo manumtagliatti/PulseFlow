@@ -1,0 +1,15 @@
+{
+  "name": "pulseflow",
+  "version": "1.0.0",
+  "description": "O PulseFlow é uma plataforma inovadora de acompanhamento de saúde, destinada a pacientes e médicos. A plataforma permite que pacientes registrem suas condições de saúde, como diabetes, pressão arterial, ciclo menstrual, insônia e asma, além de anexar exames e monitorar sua saúde. Médicos podem visualizar dados e registros para ajustar tratamentos de maneira mais eficiente e personalizada, promovendo um cuidado de saúde mais eficaz e colaborativo.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "keywords": [],
+  "dependencies": {
+    "express": "^4.21.1"
+  }
+}
