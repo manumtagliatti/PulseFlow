@@ -17,6 +17,15 @@ document.addEventListener('DOMContentLoaded', async () => {
     initializeChart(); // Inicializa o gráfico com eixos e labels, mas sem dados
 });
 
+const perfilLink = document.querySelector('.meu-perfil');
+perfilLink.addEventListener('click', () => {
+    window.location.href = "profilePaciente.html";
+});
+const sairLink = document.querySelector('.sair');
+sairLink.addEventListener('click', () => {
+    window.location.href = "../HomePage/homepage.html";
+});
+
 async function fetchInfoPaciente() {
     try {
         const response = await fetch(`${baseURL}/api/paciente/info`);

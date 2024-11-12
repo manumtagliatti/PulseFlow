@@ -21,6 +21,15 @@ document.addEventListener('DOMContentLoaded', async () => {
     document.getElementById('enviar-dados').addEventListener('click', enviarDadosDiabetes);
 });
 
+const perfilLink = document.querySelector('.meu-perfil');
+perfilLink.addEventListener('click', () => {
+    window.location.href = "profilePaciente.html";
+});
+const sairLink = document.querySelector('.sair');
+sairLink.addEventListener('click', () => {
+    window.location.href = "../HomePage/homepage.html";
+});
+
 async function fetchInfoPaciente() {
     try {
         const response = await fetch(`${baseURL}/paciente/info`);
