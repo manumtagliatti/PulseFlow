@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', () => {
     fetch('/api/cliente')
         .then(response => {
             if (!response.ok) {
-                throw new Error('Erro ao buscar o nome do cliente');
+                throw new Error('Erro ao buscar o nome do médico');
             }
             return response.json();
         })
@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', () => {
         })
         .catch(error => {
             console.error('Erro:', error);
-            document.getElementById('nome-medico').textContent = 'Cliente';
+            document.getElementById('nome-medico').textContent = 'Medico';
         });
 
     const menuIcon = document.getElementById('icon-toggle');

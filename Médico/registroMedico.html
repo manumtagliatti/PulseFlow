@@ -12,33 +12,32 @@
         <h2>PREENCHA AS INFORMAÇÕES</h2>
     </header>
     <main>
-        <form>
+        <form id="registroMedicoForm">
             <div class="form-sections">
                 <div class="personal-info">
                     <h3>Informações Pessoais</h3>
-                    <input type="text" placeholder="NOME COMPLETO" required>
-                    <input type="text" placeholder="CPF" required>
-                    <input type="tel" placeholder="TELEFONE PESSOAL" required>
-                    <input type="email" placeholder="EMAIL" required>
-                    <input type="password" placeholder="SENHA" required>
+                    <input type="text" id="nomeCompleto" placeholder="NOME COMPLETO" required>
+                    <input type="text" id="cpf" placeholder="CPF" required>
+                    <input type="tel" id="telefonePessoal" placeholder="TELEFONE PESSOAL" required>
+                    <input type="email" id="email" placeholder="EMAIL" required>
+                    <input type="password" id="senha" placeholder="SENHA" required>
                 </div>
-
                 <div class="professional-info">
                     <h3>Informações Profissionais</h3>
-                    <input type="text" placeholder="CRM" required>
-                    <input type="text" placeholder="ÁREA DE ATUAÇÃO" required>
-                    <input type="text" placeholder="ENDEREÇO DO CONSULTÓRIO 1" required>
-                    <input type="text" placeholder="ENDEREÇO DO CONSULTÓRIO 2">
-                    <input type="tel" placeholder="TELEFONE CONSULTÓRIO" required>
+                    <input type="text" id="crm" placeholder="CRM" required>
+                    <input type="text" id="areaAtuacao" placeholder="ÁREA DE ATUAÇÃO" required>
+                    <input type="text" id="enderecoConsultorio1" placeholder="ENDEREÇO DO CONSULTÓRIO 1" required>
+                    <input type="text" id="enderecoConsultorio2" placeholder="ENDEREÇO DO CONSULTÓRIO 2">
+                    <input type="tel" id="telefoneConsultorio" placeholder="TELEFONE CONSULTÓRIO" required>
                 </div>
             </div>
-
+            <!-- Mensagem de erro fixa e estilizada acima dos termos -->
+            <div class="alert-message" id="alertMessage" style="display: none;">Por favor, preencha todos os campos corretamente.</div>
             <p class="termos">
                 Criando a conta, você automaticamente aceita os 
                 <br>
                 termos de segurança de dados e utilização de informações.
             </p>
-
             <button type="submit">Criar Conta</button>
         </form>
         
@@ -46,5 +45,6 @@
             <img src="imagens/LogoRegistro.png" alt="Logo Pulse Flow">
         </div>
     </main>
+    <script src="js/registroMedico.js"></script>
 </body>
 </html>

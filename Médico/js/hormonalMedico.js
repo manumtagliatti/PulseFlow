@@ -1,5 +1,4 @@
 document.addEventListener('DOMContentLoaded', () => {
-
     fetch('/api/cliente')
         .then(response => {
             if (!response.ok) {
@@ -17,7 +16,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const menuIcon = document.getElementById('icon-toggle');
     const dropdownMenu = document.getElementById('menu-dropdown');
-    
+
     menuIcon.addEventListener('click', () => {
         dropdownMenu.style.display = dropdownMenu.style.display === 'block' ? 'none' : 'block';
     });
@@ -40,13 +39,13 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // Variável para armazenar os dados do gráfico (vazia inicialmente)
-let dadosPressaoPorMes = {};
+let dadosHormonaisPorMes = {};
 let currentMonth = 'Outubro 2024'; // Mês inicial para exibir estrutura
 let chartInstance; // Instância do gráfico
 
 // Função para buscar dados do backend
 function carregarDadosGrafico(email) {
-    fetch(`/api/pressao/dados-grafico/${email}`)
+    fetch(`/api/hormonal/dados-grafico/${email}`)
         .then(response => {
             if (!response.ok) {
                 throw new Error('Erro ao buscar dados do gráfico');
@@ -54,8 +53,8 @@ function carregarDadosGrafico(email) {
             return response.json();
         })
         .then(data => {
-            dadosPressaoPorMes = data; // Atualiza os dados com os dados do backend
-            currentMonth = Object.keys(dadosPressaoPorMes)[0] || 'Sem dados';
+            dadosHormonaisPorMes = data; // Atualiza os dados com os dados do backend
+            currentMonth = Object.keys(dadosHormonaisPorMes)[0] || 'Sem dados';
             document.getElementById('current-month').textContent = currentMonth;
             updateChart(currentMonth);
         })
@@ -65,8 +64,8 @@ function carregarDadosGrafico(email) {
 }
 
 function updateChart(month) {
-    const ctx = document.getElementById('grafico-pressao').getContext('2d');
-    const dadosMes = dadosPressaoPorMes[month] || { labels: [], data: [] }; // Dados vazios para estrutura
+    const ctx = document.getElementById('grafico-hormonal').getContext('2d');
+    const dadosMes = dadosHormonaisPorMes[month] || { labels: [], data: [] }; // Dados vazios para estrutura
 
     if (chartInstance) {
         chartInstance.destroy(); // Destrói o gráfico anterior antes de criar um novo
@@ -75,9 +74,9 @@ function updateChart(month) {
     const chartData = {
         labels: dadosMes.labels.length > 0 ? dadosMes.labels : ['Sem dados'],
         datasets: [{
-            label: 'Pressão Arterial (mmHg)',
+            label: 'Níveis Hormonais',
             data: dadosMes.data.length > 0 ? dadosMes.data : [null], // Exibe estrutura sem valores
-            borderColor: 'rgba(200, 200, 200, 1)',
+            borderColor: 'rgba(200, 200, 200, 1)', // Ajuste as cores conforme necessário
             backgroundColor: 'rgba(200, 200, 200, 0.2)',
             fill: true,
             pointRadius: 0, // Sem pontos, apenas estrutura
@@ -101,7 +100,7 @@ function updateChart(month) {
                     beginAtZero: true,
                     title: {
                         display: true,
-                        text: 'Pressão Arterial (mmHg)'
+                        text: 'Níveis Hormonais'
                     },
                     ticks: {
                         display: false // Oculta valores no eixo Y
@@ -126,7 +125,7 @@ function updateChart(month) {
 
 // Navegação entre meses
 document.getElementById('prev-month').addEventListener('click', () => {
-    const months = Object.keys(dadosPressaoPorMes);
+    const months = Object.keys(dadosHormonaisPorMes);
     const currentIndex = months.indexOf(currentMonth);
     if (currentIndex > 0) {
         currentMonth = months[currentIndex - 1];
@@ -136,7 +135,7 @@ document.getElementById('prev-month').addEventListener('click', () => {
 });
 
 document.getElementById('next-month').addEventListener('click', () => {
-    const months = Object.keys(dadosPressaoPorMes);
+    const months = Object.keys(dadosHormonaisPorMes);
     const currentIndex = months.indexOf(currentMonth);
     if (currentIndex < months.length - 1) {
         currentMonth = months[currentIndex + 1];

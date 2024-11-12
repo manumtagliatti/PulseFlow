@@ -1,8 +1,8 @@
-const baseURL = 'http://localhost:3000'; // Endereço do backend
+const baseURL = 'http://localhost:3000';
 
 document.addEventListener('DOMContentLoaded', async () => {
-    initChart(); // Inicializa o gráfico sem dados na carga da página
-    await fetchInfoPaciente(); // Carrega o nome e email do paciente do backend
+    initChart();
+    await fetchInfoPaciente();
 
     const menuIcon = document.getElementById('icon-toggle');
     const dropdownMenu = document.getElementById('menu-dropdown');
@@ -14,6 +14,11 @@ document.addEventListener('DOMContentLoaded', async () => {
             dropdownMenu.style.display = 'none';
         }
     });
+
+    document.getElementById('inputHora').addEventListener('input', formatarHora);
+    document.getElementById('inputGlicemia').addEventListener('input', impedirCaracteresNaoNumericos);
+
+    document.getElementById('enviar-dados').addEventListener('click', enviarDadosDiabetes);
 });
 
 async function fetchInfoPaciente() {
@@ -37,7 +42,6 @@ async function fetchDadosDiabetes(email) {
         const response = await fetch(`${baseURL}/api/diabetes/${email}`);
         if (!response.ok) throw new Error('Erro ao buscar dados');
         const registros = await response.json();
-
         const labels = registros.map(registro => registro.data);
         const data = registros.map(registro => registro.nivelGlicemia);
         updateChart(labels, data);
@@ -51,41 +55,33 @@ function initChart() {
     window.myChart = new Chart(ctx, {
         type: 'line',
         data: {
-            labels: [], // Rótulos dos pontos no eixo X
-            datasets: [{ // Dados para a linha do gráfico
-                data: [], // Os dados numéricos que você plotará
-                backgroundColor: 'rgba(255, 99, 132, 0.2)', // Cor de fundo dos pontos
-                borderColor: 'rgba(255, 99, 132, 1)', // Cor da linha
-                borderWidth: 1 // Espessura da linha
+            labels: [],
+            datasets: [{
+                data: [],
+                backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                borderColor: 'rgba(255, 99, 132, 1)',
+                borderWidth: 1
             }]
         },
         options: {
             scales: {
                 y: {
-                    beginAtZero: true // Inicia o eixo Y do zero
+                    beginAtZero: true
                 }
             },
-            legend: {
-                display: false // Configuração crucial para garantir que não haja legenda
-            },
             plugins: {
-                legend: false // Outra configuração para garantir que não haja legenda no Chart.js recente
+                legend: { display: false }
             }
         }
     });
 }
 
-
-
 function updateChart(labels, data) {
     window.myChart.data.labels = labels;
-    window.myChart.data.datasets.forEach((dataset) => {
-        dataset.data = data;
-    });
+    window.myChart.data.datasets[0].data = data;
     window.myChart.update();
 }
 
-// Correção: defina como async para usar await dentro dela
 async function enviarDadosDiabetes() {
     const data = document.getElementById('inputData').value;
     const hora = document.getElementById('inputHora').value;
@@ -122,6 +118,11 @@ async function enviarDadosDiabetes() {
     }
 }
 
+// Função para impedir que caracteres não numéricos sejam inseridos no campo de glicemia
+function impedirCaracteresNaoNumericos(e) {
+    e.target.value = e.target.value.replace(/\D/g, '');
+}
+
 function formatarHora(e) {
     let hora = e.target.value.replace(/\D/g, '');
     if (hora.length >= 3) {
@@ -139,3 +140,4 @@ function validarGlicemia(glicemia) {
     const valorGlicemia = parseInt(glicemia, 10);
     return valorGlicemia >= 30 && valorGlicemia <= 500;
 }
+

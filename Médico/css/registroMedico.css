@@ -65,7 +65,7 @@ input {
     font-size: 24px;
     font-weight: 500;
     line-height: normal;
-    margin-bottom: 20px; /* Aumenta o espaço entre os inputs */
+    margin-bottom: 20px;
     outline: none;
 }
 
@@ -77,12 +77,29 @@ input::placeholder {
 }
 
 .termos {
+    position: relative;
     color: #2CABAA;
     text-align: center;
     font-family: Montserrat, sans-serif;
     font-size: 18px;
     font-weight: 400;
-    margin-top: 20px; /* Ajusta o espaço acima do texto */
+    margin-top: 20px;
+}
+
+.alert-message {
+    position: absolute;
+    top: -30px;
+    left: 0;
+    right: 0;
+    color: #FF0000;
+    font-size: 18px;
+    font-weight: 400;
+    text-align: center;
+    display: none;
+    margin: 0 auto;
+    width: 100%;
+    max-width: 1040px;
+    font-family: 'Montserrat', sans-serif;
 }
 
 button {
@@ -96,7 +113,7 @@ button {
     cursor: pointer;
     transition: background-color 0.3s ease;
     display: block;
-    margin: 20px auto 0; /* Centraliza o botão */
+    margin: 20px auto 0;
 }
 
 button:hover {
