@@ -15,8 +15,30 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
 
     initializeChart(); // Inicializa o gráfico com eixos e labels, mas sem dados
+
+    // Event listener para o botão de salvar
+    document.getElementById('salvar-medicao').addEventListener('click', validarCampos);
+    
+    // Restrição para o campo dosagem
+    const inputDosagem = document.getElementById('input-dosagem');
+    inputDosagem.addEventListener('input', () => {
+        inputDosagem.value = inputDosagem.value.replace(/\D/g, ''); // Remove caracteres não numéricos
+    });
 });
 
+function validarCampos() {
+    const data = document.getElementById('input-data').value;
+    const hormonio = document.getElementById('input-hormonio').value;
+    const dosagem = document.getElementById('input-dosagem').value;
+
+    if (!data || !hormonio || !dosagem) {
+        alert('Por favor, preencha todos os campos antes de salvar.');
+        return;
+    }
+    // Código para salvar os dados aqui, caso os campos estejam preenchidos
+}
+
+// Funções e código adicional
 const perfilLink = document.querySelector('.meu-perfil');
 perfilLink.addEventListener('click', () => {
     window.location.href = "profilePaciente.html";
