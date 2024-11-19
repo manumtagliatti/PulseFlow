@@ -1,15 +1,19 @@
 document.addEventListener("DOMContentLoaded", function () {
-    const form = document.querySelector("form");
-    const cpfInput = document.querySelector('input[type="text"]');
-    const passwordInput = document.querySelector('input[type="password"]');
-    const alertMessage = document.querySelector(".alert-message");
+    const form = document.querySelector("#loginForm");
+    const cpfInput = document.querySelector("#cpf");
+    const senhaInput = document.querySelector("#senha");
+    const alertMessage = document.querySelector("#alertMessage");
+    const registerBtn = document.querySelector("#register-btn"); // Referência para o botão "Cadastre-se Aqui"
 
-    // Envio do formulário de login
+    // Evento de click no botão "Cadastre-se Aqui"
+    registerBtn.addEventListener("click", function () {
+        window.location.href = "registromedico.html"; // Redireciona para a página de registro
+    });
+
     form.addEventListener("submit", function (event) {
-        event.preventDefault(); // Impede o envio do formulário padrão
+        event.preventDefault();
 
-        // Verifica se os campos estão vazios
-        if (!cpfInput.value || !passwordInput.value) {
+        if (!cpfInput.value || !senhaInput.value) {
             alertMessage.textContent = "Por favor, preencha todos os campos.";
             alertMessage.style.display = "block";
             return;
@@ -17,62 +21,36 @@ document.addEventListener("DOMContentLoaded", function () {
             alertMessage.style.display = "none";
         }
 
-        // Dados de login
         const loginData = {
-            cpf: cpfInput.value,
-            senha: passwordInput.value,
+            cpf: cpfInput.value.trim(),
+            senha: senhaInput.value.trim(),
         };
 
-        // Enviar dados para o servidor
-        fetch("http://localhost:3000/paciente/login", {
+        fetch("http://localhost:3000/api/medico/login", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
             },
             body: JSON.stringify(loginData),
         })
-            .then((response) => {
-                if (!response.ok) {
-                    return response.text().then((text) => {
-                        throw new Error(text);
-                    });
-                }
-                return response.json();
-            })
-            .then((data) => {
-                // Armazena o token e redireciona para a página protegida
-                localStorage.setItem("token", data.token);
-                window.location.href = "/pagina-protegida.html"; // Redireciona após login
-            })
-            .catch((error) => {
-                alertMessage.textContent = error.message || "Erro ao fazer login.";
-                alertMessage.style.display = "block";
-            });
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert("Login bem-sucedido!");
+                localStorage.setItem("authToken", data.token);  // Armazenar o token
+                window.location.href = "profileMedico.html";  // Redirecionar para o perfil
+            } else {
+                showAlert(data.message || "CPF ou senha incorretos.");
+            }
+        })
+        .catch(error => {
+            console.error("Erro:", error);
+            showAlert("Erro de conexão com o servidor.");
+        });
     });
 
-    // Permite apenas números no campo de CPF
-    cpfInput.addEventListener("input", function (event) {
-        const value = this.value.replace(/[^0-9]/g, '');
-        if (this.value !== value) {
-            this.value = value;
-            alertMessage.textContent = "Por favor, insira apenas números no CPF.";
-            alertMessage.style.display = "block";
-        } else {
-            alertMessage.style.display = "none";
-        }
-    });
-
-    // Redirecionamento para redefinir senha
-    document.getElementById('forgot-password')?.addEventListener('click', function(event) {
-        event.preventDefault(); // Previne comportamento padrão
-        console.log("Redirecionando para a página de redefinição de senha...");
-        window.location.href = '../Redefinir/redefinirSenha.html';
-    });
-
-    // Redirecionamento para página de registro
-    document.getElementById('register-btn')?.addEventListener('click', function(event) {
-        event.preventDefault();
-        console.log("Redirecionando para a página de registro de médico...");
-        window.location.href = '../Médico/registroMedico.html';
-    });
+    function showAlert(message) {
+        alertMessage.textContent = message;
+        alertMessage.style.display = "block";
+    }
 });

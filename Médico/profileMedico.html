@@ -8,44 +8,36 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet">
 </head>
 <body>
-    <!-- Botão de Voltar -->
     <button class="back-button" onclick="goBack()">← Voltar</button>
 
     <div class="container">
         <div class="profile-panel">
             <div class="profile-info">
                 <div class="photo-container">
-                    <img src="imagens/Camera.png" class="photo" alt="Foto do perfil" id="camera-icon">
+                    <img src="imagens/Camera.png" class="photo" alt="Foto do perfil" id="photo">
                     <input type="file" accept="image/*" id="photo-input" style="display: none;">
+                    <img src="imagens/camera-icon.png" alt="Camera Icon" id="camera-icon" class="camera-icon">
                 </div>
                 <div class="name-info">
                     <h2><span id="nome-medico"></span></h2>
-                    <p><span id="cpf-medico"></span></p>
+                    <p><span id="crm"></span></p>
                 </div>
             </div>
             <div class="form-container">
-                <!-- Adiciona a div para mensagens -->
-                <div id="message" class="message"></div> <!-- Elemento para exibir as mensagens -->
+                <div id="message" class="message"></div>
                 <form>
                     <div class="input-container">
-                        <input type="text" placeholder="NOME COMPLETO">
+                        <input type="text" placeholder="NOME COMPLETO" id="input-nome" disabled>
                     </div>
                     <div class="input-container">
-                        <input type="tel" placeholder="TELEFONE CONSULTÓRIO">
+                        <input type="tel" placeholder="TELEFONE CONSULTÓRIO" id="input-telefone" disabled>
                     </div>
                     <div class="input-container">
-                        <input type="text" placeholder="ENDEREÇO CONSULTÓRIO">
+                        <input type="text" placeholder="ENDEREÇO CONSULTÓRIO" id="input-endereco" disabled>
                     </div>
                     <div class="input-container">
-                        <input type="email" placeholder="EMAIL">
+                        <input type="email" placeholder="EMAIL" id="input-email" disabled>
                     </div>
-                    <div class="input-container">
-                        <input type="password" placeholder="SENHA">
-                    </div>
-                    <div class="input-container">
-                        <input type="password" placeholder="CONFIRMAR SENHA">
-                    </div>
-                    <button type="submit">Salvar Alterações</button>
                 </form>
             </div>
         </div>
@@ -57,6 +49,7 @@
             <img src="imagens/LogoVerde.png" class="logo" alt="Logo Pulse Flow">
         </div>
     </div>
+
     <script src="js/profileMedico.js"></script>
 </body>
 </html>
