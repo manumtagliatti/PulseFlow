@@ -49,10 +49,13 @@
     </header>
     <main>
         <h1>Analise as crises de asma do seu paciente</h1>
+        <div id="mensagem-sem-dados" style="display: none; text-align: center; color: red; font-size: 11px;">
+            Não há registros de asma para o mês selecionado.
+        </div>      
             <div class="chart-section">
-                <span class="arrow-left">&#9664;</span> <!-- Seta para esquerda -->
+                <span id="prev-month" class="arrow-left">&#9664;</span> <!-- Seta para esquerda -->
                 <canvas id="asmaChart" width="400" height="400"></canvas> <!-- Elemento Canvas para o gráfico -->
-                <span class="arrow-right">&#9654;</span> <!-- Seta para direita -->
+                <span id="next-month" class="arrow-right">&#9654;</span> <!-- Seta para direita -->
             </div>
         </div>
     </main>

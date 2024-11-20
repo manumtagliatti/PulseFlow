@@ -1,118 +1,254 @@
-// Simulando o nome do médico logado
-const medicoLogado = "Dimas Augusto";  // Aqui você pode pegar o nome real de uma fonte como API ou localStorage
-
-// Definindo o nome no campo correto
 document.addEventListener('DOMContentLoaded', () => {
-    document.getElementById('nome-medico').textContent = medicoLogado;
-    
-    // Toggle para exibir/ocultar o menu
+    const authToken = localStorage.getItem('authToken');
+    const email = 'julio@gmail.com'; // Email do paciente
+
+    if (!authToken) {
+        alert("Você precisa fazer login primeiro.");
+        window.location.href = "loginMedico.html";
+        return;
+    }
+
+    carregarNomeMedico(authToken);
+    carregarDadosGraficoAsma(email, authToken);
+
     const menuIcon = document.getElementById('icon-toggle');
     const dropdownMenu = document.getElementById('menu-dropdown');
-    
+
     menuIcon.addEventListener('click', () => {
         dropdownMenu.style.display = dropdownMenu.style.display === 'block' ? 'none' : 'block';
     });
-    
-    // Fecha o menu se clicar fora dele
+
     document.addEventListener('click', (event) => {
         if (!menuIcon.contains(event.target) && !dropdownMenu.contains(event.target)) {
             dropdownMenu.style.display = 'none';
         }
     });
+
+    document.querySelector('.meu-perfil').addEventListener('click', () => {
+        window.location.href = "profileMedico.html";
+    });
+
+    document.querySelector('.sair').addEventListener('click', () => {
+        window.location.href = "../HomePage/homepage.html";
+    });
+
+    document.getElementById('prev-month').addEventListener('click', () => {
+        alterarMes(-1);
+    });
+
+    document.getElementById('next-month').addEventListener('click', () => {
+        alterarMes(1);
+    });
+
+    updateMonthTitle();
+    initializeChartAsma();
 });
 
-document.addEventListener("DOMContentLoaded", () => {
-    const saveButton = document.querySelector(".save-button");
-    const arrowLeft = document.querySelector(".arrow-left");
-    const arrowRight = document.querySelector(".arrow-right");
+let chartInstanceAsma;
+let asmaData = [];
+let currentMonth = new Date().getMonth();
+let currentYear = new Date().getFullYear();
 
-    // Índice do mês atual (inicia no primeiro mês)
-    let currentMonth = 0;
+const monthNames = [
+    "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho",
+    "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"
+];
 
-    // Dados de exemplo para os meses
-    const monthlyData = [
-        { label: "Janeiro", data: [1, 2, 1, 3, 2, 4, 3, 2, 1, 3, 4, 2, 1, 4, 3, 2, 1, 3, 4, 1, 2, 3, 1, 3, 2, 4, 1, 3, 2, 4] },
-        { label: "Fevereiro", data: [2, 3, 2, 4, 1, 2, 4, 2, 3, 1, 3, 4, 2, 1, 3, 4, 2, 3, 1, 3, 2, 1, 4, 3, 1, 2, 4, 3] },
-        // Adicione mais meses conforme necessário
-    ];
+function carregarNomeMedico(authToken) {
+    fetch('http://localhost:3000/api/medico/perfil', {
+        method: 'GET',
+        headers: {
+            'Authorization': `Bearer ${authToken}`,
+            'Content-Type': 'application/json'
+        }
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error("Erro ao buscar o nome do médico.");
+        }
+        return response.json();
+    })
+    .then(data => {
+        document.getElementById('nome-medico').textContent = ` Dr. ${data.medico.nomeCompleto}`;
+    })
+    .catch(error => {
+        console.error("Erro ao buscar o nome do médico:", error);
+        document.getElementById('nome-medico').textContent = 'Dr.';
+    });
+}
 
-    // Função para criar o gráfico com os dados do mês atual
-    const createChart = (data) => {
-        const ctx = document.getElementById("asmaChart").getContext("2d");
-        return new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: Array.from({ length: data.data.length }, (_, i) => i + 1),
-                datasets: [{
-                    label: data.label,
-                    data: data.data,
-                    borderColor: '#2CABAA',
-                    backgroundColor: 'rgba(44, 171, 170, 0.2)',
-                    fill: true,
-                    tension: 0.3,
-                    pointRadius: 4,
-                    pointBackgroundColor: '#2CABAA'
-                }]
-            },
-            options: {
-                responsive: true,
-                plugins: {
-                    legend: {
-                        display: true,
-                        position: 'top',
-                        labels: {
-                            color: '#333'
-                        }
-                    }
+function carregarDadosGraficoAsma(email, authToken) {
+    fetch(`http://localhost:3000/api/asma/${email}`, {
+        method: 'GET',
+        headers: {
+            'Authorization': `Bearer ${authToken}`,
+            'Content-Type': 'application/json'
+        }
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error("Erro ao buscar os dados de crises de asma.");
+        }
+        return response.json();
+    })
+    .then(data => {
+        if (!data || !data.data || data.data.length === 0) {
+            mostrarMensagemSemDadosAsma();
+            return;
+        }
+
+        asmaData = data.data.map(item => ({
+            date: new Date(item.dataCrise),
+            intensidade: item.intensidadeCrise,
+            duration: item.tempoDuracaoCrise,
+            time: item.horaCrise
+        }));
+
+        updateChartAsma();
+    })
+    .catch(error => {
+        console.error("Erro ao buscar os dados de crises de asma:", error);
+        mostrarMensagemSemDadosAsma();
+    });
+}
+
+
+
+function updateMonthTitle() {
+    const monthTitle = document.getElementById('current-month');
+    if (monthTitle) {
+        monthTitle.textContent = `${monthNames[currentMonth]} ${currentYear}`;
+    }
+}
+
+function alterarMes(offset) {
+    currentMonth += offset;
+
+    if (currentMonth < 0) {
+        currentMonth = 11;
+        currentYear--;
+    } else if (currentMonth > 11) {
+        currentMonth = 0;
+        currentYear++;
+    }
+
+    updateMonthTitle();
+
+    // Atualizar o rótulo do gráfico com o novo mês e ano
+    if (chartInstanceAsma) {
+        chartInstanceAsma.data.datasets[0].label = `${monthNames[currentMonth]} ${currentYear}`;
+        chartInstanceAsma.update();
+    }
+
+    updateChartAsma();
+}
+
+function initializeChartAsma() {
+    const ctx = document.getElementById('asmaChart').getContext('2d');
+    chartInstanceAsma = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: [], // Rótulos do eixo X
+            datasets: [{
+                label: `${monthNames[currentMonth]} ${currentYear}`,
+                data: [], // Dados de intensidade
+                borderColor: 'rgba(75, 192, 192, 1)',
+                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                fill: true,
+                tension: 0.3
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    display: true,
+                    position: 'top'
                 },
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        min: 0,
-                        max: 5,
-                        ticks: {
-                            stepSize: 1,
-                            callback: (value) => {
-                                const labels = ["Leve", "Moderada", "Severa"];
-                                return labels[value - 1] || "";
-                            }
+                tooltip: {
+                    callbacks: {
+                        title: function(context) {
+                            const index = context[0].dataIndex;
+                            const day = chartInstanceAsma.data.labels[index];
+                            return `Dia ${day}`;
                         },
-                        title: {
-                            display: true,
-                            text: "Intensidade da Crise",
-                            color: '#333'
-                        }
-                    },
-                    x: {
-                        title: {
-                            display: true,
-                            text: "Dias do Mês",
-                            color: '#333'
+                        label: function(context) {
+                            const index = context.dataIndex;
+                            const sortedData = chartInstanceAsma.data.datasets[0].data[index];
+                            const duration = asmaData.find(item => item.intensidade === sortedData)?.duration || "Desconhecida";
+                            const time = asmaData.find(item => item.intensidade === sortedData)?.time || "Hora não registrada";
+                            return `Intensidade: ${context.raw}, Duração: ${duration}, Hora: ${time}`;
                         }
                     }
                 }
+            },
+            scales: {
+                x: {
+                    title: {
+                        display: true,
+                        text: 'Dias do Mês'
+                    }
+                },
+                y: {
+                    title: {
+                        display: true,
+                        text: 'Intensidade da Crise'
+                    },
+                    min: 1, // Começa no valor 1
+                    max: 9, // Termina no valor 8
+                    ticks: {
+                        stepSize: 1, // Adiciona divisores de 1 em 1
+                        callback: function(value) {
+                            // Adiciona rótulos específicos
+                            if (value === 3) return 'Leve';
+                            if (value === 5) return 'Moderada';
+                            if (value === 7) return 'Severa';
+                            return ''; // Outros valores sem rótulos
+                        }
+                    },
+                    grid: {
+                        drawTicks: true,
+                        color: 'rgba(200, 200, 200, 0.3)', // Linhas de grade neutras
+                        drawBorder: true // Mantém a borda visível
+                    }
+                }
             }
-        });
-    };
-
-    // Inicializa o gráfico com os dados do primeiro mês
-    let asmaChart = createChart(monthlyData[currentMonth]);
-
-    // Função para atualizar o gráfico com os dados do mês selecionado
-    const updateChart = () => {
-        asmaChart.destroy(); // Destroi o gráfico atual para evitar sobreposição
-        asmaChart = createChart(monthlyData[currentMonth]); // Cria um novo gráfico com os dados do mês atualizado
-    };
-
-    // Event Listener para a seta esquerda (mês anterior)
-    arrowLeft.addEventListener("click", () => {
-        currentMonth = (currentMonth - 1 + monthlyData.length) % monthlyData.length; // Atualiza para o mês anterior
-        updateChart();
+        }
     });
+}
 
-    // Event Listener para a seta direita (próximo mês)
-    arrowRight.addEventListener("click", () => {
-        currentMonth = (currentMonth + 1) % monthlyData.length; // Atualiza para o próximo mês
-        updateChart();
-    });
-});
+function updateChartAsma() {
+    const filteredData = asmaData.filter(item => 
+        item.date.getMonth() === currentMonth && item.date.getFullYear() === currentYear
+    );
+
+    const sortedData = filteredData.sort((a, b) => a.date.getDate() - b.date.getDate());
+
+    if (sortedData.length === 0) {
+        mostrarMensagemSemDadosAsma();
+        return;
+    }
+
+    const labels = sortedData.map(item => item.date.getDate());
+    const data = sortedData.map(item => item.intensidade);
+
+    chartInstanceAsma.data.labels = labels;
+    chartInstanceAsma.data.datasets[0].data = data;
+
+    chartInstanceAsma.update();
+    document.getElementById('mensagem-sem-dados').style.display = 'none';
+}
+
+
+function mostrarMensagemSemDadosAsma() {
+    if (chartInstanceAsma) {
+        chartInstanceAsma.data.labels = ['Sem dados'];
+        chartInstanceAsma.data.datasets[0].data = [null];
+        chartInstanceAsma.update();
+    }
+    const mensagemSemDados = document.getElementById('mensagem-sem-dados');
+    if (mensagemSemDados) {
+        mensagemSemDados.style.display = 'block';
+    }
+}
