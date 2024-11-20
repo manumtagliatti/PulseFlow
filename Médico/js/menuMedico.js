@@ -1,29 +1,17 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // Obter o nome do médico ao carregar a página
-    fetch('http://127.0.0.1:3000/api/medico/perfil', {
-        headers: {
-            'Authorization': `Bearer ${localStorage.getItem('token')}` // Token salvo no localStorage
-        }
-    })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error('Erro ao buscar o nome do médico');
-        }
-        return response.json();
-    })
-    .then(data => {
-        // Atribui o nome do médico ao elemento da página
-        document.getElementById('nome-medico').textContent = data.medico.nomeCompleto || 'Nome não disponível';
-    })
-    .catch(error => {
-        console.error('Erro:', error);
-        document.getElementById('nome-medico').textContent = 'Médico não encontrado';
-    });
+    const authToken = localStorage.getItem('authToken'); // Certifique-se de que o token seja consistente
+    if (!authToken) {
+        alert("Você precisa fazer login primeiro.");
+        window.location.href = "loginMedico.html";
+        return;
+    }
+
+    carregarNomeMedico(authToken);
 
     // Controle do menu dropdown
     const menuIcon = document.getElementById('icon-toggle');
     const dropdownMenu = document.getElementById('menu-dropdown');
-    
+
     menuIcon.addEventListener('click', () => {
         dropdownMenu.style.display = dropdownMenu.style.display === 'block' ? 'none' : 'block';
     });
@@ -35,12 +23,12 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // Redirecionar para as páginas de perfil e logout
-    document.querySelector('.meu-perfil').addEventListener('click', () => {
+    document.querySelector('.meu-perfil')?.addEventListener('click', () => {
         window.location.href = "profileMedico.html";
     });
 
-    document.querySelector('.sair').addEventListener('click', () => {
-        localStorage.removeItem('token'); // Remover o token ao sair
+    document.querySelector('.sair')?.addEventListener('click', () => {
+        localStorage.removeItem('authToken'); // Remover o token ao sair
         window.location.href = "../HomePage/homepage.html";
     });
 
@@ -49,38 +37,46 @@ document.addEventListener('DOMContentLoaded', () => {
         card.addEventListener('click', () => {
             const imgAlt = card.querySelector('img').alt;
 
-            let targetPage;
-            switch (imgAlt) {
-                case "Pressão Alta":
-                    targetPage = "pressaoArterialM.html";
-                    break;
-                case "Diabetes":
-                    targetPage = "diabetesMedico.html";
-                    break;
-                case "Hormonal":
-                    targetPage = "hormonalMedico.html";
-                    break;
-                case "Ciclo Menstrual":
-                    targetPage = "cicloMedico.html";
-                    break;
-                case "Enxaqueca":
-                    targetPage = "enxaquecaMedico.html";
-                    break;
-                case "Insônia":
-                    targetPage = "insoniaMedico.html";
-                    break;
-                case "Asma":
-                    targetPage = "asmaMedico.html";
-                    break;
-                case "Exames":
-                    targetPage = "examesMedico.html";
-                    break;
-                default:
-                    console.log("Página não encontrada.");
-                    return;
-            }
+            const pages = {
+                "Pressão Alta": "pressaoArterialM.html",
+                "Diabetes": "diabetesMedico.html",
+                "Hormonal": "hormonalMedico.html",
+                "Ciclo Menstrual": "cicloMedico.html",
+                "Enxaqueca": "enxaquecaMedico.html",
+                "Insônia": "insoniaMedico.html",
+                "Asma": "asmaMedico.html",
+                "Exames": "examesMedico.html"
+            };
 
-            window.location.href = targetPage;
+            const targetPage = pages[imgAlt];
+            if (targetPage) {
+                window.location.href = targetPage;
+            } else {
+                console.log("Página não encontrada.");
+            }
         });
     });
 });
+
+function carregarNomeMedico(authToken) {
+    fetch('http://localhost:3000/api/medico/perfil', {
+        method: 'GET',
+        headers: {
+            'Authorization': `Bearer ${authToken}`,
+            'Content-Type': 'application/json'
+        }
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error("Erro ao buscar o nome do médico.");
+        }
+        return response.json();
+    })
+    .then(data => {
+        document.getElementById('nome-medico').textContent = ` ${data.medico.nomeCompleto}`;
+    })
+    .catch(error => {
+        console.error("Erro ao buscar o nome do médico:", error);
+        document.getElementById('nome-medico').textContent = 'Dr.';
+    });
+}
