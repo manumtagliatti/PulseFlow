@@ -51,6 +51,9 @@
     <main>
         <div class="container">
             <div class="title">Medição de Diabetes</div>
+            <div id="mensagem-sem-dados" style="display: none; text-align: center; color: red; font-size: 11px;">
+                Não há registros para o mês selecionado.
+            </div> 
             <div class="right-content">
                 <div class="month-navigation">
                     <button id="prev-month" class="nav-button">
@@ -69,115 +72,6 @@
             </div>
         </div>
     </main>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            fetch('/api/cliente')
-                .then(response => {
-                    if (!response.ok) throw new Error('Erro ao buscar o nome do médico');
-                    return response.json();
-                })
-                .then(data => document.getElementById('nome-medico').textContent = data.nome)
-                .catch(() => document.getElementById('nome-medico').textContent = 'Medico');
-
-            const menuIcon = document.getElementById('icon-toggle');
-            const dropdownMenu = document.getElementById('menu-dropdown');
-            menuIcon.addEventListener('click', () => {
-                dropdownMenu.style.display = dropdownMenu.style.display === 'block' ? 'none' : 'block';
-            });
-            
-            document.addEventListener('click', event => {
-                if (!menuIcon.contains(event.target) && !dropdownMenu.contains(event.target)) {
-                    dropdownMenu.style.display = 'none';
-                }
-            });
-
-            document.querySelector('.meu-perfil').addEventListener('click', () => {
-                window.location.href = "profileMedico.html";
-            });
-            
-            document.querySelector('.sair').addEventListener('click', () => {
-                window.location.href = "../HomePage/homepage.html";
-            });
-
-            // Inicializa o gráfico com a estrutura vazia
-            document.getElementById('current-month').textContent = "Outubro 2024";
-            updateChart("Outubro 2024");
-        });
-
-        let chartInstance;
-
-        function updateChart(month) {
-            const ctx = document.getElementById('grafico-diabetes').getContext('2d');
-            
-            // Destrói o gráfico anterior antes de criar um novo
-            if (chartInstance) chartInstance.destroy();
-
-            // Configuração do gráfico com estrutura sem dados
-            chartInstance = new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: Array.from({ length: 7 }, (_, i) => `Dia ${i + 1}`),
-                    datasets: [{
-                        label: 'Nível de Glicemia (mg/dL)',
-                        data: [], // Nenhum dado real
-                        borderColor: 'rgba(200, 200, 200, 1)',
-                        backgroundColor: 'rgba(200, 200, 200, 0.2)',
-                        fill: true,
-                        pointRadius: 0,
-                        tension: 0.3
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            display: false
-                        }
-                    },
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            title: {
-                                display: true,
-                                text: 'Glicemia (mg/dL)'
-                            },
-                            min: 60,
-                            max: 180,
-                            ticks: {
-                                stepSize: 20,
-                            },
-                            grid: {
-                                display: true
-                            }
-                        },
-                        x: {
-                            title: {
-                                display: true,
-                                text: `Dias de ${month}`
-                            },
-                            grid: {
-                                display: true
-                            }
-                        }
-                    }
-                }
-            });
-        }
-
-        // Navegação entre meses
-        document.getElementById('prev-month').addEventListener('click', () => {
-            const monthLabel = document.getElementById('current-month');
-            monthLabel.textContent = "Setembro 2024";
-            updateChart(monthLabel.textContent);
-        });
-
-        document.getElementById('next-month').addEventListener('click', () => {
-            const monthLabel = document.getElementById('current-month');
-            monthLabel.textContent = "Novembro 2024";
-            updateChart(monthLabel.textContent);
-        });
-    </script>
+    <script src="js/diabetesMedico.js"></script>
 </body>
 </html>
