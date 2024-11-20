@@ -1,63 +1,94 @@
-const medicoLogado = "Dimas Augusto";  
+let currentMonth = new Date().getMonth(); // Outubro = 9
+let currentYear = new Date().getFullYear(); // Ano atual
 
 document.addEventListener('DOMContentLoaded', () => {
-    document.getElementById('nome-medico').textContent = medicoLogado;
-    
-    const menuIcon = document.getElementById('icon-toggle');
-    const dropdownMenu = document.getElementById('menu-dropdown');
-    
-    menuIcon.addEventListener('click', () => {
-        dropdownMenu.style.display = dropdownMenu.style.display === 'block' ? 'none' : 'block';
-    });
-    
-    document.addEventListener('click', (event) => {
-        if (!menuIcon.contains(event.target) && !dropdownMenu.contains(event.target)) {
-            dropdownMenu.style.display = 'none';
-        }
-    });
+    const authToken = localStorage.getItem("authToken");
+
+    if (!authToken) {
+        alert("Você precisa fazer login primeiro.");
+        window.location.href = "loginMedico.html";
+        return;
+    }
+
+    const emailPaciente = "maria@exemplo.com";
+    fetchCicloMenstrualData(emailPaciente, authToken);
 });
 
-const menstruationDays = [13, 14, 16];
-let currentMonth = new Date().getMonth();
-let currentYear = new Date().getFullYear();
+let ciclosMenstruais = []; // Armazena todos os ciclos recebidos do backend
 
-const monthNames = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"];
+function fetchCicloMenstrualData(email, authToken) {
+    fetch(`http://localhost:3000/api/ciclo-menstrual/${email}`, {
+        method: 'GET',
+        headers: {
+            "Authorization": `Bearer ${authToken}`,
+            "Content-Type": "application/json"
+        }
+    })
+        .then(response => {
+            if (!response.ok) {
+                if (response.status === 401) {
+                    alert("Sessão expirada. Por favor, faça login novamente.");
+                    localStorage.removeItem("authToken");
+                    window.location.href = "loginMedico.html";
+                } else if (response.status === 404) {
+                    alert("Nenhum ciclo menstrual encontrado para este paciente.");
+                }
+                throw new Error("Erro ao buscar os dados do ciclo menstrual.");
+            }
+            return response.json();
+        })
+        .then(data => {
+            ciclosMenstruais = data.data.map(ciclo => ({
+                dataInicial: new Date(ciclo.dataInicial),
+                dataFinal: new Date(ciclo.dataFinal)
+            }));
 
-function updateCalendarTitle() {
-    document.getElementById('current-month').textContent = `${monthNames[currentMonth]} ${currentYear}`;
+            updateCalendarTitle();
+            generateCalendar();
+        })
+        .catch(error => {
+            console.error("Erro ao buscar os dados do ciclo menstrual:", error);
+        });
 }
 
 function generateCalendar() {
     const firstDay = new Date(currentYear, currentMonth, 1).getDay();
     const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
     const calendarBody = document.getElementById('calendar-body');
-    calendarBody.innerHTML = '';  // Limpar o calendário
+    calendarBody.innerHTML = ''; // Limpa o calendário
 
     let date = 1;
 
     for (let i = 0; i < 6; i++) {
-        let row = document.createElement('tr');
+        const row = document.createElement('tr');
 
         for (let j = 0; j < 7; j++) {
-            let cell = document.createElement('td');
+            const cell = document.createElement('td');
 
             if (i === 0 && j < firstDay) {
-                let cellText = document.createTextNode("");
+                const cellText = document.createTextNode("");
                 cell.appendChild(cellText);
             } else if (date > daysInMonth) {
                 break;
             } else {
-                let cellText = document.createTextNode(date);
+                const cellText = document.createTextNode(date);
                 cell.appendChild(cellText);
 
-                if (menstruationDays.includes(date)) {
-                    let dot = document.createElement('div');
+                // Verifica se o dia está no intervalo de menstruação
+                const currentDate = new Date(currentYear, currentMonth, date);
+                if (isMenstruationDay(currentDate)) {
+                    const dot = document.createElement('div');
                     dot.classList.add('day-menstruacao');
                     cell.appendChild(dot);
                 }
 
+                // Destaca o dia atual
                 const today = new Date();
-                if (date === today.getDate() && currentMonth === today.getMonth() && currentYear === today.getFullYear()) {
+                if (
+                    date === today.getDate() &&
+                    currentMonth === today.getMonth() &&
+                    currentYear === today.getFullYear()
+                ) {
                     cell.classList.add('today');
                 }
 
@@ -69,29 +100,34 @@ function generateCalendar() {
     }
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-    generateCalendar();
+function isMenstruationDay(date) {
+    return ciclosMenstruais.some(ciclo => date >= ciclo.dataInicial && date <= ciclo.dataFinal);
+}
+
+function updateCalendarTitle() {
+    const monthNames = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"];
+    document.getElementById('current-month').textContent = `${monthNames[currentMonth]} ${currentYear}`;
+}
+
+// Navegação entre meses
+document.getElementById('prev-month').addEventListener('click', () => {
+    if (currentMonth === 0) {
+        currentMonth = 11;
+        currentYear--;
+    } else {
+        currentMonth--;
+    }
     updateCalendarTitle();
+    generateCalendar();
+});
 
-    document.getElementById('prev-month').addEventListener('click', () => {
-        if (currentMonth === 0) {
-            currentMonth = 11;
-            currentYear--;
-        } else {
-            currentMonth--;
-        }
-        generateCalendar();
-        updateCalendarTitle();
-    });
-
-    document.getElementById('next-month').addEventListener('click', () => {
-        if (currentMonth === 11) {
-            currentMonth = 0;
-            currentYear++;
-        } else {
-            currentMonth++;
-        }
-        generateCalendar();
-        updateCalendarTitle();
-    });
+document.getElementById('next-month').addEventListener('click', () => {
+    if (currentMonth === 11) {
+        currentMonth = 0;
+        currentYear++;
+    } else {
+        currentMonth++;
+    }
+    updateCalendarTitle();
+    generateCalendar();
 });
