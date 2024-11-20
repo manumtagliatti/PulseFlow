@@ -1,60 +1,36 @@
-document.addEventListener("DOMContentLoaded", function() {
-    const form = document.querySelector("form");
-    const cpfInput = document.querySelector('input[type="text"]');
-    const passwordInput = document.querySelector('input[type="password"]');
-    const submitButton = form.querySelector("button[type='submit']");
-    const alertMessage = document.querySelector(".alert-message");
+const loginPaciente = async (event) => {
+    event.preventDefault();
 
-    submitButton.addEventListener("click", async function(event) {
-        event.preventDefault();
+    const cpf = document.getElementById('cpf').value;
+    const senha = document.getElementById('senha').value;
 
+    if (!cpf || !senha) {
+        alert('Por favor, preencha todos os campos.');
+        return;
+    }
 
-        if (!cpfInput.value || !passwordInput.value) {
-            alertMessage.textContent = "Por favor, preencha todos os campos.";
-            alertMessage.style.display = "block";
-            return;
-        }
+    try {
+        const response = await fetch('http://localhost:3000/api/pacientes/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ cpf, senha })
+        });
 
-        try {
+        const data = await response.json();
 
-            const response = await fetch('/paciente/login', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    email: cpfInput.value,
-                    senha: passwordInput.value
-                })
-            });
+        if (response.status === 200) {
+            // Armazenar o token no localStorage ou sessionStorage
+            localStorage.setItem('token', data.token);
 
-            const data = await response.json();
-
-            if (response.ok) {
-
-                localStorage.setItem('token', data.token);
-
-                window.location.href = "menuPaciente.html";
-            } else {
-
-                alertMessage.textContent = data.message || "Erro ao fazer login. Tente novamente.";
-                alertMessage.style.display = "block";
-            }
-        } catch (error) {
-            alertMessage.textContent = "Erro ao conectar ao servidor. Tente novamente mais tarde.";
-            alertMessage.style.display = "block";
-        }
-    });
-
-
-    cpfInput.addEventListener("input", function() {
-        const value = this.value.replace(/[^0-9]/g, '');
-        if (this.value !== value) {
-            this.value = value;
-            alertMessage.textContent = "Por favor, insira apenas números no CPF.";
-            alertMessage.style.display = "block";
+            alert('Login realizado com sucesso!');
+            window.location.href = 'profilePaciente.html';
         } else {
-            alertMessage.style.display = "none";
+            alert(data.message || 'Erro ao realizar login');
         }
-    });
-});
+    } catch (error) {
+        console.error('Erro:', error);
+        alert('Erro ao conectar ao servidor');
+    }
+};
