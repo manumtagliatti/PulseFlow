@@ -1,18 +1,15 @@
 document.addEventListener('DOMContentLoaded', () => {
-    fetch('/api/cliente')
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Erro ao buscar o nome do médico');
-            }
-            return response.json();
-        })
-        .then(data => {
-            document.getElementById('nome-medico').textContent = data.nome;
-        })
-        .catch(error => {
-            console.error('Erro:', error);
-            document.getElementById('nome-medico').textContent = 'Medico';
-        });
+    const authToken = localStorage.getItem('authToken');
+    const email = 'maria@example.com'; // Email do paciente
+
+    if (!authToken) {
+        alert("Você precisa fazer login primeiro.");
+        window.location.href = "loginMedico.html";
+        return;
+    }
+
+    carregarNomeMedico(authToken);
+    carregarDadosGrafico(email, authToken);
 
     const menuIcon = document.getElementById('icon-toggle');
     const dropdownMenu = document.getElementById('menu-dropdown');
@@ -27,125 +24,171 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    const perfilLink = document.querySelector('.meu-perfil');
-    perfilLink.addEventListener('click', () => {
+    document.querySelector('.meu-perfil').addEventListener('click', () => {
         window.location.href = "profileMedico.html";
     });
 
-    const sairLink = document.querySelector('.sair');
-    sairLink.addEventListener('click', () => {
+    document.querySelector('.sair').addEventListener('click', () => {
         window.location.href = "../HomePage/homepage.html";
     });
+
+    document.getElementById('prev-month').addEventListener('click', () => {
+        alterarMes(-1);
+    });
+
+    document.getElementById('next-month').addEventListener('click', () => {
+        alterarMes(1);
+    });
+
+    updateMonthTitle();
+    initializeChart();
 });
 
-// Variável para armazenar os dados do gráfico (vazia inicialmente)
-let dadosHormonaisPorMes = {};
-let currentMonth = 'Outubro 2024'; // Mês inicial para exibir estrutura
-let chartInstance; // Instância do gráfico
+let chartInstance;
+let hormonalData = [];
+let currentMonth = new Date().getMonth();
+let currentYear = new Date().getFullYear();
 
-// Função para buscar dados do backend
-function carregarDadosGrafico(email) {
-    fetch(`/api/hormonal/dados-grafico/${email}`)
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Erro ao buscar dados do gráfico');
-            }
-            return response.json();
-        })
-        .then(data => {
-            dadosHormonaisPorMes = data; // Atualiza os dados com os dados do backend
-            currentMonth = Object.keys(dadosHormonaisPorMes)[0] || 'Sem dados';
-            document.getElementById('current-month').textContent = currentMonth;
-            updateChart(currentMonth);
-        })
-        .catch(error => {
-            console.error('Erro:', error);
-        });
+const monthNames = [
+    "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho",
+    "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"
+];
+
+function carregarNomeMedico(authToken) {
+    fetch('http://localhost:3000/api/medico/perfil', {
+        method: 'GET',
+        headers: {
+            'Authorization': `Bearer ${authToken}`,
+            'Content-Type': 'application/json'
+        }
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error("Erro ao buscar o nome do médico.");
+        }
+        return response.json();
+    })
+    .then(data => {
+        document.getElementById('nome-medico').textContent = ` ${data.medico.nomeCompleto}`;
+    })
+    .catch(error => {
+        console.error("Erro ao buscar o nome do médico:", error);
+        document.getElementById('nome-medico').textContent = 'Dr.';
+    });
 }
 
-function updateChart(month) {
-    const ctx = document.getElementById('grafico-hormonal').getContext('2d');
-    const dadosMes = dadosHormonaisPorMes[month] || { labels: [], data: [] }; // Dados vazios para estrutura
+function carregarDadosGrafico(email, authToken) {
+    fetch(`http://localhost:3000/api/hormonal/${email}`, {
+        method: 'GET',
+        headers: {
+            'Authorization': `Bearer ${authToken}`,
+            'Content-Type': 'application/json'
+        }
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error("Erro ao buscar os dados hormonais.");
+        }
+        return response.json();
+    })
+    .then(data => {
+        hormonalData = data.data.map(item => ({
+            date: new Date(item.data),
+            dosagem: item.dosagem
+        }));
+        updateChart();
+    })
+    .catch(error => {
+        console.error("Erro ao buscar os dados hormonais:", error);
+        mostrarMensagemSemDados();
+    });
+}
 
-    if (chartInstance) {
-        chartInstance.destroy(); // Destrói o gráfico anterior antes de criar um novo
+function updateMonthTitle() {
+    document.getElementById('current-month').textContent = `${monthNames[currentMonth]} ${currentYear}`;
+}
+
+function alterarMes(offset) {
+    currentMonth += offset;
+
+    if (currentMonth < 0) {
+        currentMonth = 11;
+        currentYear--;
+    } else if (currentMonth > 11) {
+        currentMonth = 0;
+        currentYear++;
     }
 
-    const chartData = {
-        labels: dadosMes.labels.length > 0 ? dadosMes.labels : ['Sem dados'],
-        datasets: [{
-            label: 'Níveis Hormonais',
-            data: dadosMes.data.length > 0 ? dadosMes.data : [null], // Exibe estrutura sem valores
-            borderColor: 'rgba(200, 200, 200, 1)', // Ajuste as cores conforme necessário
-            backgroundColor: 'rgba(200, 200, 200, 0.2)',
-            fill: true,
-            pointRadius: 0, // Sem pontos, apenas estrutura
-            tension: 0.3 // Suaviza as linhas
-        }]
-    };
+    updateMonthTitle();
+    updateChart();
+}
 
-    const configGrafico = {
+function initializeChart() {
+    const ctx = document.getElementById('grafico-hormonal').getContext('2d');
+    chartInstance = new Chart(ctx, {
         type: 'line',
-        data: chartData,
+        data: {
+            labels: [],
+            datasets: [{
+                label: 'Nível Hormonal',
+                data: [],
+                borderColor: 'rgba(54, 162, 235, 1)',
+                backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                fill: true,
+                tension: 0.3
+            }]
+        },
         options: {
             responsive: true,
-            maintainAspectRatio: false, // Ajusta o gráfico dinamicamente
+            maintainAspectRatio: false,
             plugins: {
                 legend: {
-                    display: false // Não exibir a legenda
+                    display: true,
+                    position: 'top'
                 }
             },
             scales: {
-                y: {
-                    beginAtZero: true,
-                    title: {
-                        display: true,
-                        text: 'Níveis Hormonais'
-                    },
-                    ticks: {
-                        display: false // Oculta valores no eixo Y
-                    }
-                },
                 x: {
                     title: {
                         display: true,
-                        text: `Dias de ${month}`
-                    },
-                    ticks: {
-                        display: false // Oculta valores no eixo X
+                        text: 'Dias'
                     }
+                },
+                y: {
+                    title: {
+                        display: true,
+                        text: 'Dosagem Hormonal'
+                    },
+                    beginAtZero: true
                 }
             }
         }
-    };
-
-    // Cria o novo gráfico apenas com a estrutura
-    chartInstance = new Chart(ctx, configGrafico);
+    });
 }
 
-// Navegação entre meses
-document.getElementById('prev-month').addEventListener('click', () => {
-    const months = Object.keys(dadosHormonaisPorMes);
-    const currentIndex = months.indexOf(currentMonth);
-    if (currentIndex > 0) {
-        currentMonth = months[currentIndex - 1];
-        document.getElementById('current-month').textContent = currentMonth;
-        updateChart(currentMonth);
-    }
-});
+function updateChart() {
+    const filteredData = hormonalData.filter(item => 
+        item.date.getMonth() === currentMonth && item.date.getFullYear() === currentYear
+    );
 
-document.getElementById('next-month').addEventListener('click', () => {
-    const months = Object.keys(dadosHormonaisPorMes);
-    const currentIndex = months.indexOf(currentMonth);
-    if (currentIndex < months.length - 1) {
-        currentMonth = months[currentIndex + 1];
-        document.getElementById('current-month').textContent = currentMonth;
-        updateChart(currentMonth);
+    if (filteredData.length === 0) {
+        mostrarMensagemSemDados();
+        return;
     }
-});
 
-// Inicializa o gráfico com a estrutura vazia
-window.onload = function() {
-    carregarDadosGrafico('email-do-paciente'); // Substitua pelo email correto
-    updateChart(currentMonth); // Exibe apenas a estrutura do gráfico
-};
+    const labels = filteredData.map(item => item.date.getDate()).sort((a, b) => a - b);
+    const data = filteredData.map(item => item.dosagem);
+
+    chartInstance.data.labels = labels;
+    chartInstance.data.datasets[0].data = data;
+    chartInstance.update();
+    document.getElementById('mensagem-sem-dados').style.display = 'none'; // Esconde a mensagem de "Sem dados"
+}
+
+function mostrarMensagemSemDados() {
+    const ctx = document.getElementById('grafico-hormonal').getContext('2d');
+    chartInstance.data.labels = ['Sem dados'];
+    chartInstance.data.datasets[0].data = [null];
+    chartInstance.update();
+    document.getElementById('mensagem-sem-dados').style.display = 'block'; // Exibe a mensagem de "Sem dados"
+}
