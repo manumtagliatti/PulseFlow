@@ -1,119 +1,220 @@
-const medicoLogado = "Dimas Augusto";
-
 document.addEventListener('DOMContentLoaded', () => {
-    document.getElementById('nome-medico').textContent = medicoLogado;
-    
-    const menuIcon = document.getElementById('icon-toggle');
-    const dropdownMenu = document.getElementById('menu-dropdown');
-    
-    menuIcon.addEventListener('click', () => {
-        dropdownMenu.style.display = dropdownMenu.style.display === 'block' ? 'none' : 'block';
-    });
-    
-    document.addEventListener('click', (event) => {
-        if (!menuIcon.contains(event.target) && !dropdownMenu.contains(event.target)) {
-            dropdownMenu.style.display = 'none';
-        }
-    });
-  
-    const perfilLink = document.querySelector('.meu-perfil');
-    perfilLink.addEventListener('click', () => {
-        window.location.href = "profileMedico.html";
+    const authToken = localStorage.getItem('authToken');
+    const email = 'julio@gmail.com'; // Email do paciente
+
+    if (!authToken) {
+        alert("Você precisa fazer login primeiro.");
+        window.location.href = "loginMedico.html";
+        return;
+    }
+
+    carregarNomeMedico(authToken);
+    carregarDadosGraficoEnxaqueca(email, authToken);
+
+    document.getElementById('prev-month').addEventListener('click', () => {
+        alterarMes(-1);
     });
 
-    const sairLink = document.querySelector('.sair');
-    sairLink.addEventListener('click', () => {
-        window.location.href = "../HomePage/homepage.html";
+    document.getElementById('next-month').addEventListener('click', () => {
+        alterarMes(1);
     });
-    
-    fetchData();
+
+    initializeChartEnxaqueca();
 });
 
-function showMessage(message, type) {
-    const messageDiv = document.getElementById("message");
-    messageDiv.textContent = message;
-    messageDiv.className = `message ${type}`;
-    messageDiv.style.display = "block";
+let chartInstanceEnxaqueca;
+let enxaquecaData = [];
+let currentMonth = new Date().getMonth();
+let currentYear = new Date().getFullYear();
 
-    setTimeout(() => {
-        messageDiv.style.display = "none";
-    }, 3000);
+const monthNames = [
+    "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho",
+    "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"
+];
+
+function carregarNomeMedico(authToken) {
+    fetch('http://localhost:3000/api/medico/perfil', {
+        method: 'GET',
+        headers: {
+            'Authorization': `Bearer ${authToken}`,
+            'Content-Type': 'application/json'
+        }
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error("Erro ao buscar o nome do médico.");
+        }
+        return response.json();
+    })
+    .then(data => {
+        document.getElementById('nome-medico').textContent = ` Dr. ${data.medico.nomeCompleto}`;
+    })
+    .catch(error => {
+        console.error("Erro ao buscar o nome do médico:", error);
+        document.getElementById('nome-medico').textContent = 'Dr.';
+    });
 }
 
-async function fetchData() {
-    try {
-        const response = await fetch('https://seuservidor.com/api/dados');
-        if (!response.ok) throw new Error('Erro ao buscar dados do servidor');
-        
-        const data = await response.json();
-        atualizarDados(data);
-    } catch (error) {
-        console.error("Erro ao buscar dados:", error);
-        showMessage("Não foi possível carregar os dados.", "error");
+function carregarDadosGraficoEnxaqueca(email, authToken) {
+    fetch(`http://localhost:3000/api/enxaqueca/${email}`, {
+        method: 'GET',
+        headers: {
+            'Authorization': `Bearer ${authToken}`,
+            'Content-Type': 'application/json'
+        }
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error("Erro ao buscar os dados de enxaquecas.");
+        }
+        return response.json();
+    })
+    .then(data => {
+        if (!data || !data.data || data.data.length === 0) {
+            mostrarMensagemSemDados();
+            return;
+        }
+
+        // Ajustando a data para evitar problemas de fuso horário
+        enxaquecaData = data.data.map(item => ({
+            date: new Date(item.data),
+            intensidade: item.intensidadeDor,
+            duration: item.tempoDuracao,
+            time: item.hora
+        }));
+
+        enxaquecaData = enxaquecaData.map(item => ({
+            ...item,
+            date: new Date(item.date.getTime() + item.date.getTimezoneOffset() * 60000)
+        }));
+
+        updateChartEnxaqueca();
+    })
+    .catch(error => {
+        console.error("Erro ao buscar os dados de enxaquecas:", error);
+        mostrarMensagemSemDados();
+    });
+}
+
+function alterarMes(offset) {
+    currentMonth += offset;
+
+    if (currentMonth < 0) {
+        currentMonth = 11;
+        currentYear--;
+    } else if (currentMonth > 11) {
+        currentMonth = 0;
+        currentYear++;
     }
+
+    // Atualiza a legenda do gráfico se o gráfico existir
+    if (chartInstanceEnxaqueca) {
+        chartInstanceEnxaqueca.data.datasets[0].label = `${monthNames[currentMonth]} ${currentYear}`;
+        chartInstanceEnxaqueca.update();
+    }
+
+    updateChartEnxaqueca();
 }
 
-function atualizarDados(data) {
-    if (asmaChart) asmaChart.destroy();
-    asmaChart = createChart(data);
-}
-
-const createChart = (data) => {
-    const ctx = document.getElementById("asmaChart").getContext("2d");
-    return new Chart(ctx, {
+function initializeChartEnxaqueca() {
+    const ctx = document.getElementById('enxaquecaChart').getContext('2d');
+    chartInstanceEnxaqueca = new Chart(ctx, {
         type: 'line',
         data: {
-            labels: Array.from({ length: data.data.length }, (_, i) => i + 1),
+            labels: [],
             datasets: [{
-                label: data.label,
-                data: data.data,
-                borderColor: '#2CABAA',
-                backgroundColor: 'rgba(44, 171, 170, 0.2)',
+                label: `${monthNames[currentMonth]} ${currentYear}`,
+                data: [],
+                borderColor: 'rgba(75, 192, 192, 1)',
+                backgroundColor: 'rgba(75, 192, 192, 0.2)',
                 fill: true,
-                tension: 0.3,
-                pointRadius: 4,
-                pointBackgroundColor: '#2CABAA'
+                tension: 0.3
             }]
         },
         options: {
             responsive: true,
+            maintainAspectRatio: false,
             plugins: {
                 legend: {
                     display: true,
-                    position: 'top',
-                    labels: {
-                        color: '#333'
+                    position: 'top'
+                },
+                tooltip: {
+                    callbacks: {
+                        title: function(context) {
+                            const index = context[0].dataIndex;
+                            const day = chartInstanceEnxaqueca.data.labels[index];
+                            return `Dia ${day}`;
+                        },
+                        label: function(context) {
+                            const index = context.dataIndex;
+                            const dataPoint = enxaquecaData.find(item => item.date.getDate() === chartInstanceEnxaqueca.data.labels[index]);
+                            const duration = dataPoint?.duration || "Desconhecida";
+                            const time = dataPoint?.time || "Hora não registrada";
+                            return `Intensidade: ${context.raw}, Duração: ${duration} min, Hora: ${time}`;
+                        }
                     }
                 }
             },
             scales: {
-                y: {
-                    beginAtZero: true,
-                    min: 0,
-                    max: 5,
-                    ticks: {
-                        stepSize: 1,
-                        callback: (value) => {
-                            const labels = ["Baixa", "Média", "Alta"];
-                            return labels[value - 1] || "";
-                        }
-                    },
-                    title: {
-                        display: true,
-                        text: "Intensidade da Dor",
-                        color: '#333'
-                    }
-                },
                 x: {
                     title: {
                         display: true,
-                        text: "Dias do Mês",
-                        color: '#333'
+                        text: 'Dias do Mês'
+                    }
+                },
+                y: {
+                    title: {
+                        display: true,
+                        text: 'Intensidade da Dor'
+                    },
+                    min: 1,
+                    max: 10,
+                    ticks: {
+                        stepSize: 1,
+                        callback: function(value) {
+                            if (value === 1) return 'Baixa';
+                            if (value === 5) return 'Média';
+                            if (value === 8) return 'Alta';
+                            return '';
+                        }
                     }
                 }
             }
         }
     });
-};
+}
 
-let asmaChart = createChart({ label: "Janeiro", data: [1, 2, 1, 3, 2, 4, 3, 2, 1, 3, 4, 2, 1, 4, 3, 2, 1, 3, 4, 1, 2, 3, 1, 3, 2, 4, 1, 3, 2, 4] });
+function updateChartEnxaqueca() {
+    const filteredData = enxaquecaData.filter(item => 
+        item.date.getMonth() === currentMonth && item.date.getFullYear() === currentYear
+    );
+
+    const sortedData = filteredData.sort((a, b) => a.date - b.date);
+
+    if (sortedData.length === 0) {
+        mostrarMensagemSemDados();
+        return;
+    }
+
+    const labels = sortedData.map(item => item.date.getDate());
+    const data = sortedData.map(item => item.intensidade);
+
+    chartInstanceEnxaqueca.data.labels = labels;
+    chartInstanceEnxaqueca.data.datasets[0].data = data;
+
+    chartInstanceEnxaqueca.update();
+    document.getElementById('mensagem-sem-dados').style.display = 'none';
+}
+
+function mostrarMensagemSemDados() {
+    if (chartInstanceEnxaqueca) {
+        chartInstanceEnxaqueca.data.labels = [];
+        chartInstanceEnxaqueca.data.datasets[0].data = [];
+        chartInstanceEnxaqueca.update();
+    }
+    const mensagemSemDados = document.getElementById('mensagem-sem-dados');
+    if (mensagemSemDados) {
+        mensagemSemDados.style.display = 'block';
+    }
+}

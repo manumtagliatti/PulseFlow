@@ -52,11 +52,15 @@
     
     <main>
         <h1>Verifique as crises de enxaqueca de seu paciente</h1>
+        <div id="mensagem-sem-dados" style="display: none; text-align: center; color: red; font-size: 11px;">
+            Não há registros para o mês selecionado.
+        </div> 
         <div class="container">
             <div class="chart-section">
-                <span class="arrow-left">&#9664;</span>
-                <canvas id="asmaChart" width="400" height="400"></canvas>
-                <span class="arrow-right">&#9654;</span>
+                <span id="prev-month" class="arrow-left">&#9664;</span>
+                <canvas id="enxaquecaChart" width="400" height="400"></canvas>
+                <span id="next-month" class="arrow-right">&#9654;</span>
+
             </div>
         </div>
     </main>
