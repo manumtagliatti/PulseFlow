@@ -51,19 +51,20 @@
         <h1>Vamos registrar sua crise de asma?</h1>
         <div class="container">
             <div class="input-section">
-                <input type="text" placeholder="Data da crise" disabled>
-                <input type="text" placeholder="Hora da crise" disabled>
-                <input type="text" placeholder="Tempo de duração da crise" disabled>
-                <input type="text" placeholder="Intensidade da crise" disabled>
-                <input type="text" placeholder="Uso de medicação" disabled>
+                <input id="dataCrise" type="text" placeholder="Data da crise">
+                <input id="horaCrise" type="text" placeholder="Hora da crise">
+                <input id="tempoDuracaoCrise" type="text" placeholder="Tempo de duração da crise (minutos)">
+                <input id="intensidadeCrise" type="text" placeholder="Intensidade da crise">
+                <input id="horarioMedicao" type="text" placeholder="Horário da medicação">
+                
             </div>
             <div class="chart-section">
-                <span class="arrow-left">&#9664;</span> <!-- Seta para esquerda -->
+                <span id="prev-month" class="arrow-left">&#9664;</span> <!-- Seta para esquerda -->
                 <canvas id="asmaChart" width="400" height="400"></canvas> <!-- Elemento Canvas para o gráfico -->
-                <span class="arrow-right">&#9654;</span> <!-- Seta para direita -->
+                <span id="next-month"class="arrow-right">&#9654;</span> <!-- Seta para direita -->
             </div>
         </div>
-        <button class="save-button">Salvar Registro</button>
+        <button class="save-button">Registrar Nova Crise</button>
     </main>
     <script src="js/asmaPaciente.js"></script> <!-- Inclui o JavaScript personalizado -->
 </body>
