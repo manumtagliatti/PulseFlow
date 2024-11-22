@@ -1,23 +1,19 @@
 document.addEventListener('DOMContentLoaded', () => {
+    const authToken = localStorage.getItem('authToken');
+    const email = 'maria@example.com'; // Email do paciente
 
-    fetch('/api/cliente')
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Erro ao buscar o nome do médico');
-            }
-            return response.json();
-        })
-        .then(data => {
-            document.getElementById('nome-medico').textContent = data.nome;
-        })
-        .catch(error => {
-            console.error('Erro:', error);
-            document.getElementById('nome-medico').textContent = 'Medico';
-        });
+    if (!authToken) {
+        alert("Você precisa fazer login primeiro.");
+        window.location.href = "loginMedico.html";
+        return;
+    }
+
+    carregarNomeMedico(authToken);
+    carregarDadosGraficoPressao(email, authToken);
 
     const menuIcon = document.getElementById('icon-toggle');
     const dropdownMenu = document.getElementById('menu-dropdown');
-    
+
     menuIcon.addEventListener('click', () => {
         dropdownMenu.style.display = dropdownMenu.style.display === 'block' ? 'none' : 'block';
     });
@@ -28,125 +24,170 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    const perfilLink = document.querySelector('.meu-perfil');
-    perfilLink.addEventListener('click', () => {
+    document.querySelector('.meu-perfil').addEventListener('click', () => {
         window.location.href = "profileMedico.html";
     });
 
-    const sairLink = document.querySelector('.sair');
-    sairLink.addEventListener('click', () => {
+    document.querySelector('.sair').addEventListener('click', () => {
         window.location.href = "../HomePage/homepage.html";
     });
+
+    document.getElementById('prev-month').addEventListener('click', () => {
+        alterarMes(-1);
+    });
+
+    document.getElementById('next-month').addEventListener('click', () => {
+        alterarMes(1);
+    });
+
+    updateMonthTitle();
+    initializeChartPressao();
 });
 
-// Variável para armazenar os dados do gráfico (vazia inicialmente)
-let dadosPressaoPorMes = {};
-let currentMonth = 'Outubro 2024'; // Mês inicial para exibir estrutura
-let chartInstance; // Instância do gráfico
+let chartInstancePressao;
+let pressaoData = [];
+let currentMonth = new Date().getMonth();
+let currentYear = new Date().getFullYear();
 
-// Função para buscar dados do backend
-function carregarDadosGrafico(email) {
-    fetch(`/api/pressao/dados-grafico/${email}`)
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Erro ao buscar dados do gráfico');
-            }
-            return response.json();
-        })
-        .then(data => {
-            dadosPressaoPorMes = data; // Atualiza os dados com os dados do backend
-            currentMonth = Object.keys(dadosPressaoPorMes)[0] || 'Sem dados';
-            document.getElementById('current-month').textContent = currentMonth;
-            updateChart(currentMonth);
-        })
-        .catch(error => {
-            console.error('Erro:', error);
-        });
+const monthNames = [
+    "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho",
+    "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"
+];
+
+function carregarNomeMedico(authToken) {
+    fetch('http://localhost:3000/api/medico/perfil', {
+        method: 'GET',
+        headers: {
+            'Authorization': `Bearer ${authToken}`,
+            'Content-Type': 'application/json'
+        }
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error("Erro ao buscar o nome do médico.");
+        }
+        return response.json();
+    })
+    .then(data => {
+        document.getElementById('nome-medico').textContent = ` ${data.medico.nomeCompleto}`;
+    })
+    .catch(error => {
+        console.error("Erro ao buscar o nome do médico:", error);
+        document.getElementById('nome-medico').textContent = 'Dr.';
+    });
 }
 
-function updateChart(month) {
-    const ctx = document.getElementById('grafico-pressao').getContext('2d');
-    const dadosMes = dadosPressaoPorMes[month] || { labels: [], data: [] }; // Dados vazios para estrutura
+function carregarDadosGraficoPressao(email, authToken) {
+    fetch(`http://localhost:3000/api/pressaoArterial/${encodeURIComponent(email)}`, {
+        method: 'GET',
+        headers: {
+            'Authorization': `Bearer ${authToken}`,
+            'Content-Type': 'application/json'
+        }
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error("Erro ao buscar os dados de pressão arterial.");
+        }
+        return response.json();
+    })
+    .then(data => {
+        pressaoData = data.data.map(item => ({
+            date: new Date(item.data),
+            pressao: item.pressao
+        }));
+        updateChartPressao();
+    })
+    .catch(error => {
+        console.error("Erro ao buscar os dados de pressão arterial:", error);
+        mostrarMensagemSemDados();
+    });
+}
 
-    if (chartInstance) {
-        chartInstance.destroy(); // Destrói o gráfico anterior antes de criar um novo
+function updateMonthTitle() {
+    document.getElementById('current-month').textContent = `${monthNames[currentMonth]} ${currentYear}`;
+}
+
+function alterarMes(offset) {
+    currentMonth += offset;
+
+    if (currentMonth < 0) {
+        currentMonth = 11;
+        currentYear--;
+    } else if (currentMonth > 11) {
+        currentMonth = 0;
+        currentYear++;
     }
 
-    const chartData = {
-        labels: dadosMes.labels.length > 0 ? dadosMes.labels : ['Sem dados'],
-        datasets: [{
-            label: 'Pressão Arterial (mmHg)',
-            data: dadosMes.data.length > 0 ? dadosMes.data : [null], // Exibe estrutura sem valores
-            borderColor: 'rgba(200, 200, 200, 1)',
-            backgroundColor: 'rgba(200, 200, 200, 0.2)',
-            fill: true,
-            pointRadius: 0, // Sem pontos, apenas estrutura
-            tension: 0.3 // Suaviza as linhas
-        }]
-    };
+    updateMonthTitle();
+    updateChartPressao();
+}
 
-    const configGrafico = {
+function initializeChartPressao() {
+    const ctx = document.getElementById('grafico-pressao').getContext('2d');
+    chartInstancePressao = new Chart(ctx, {
         type: 'line',
-        data: chartData,
+        data: {
+            labels: [],
+            datasets: [{
+                label: 'Pressão Arterial (mmHg)',
+                data: [],
+                borderColor: 'rgba(54, 162, 235, 1)',
+                backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                fill: true,
+                tension: 0.3
+            }]
+        },
         options: {
             responsive: true,
-            maintainAspectRatio: false, // Ajusta o gráfico dinamicamente
+            maintainAspectRatio: false,
             plugins: {
                 legend: {
-                    display: false // Não exibir a legenda
+                    display: true,
+                    position: 'top'
                 }
             },
             scales: {
+                x: {
+                    title: {
+                        display: true,
+                        text: 'Dias do Mês'
+                    }
+                },
                 y: {
-                    beginAtZero: true,
                     title: {
                         display: true,
                         text: 'Pressão Arterial (mmHg)'
                     },
-                    ticks: {
-                        display: false // Oculta valores no eixo Y
-                    }
-                },
-                x: {
-                    title: {
-                        display: true,
-                        text: `Dias de ${month}`
-                    },
-                    ticks: {
-                        display: false // Oculta valores no eixo X
-                    }
+                    beginAtZero: true
                 }
             }
         }
-    };
-
-    // Cria o novo gráfico apenas com a estrutura
-    chartInstance = new Chart(ctx, configGrafico);
+    });
 }
 
-// Navegação entre meses
-document.getElementById('prev-month').addEventListener('click', () => {
-    const months = Object.keys(dadosPressaoPorMes);
-    const currentIndex = months.indexOf(currentMonth);
-    if (currentIndex > 0) {
-        currentMonth = months[currentIndex - 1];
-        document.getElementById('current-month').textContent = currentMonth;
-        updateChart(currentMonth);
-    }
-});
+function updateChartPressao() {
+    const filteredData = pressaoData.filter(item => 
+        item.date.getMonth() === currentMonth && item.date.getFullYear() === currentYear
+    );
 
-document.getElementById('next-month').addEventListener('click', () => {
-    const months = Object.keys(dadosPressaoPorMes);
-    const currentIndex = months.indexOf(currentMonth);
-    if (currentIndex < months.length - 1) {
-        currentMonth = months[currentIndex + 1];
-        document.getElementById('current-month').textContent = currentMonth;
-        updateChart(currentMonth);
+    if (filteredData.length === 0) {
+        mostrarMensagemSemDados();
+        return;
     }
-});
 
-// Inicializa o gráfico com a estrutura vazia
-window.onload = function() {
-    carregarDadosGrafico('email-do-paciente'); // Substitua pelo email correto
-    updateChart(currentMonth); // Exibe apenas a estrutura do gráfico
-};
+    const labels = filteredData.map(item => item.date.getDate());
+    const data = filteredData.map(item => item.pressao);
+
+    chartInstancePressao.data.labels = labels;
+    chartInstancePressao.data.datasets[0].data = data;
+    chartInstancePressao.update();
+    document.getElementById('mensagem-sem-dados').style.display = 'none';
+}
+
+function mostrarMensagemSemDados() {
+    chartInstancePressao.data.labels = ['Sem dados'];
+    chartInstancePressao.data.datasets[0].data = [null];
+    chartInstancePressao.update();
+    document.getElementById('mensagem-sem-dados').style.display = 'block';
+}
