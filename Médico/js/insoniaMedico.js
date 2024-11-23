@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
     const authToken = localStorage.getItem('authToken');
-    const email = 'maria@exemple.com'; // Email do paciente
+    const email = 'julio@gmail.com'; // Email do paciente
 
     if (!authToken) {
         alert("Você precisa fazer login primeiro.");
@@ -9,36 +9,37 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     carregarNomeMedico(authToken);
-    carregarDadosGraficoInsonia(email, authToken);
+    carregarDadosGrafico(email, authToken);
 
     const menuIcon = document.getElementById('icon-toggle');
     const dropdownMenu = document.getElementById('menu-dropdown');
 
-    menuIcon.addEventListener('click', () => {
-        dropdownMenu.style.display = dropdownMenu.style.display === 'block' ? 'none' : 'block';
-    });
+    if (menuIcon && dropdownMenu) {
+        menuIcon.addEventListener('click', () => {
+            dropdownMenu.style.display = dropdownMenu.style.display === 'block' ? 'none' : 'block';
+        });
 
-    document.addEventListener('click', (event) => {
-        if (!menuIcon.contains(event.target) && !dropdownMenu.contains(event.target)) {
-            dropdownMenu.style.display = 'none';
-        }
-    });
+        document.addEventListener('click', (event) => {
+            if (!menuIcon.contains(event.target) && !dropdownMenu.contains(event.target)) {
+                dropdownMenu.style.display = 'none';
+            }
+        });
+    }
 
-    document.querySelector('.meu-perfil').addEventListener('click', () => {
-        window.location.href = "profileMedico.html";
-    });
+    const prevMonthButton = document.getElementById('prev-month');
+    const nextMonthButton = document.getElementById('next-month');
 
-    document.querySelector('.sair').addEventListener('click', () => {
-        window.location.href = "../HomePage/homepage.html";
-    });
+    if (prevMonthButton) {
+        prevMonthButton.addEventListener('click', () => {
+            alterarMes(-1, email, authToken);
+        });
+    }
 
-    document.getElementById('prev-month').addEventListener('click', () => {
-        alterarMes(-1);
-    });
-
-    document.getElementById('next-month').addEventListener('click', () => {
-        alterarMes(1);
-    });
+    if (nextMonthButton) {
+        nextMonthButton.addEventListener('click', () => {
+            alterarMes(1, email, authToken);
+        });
+    }
 
     updateMonthTitle();
     initializeChartInsonia();
@@ -62,70 +63,79 @@ function carregarNomeMedico(authToken) {
             'Content-Type': 'application/json'
         }
     })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error("Erro ao buscar o nome do médico.");
-        }
-        return response.json();
-    })
-    .then(data => {
-        document.getElementById('nome-medico').textContent = ` Dr. ${data.medico.nomeCompleto}`;
-    })
-    .catch(error => {
-        console.error("Erro ao buscar o nome do médico:", error);
-        document.getElementById('nome-medico').textContent = 'Dr.';
-    });
-}
-
-function carregarDadosGraficoInsonia(email, authToken) {
-    const encodedEmail = encodeURIComponent(email);
-
-    fetch(`http://localhost:3000/api/insonia/${encodedEmail}`, {
-        method: 'GET',
-        headers: {
-            'Authorization': `Bearer ${authToken}`,
-            'Content-Type': 'application/json',
-        },
-    })
         .then(response => {
             if (!response.ok) {
-                throw new Error('Erro ao buscar os dados de insônia.');
+                throw new Error("Erro ao buscar o nome do médico.");
             }
             return response.json();
         })
         .then(data => {
-            if (!data || !data.data || data.data.length === 0) {
-                mostrarMensagemSemDadosInsonia();
-                return;
+            const medicoElement = document.getElementById('nome-medico');
+            if (medicoElement) {
+                medicoElement.textContent = `Dr. ${data.medico.nomeCompleto}`;
             }
-
-            // Mapeia e ordena os dados por data
-            insoniaData = data.data
-                .map(item => ({
-                    date: new Date(item.data),
-                    horaDormir: item.horaDormir,
-                    horaAcordar: item.horaAcordar,
-                    quantQueAcordou: item.quantQueAcordou,
-                }))
-                .sort((a, b) => a.date - b.date); // Ordena pela data
-
-            updateChartInsonia();
         })
         .catch(error => {
-            console.error('Erro ao buscar os dados de insônia:', error);
-            mostrarMensagemSemDadosInsonia();
+            console.error("Erro ao buscar o nome do médico:", error);
+            const medicoElement = document.getElementById('nome-medico');
+            if (medicoElement) {
+                medicoElement.textContent = 'Dr.';
+            }
         });
 }
 
+async function carregarDadosGrafico(email, authToken) {
+    try {
+        const response = await fetch(`http://localhost:3000/api/insonia/${encodeURIComponent(email)}`, {
+            method: "GET",
+            headers: {
+                Authorization: `Bearer ${authToken}`,
+                "Content-Type": "application/json",
+            },
+        });
+
+        if (!response.ok) throw new Error("Erro ao carregar dados");
+
+        const data = await response.json();
+
+        const filteredData = data.data.filter(item => {
+            const itemDate = new Date(item.data);
+            return (
+                itemDate.getMonth() === currentMonth &&
+                itemDate.getFullYear() === currentYear
+            );
+        });
+
+        filteredData.sort((a, b) => new Date(a.data) - new Date(b.data));
+
+        if (filteredData.length === 0) {
+            mostrarMensagemSemDados();
+        } else {
+            esconderMensagemSemDados();
+        }
+
+        atualizarGrafico(filteredData);
+
+    } catch (error) {
+        console.error("Erro ao carregar dados:", error);
+        atualizarGrafico([]);
+        mostrarMensagemSemDados();
+    }
+}
 
 function updateMonthTitle() {
     const monthTitle = document.getElementById('current-month');
     if (monthTitle) {
         monthTitle.textContent = `${monthNames[currentMonth]} ${currentYear}`;
     }
+
+    if (chartInstanceInsonia) {
+        chartInstanceInsonia.data.datasets[0].label = `${monthNames[currentMonth]} ${currentYear}`;
+        chartInstanceInsonia.update();
+    }
 }
 
-function alterarMes(offset) {
+function alterarMes(offset, email, authToken) {
     currentMonth += offset;
 
     if (currentMonth < 0) {
@@ -137,14 +147,7 @@ function alterarMes(offset) {
     }
 
     updateMonthTitle();
-
-    // Atualizar o rótulo do gráfico com o novo mês e ano
-    if (chartInstanceInsonia) {
-        chartInstanceInsonia.data.datasets[0].label = `${monthNames[currentMonth]} ${currentYear}`;
-        chartInstanceInsonia.update();
-    }
-
-    updateChartInsonia();
+    carregarDadosGrafico(email, authToken);
 }
 
 function initializeChartInsonia() {
@@ -153,25 +156,22 @@ function initializeChartInsonia() {
     chartInstanceInsonia = new Chart(ctx, {
         type: 'line',
         data: {
-            labels: [], // Dias do mês
+            labels: [],
             datasets: [{
-                label: `${monthNames[currentMonth]} ${currentYear}`, // Nome do mês e ano
-                data: [], // Dados numéricos
-                borderColor: '#2CABAA', // Cor da linha
-                backgroundColor: 'rgba(44, 171, 170, 0.2)', // Fundo preenchido
+                label: `${monthNames[currentMonth]} ${currentYear}`,
+                data: [],
+                borderColor: '#2CABAA',
+                backgroundColor: 'rgba(44, 171, 170, 0.2)',
                 fill: true,
                 tension: 0.3,
-                pointRadius: 5, // Tamanho dos pontos
-                pointBackgroundColor: '#2CABAA', // Bolinhas azuis
+                pointRadius: 0, // Sem pontos por padrão
+                pointBackgroundColor: '#2CABAA',
             }],
         },
         options: {
             responsive: true,
             plugins: {
-                legend: {
-                    display: true,
-                    position: 'top',
-                },
+                legend: { display: true, position: 'top' },
                 tooltip: {
                     callbacks: {
                         title: (tooltipItems) => {
@@ -183,9 +183,10 @@ function initializeChartInsonia() {
                             const index = tooltipItem.dataIndex;
                             const dataPoint = insoniaData[index];
                             return [
-                                `Número de vezes que acordou: ${tooltipItem.raw}`,
-                                `Dormiu: ${dataPoint.horaDormir}`,
-                                `Acordou: ${dataPoint.horaAcordar}`,
+                                `Número de vezes que acordou: ${tooltipItem.raw || "N/A"}`,
+                                `Dormiu: ${dataPoint?.horaDormir || "N/A"}`,
+                                `Acordou: ${dataPoint?.horaAcordar || "N/A"}`,
+                                `Qualidade do Sono: ${dataPoint?.qualidadeSono || "N/A"}`,
                             ];
                         },
                     },
@@ -193,63 +194,36 @@ function initializeChartInsonia() {
             },
             scales: {
                 y: {
-                    title: {
-                        display: true,
-                        text: 'Número de vezes que acordou',
-                    },
+                    title: { display: true, text: 'Número de vezes que acordou' },
                     beginAtZero: true,
-                    ticks: {
-                        stepSize: 1,
-                        callback: (value) => {
-                            if (value === 2) return 'Excelente';
-                            if (value === 4) return 'Boa';
-                            if (value === 5) return 'Ruim';
-                            return value;
-                        },
-                    },
+                    max: 10,
+                    ticks: { stepSize: 1 },
                 },
-                x: {
-                    title: {
-                        display: true,
-                        text: 'Dias do Mês',
-                    },
-                },
+                x: { title: { display: true, text: 'Dias do Mês' } },
             },
         },
     });
 }
 
-
-function updateChartInsonia() {
-    const filteredData = insoniaData.filter(item =>
-        item.date.getMonth() === currentMonth && item.date.getFullYear() === currentYear
-    );
-
-    const sortedData = filteredData.sort((a, b) => a.date.getDate() - b.date.getDate());
-
-    if (sortedData.length === 0) {
-        mostrarMensagemSemDadosInsonia();
-        return;
-    }
-
-    const labels = sortedData.map(item => item.date.getDate());
-    const data = sortedData.map(item => item.quantQueAcordou);
+function atualizarGrafico(data) {
+    const labels = data.length > 0 ? data.map(item => new Date(item.data).getDate()) : [];
+    const datasetData = data.length > 0 ? data.map(item => item.quantQueAcordou) : [];
 
     chartInstanceInsonia.data.labels = labels;
-    chartInstanceInsonia.data.datasets[0].data = data;
+    chartInstanceInsonia.data.datasets[0].data = datasetData;
+    chartInstanceInsonia.data.datasets[0].pointRadius = data.length > 0 ? 5 : 0; // Mostra pontos somente com dados
     chartInstanceInsonia.update();
-
-    document.getElementById('mensagem-sem-dados').style.display = 'none';
 }
 
-function mostrarMensagemSemDadosInsonia() {
-    if (chartInstanceInsonia) {
-        chartInstanceInsonia.data.labels = ['Sem dados'];
-        chartInstanceInsonia.data.datasets[0].data = [null];
-        chartInstanceInsonia.update();
+function mostrarMensagemSemDados() {
+    const mensagem = document.getElementById("mensagem-sem-dados");
+    if (mensagem) {
+        mensagem.style.display = "block";
+        mensagem.textContent = "Nenhum registro de insônia encontrado para este mês.";
     }
-    const mensagemSemDados = document.getElementById('mensagem-sem-dados');
-    if (mensagemSemDados) {
-        mensagemSemDados.style.display = 'block';
-    }
+}
+
+function esconderMensagemSemDados() {
+    const mensagem = document.getElementById("mensagem-sem-dados");
+    if (mensagem) mensagem.style.display = "none";
 }

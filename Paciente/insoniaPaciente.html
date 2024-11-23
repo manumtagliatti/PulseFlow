@@ -49,17 +49,20 @@
     </header>
     <main>
         <h1>Vamos registrar sua insônia?</h1>
+        <div id="mensagem-sem-dados" style="display: none; text-align: center; color: red; font-size: 11px;">
+            Não há registros para o mês selecionado.
+        </div>
         <div class="container">
             <div class="input-section">
-                <input type="text" placeholder="Data" disabled>
-                <input type="text" placeholder="Hora de dormir" disabled>
-                <input type="text" placeholder="Horário de acordar" disabled>
-            <input type="text" placeholder="Quantas vezes acordou" disabled>
-                <input type="text" placeholder="Qualidade do Sono" disabled>
+                <input id="dataInput" type="text" placeholder="Data" >
+                <input id="horaDormirInput" type="text" placeholder="Hora de dormir" >
+                <input id="horaAcordarInput" type="text" placeholder="Horário de acordar" >
+            <input id="vezesAcordouInput" type="text" placeholder="Quantas vezes acordou" >
+                <input id="qualidadeInput" type="text" placeholder="Qualidade do Sono" >
             </div>
             <div class="chart-section">
                 <span class="arrow-left">&#9664;</span> <!-- Seta para esquerda -->
-                <canvas id="asmaChart" width="400" height="400"></canvas> <!-- Elemento Canvas para o gráfico -->
+                <canvas id="insoniaChart" width="400" height="400"></canvas> <!-- Elemento Canvas para o gráfico -->
                 <span class="arrow-right">&#9654;</span> <!-- Seta para direita -->
             </div>
         </div>
