@@ -54,16 +54,20 @@
         <h1>Vamos registrar sua enxaqueca?</h1>
         <div class="container">
             <div class="chart-section">
+                <span id="prev-month" class="arrow-left">&#9664;</span> <!-- Seta para esquerda -->
                 <canvas id="enxaquecaChart" width="400" height="400"></canvas>
+                <span id="next-month" class="arrow-right">&#9654;</span> <!-- Seta para direita -->
             </div>
             <div class="input-section">
-                <input type="text" placeholder="Data" disabled>
-                <input type="text" placeholder="Hora" disabled>
-                <input type="text" placeholder="Intensidade da dor" disabled>
+                <input id="dataInput" type="text" placeholder="Data">
+                <input id="horaInput" type="text" placeholder="Hora">
+                <input id="intensidadeInput" type="text" placeholder="Intensidade da dor">
             </div>
         </div>
+        
         <button class="save-button">Salvar Registro</button>
     </main>
     <script src="js/enxaquecaPaciente.js"></script>
+
 </body>
 </html>
