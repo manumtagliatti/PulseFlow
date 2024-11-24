@@ -1,6 +1,10 @@
 document.addEventListener('DOMContentLoaded', () => {
     const authToken = localStorage.getItem('authToken');
-    const email = 'julio@gmail.com'; // Email do paciente
+    const emailPaciente = localStorage.getItem("email-paciente");
+    if (!emailPaciente) {
+        alert("E-mail não encontrado. Por favor, insira o e-mail do seu paciente.");
+        window.location.href = "principalMedico.html"; // Redireciona para selecionar o email do paciente
+    }
 
     if (!authToken) {
         alert("Você precisa fazer login primeiro.");
@@ -9,7 +13,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     carregarNomeMedico(authToken);
-    carregarDadosGrafico(email, authToken);
+    carregarDadosGrafico(emailPaciente, authToken);
 
     const menuIcon = document.getElementById('icon-toggle');
     const dropdownMenu = document.getElementById('menu-dropdown');
@@ -31,13 +35,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (prevMonthButton) {
         prevMonthButton.addEventListener('click', () => {
-            alterarMes(-1, email, authToken);
+            alterarMes(-1, emailPaciente, authToken);
         });
     }
 
     if (nextMonthButton) {
         nextMonthButton.addEventListener('click', () => {
-            alterarMes(1, email, authToken);
+            alterarMes(1, emailPaciente, authToken);
         });
     }
 
@@ -84,9 +88,9 @@ function carregarNomeMedico(authToken) {
         });
 }
 
-async function carregarDadosGrafico(email, authToken) {
+async function carregarDadosGrafico(emailPaciente, authToken) {
     try {
-        const response = await fetch(`http://localhost:3000/api/insonia/${encodeURIComponent(email)}`, {
+        const response = await fetch(`http://localhost:3000/api/insonia/${encodeURIComponent(emailPaciente)}`, {
             method: "GET",
             headers: {
                 Authorization: `Bearer ${authToken}`,
@@ -135,7 +139,7 @@ function updateMonthTitle() {
     }
 }
 
-function alterarMes(offset, email, authToken) {
+function alterarMes(offset, emailPaciente, authToken) {
     currentMonth += offset;
 
     if (currentMonth < 0) {
@@ -147,7 +151,7 @@ function alterarMes(offset, email, authToken) {
     }
 
     updateMonthTitle();
-    carregarDadosGrafico(email, authToken);
+    carregarDadosGrafico(emailPaciente, authToken);
 }
 
 function initializeChartInsonia() {

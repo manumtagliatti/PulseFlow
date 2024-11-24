@@ -1,7 +1,11 @@
 document.addEventListener('DOMContentLoaded', () => {
     const authToken = localStorage.getItem('authToken');
-    const email = 'julio@gmail.com'; // Email do paciente
 
+    const emailPaciente = localStorage.getItem("email-paciente");
+    if (!emailPaciente) {
+        alert("E-mail não encontrado. Por favor, insira o e-mail do seu paciente.");
+        window.location.href = "principalMedico.html"; // Redireciona para selecionar o email do paciente
+    }
     if (!authToken) {
         alert("Você precisa fazer login primeiro.");
         window.location.href = "loginMedico.html";
@@ -9,7 +13,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     carregarNomeMedico(authToken);
-    carregarDadosGraficoDiabetes(email, authToken);
+    carregarDadosGraficoDiabetes(emailPaciente, authToken);
 
     const menuIcon = document.getElementById('icon-toggle');
     const dropdownMenu = document.getElementById('menu-dropdown');
@@ -76,8 +80,8 @@ function carregarNomeMedico(authToken) {
     });
 }
 
-function carregarDadosGraficoDiabetes(email, authToken) {
-    fetch(`http://localhost:3000/api/diabetes/${email}`, {
+function carregarDadosGraficoDiabetes(emailPaciente, authToken) {
+    fetch(`http://localhost:3000/api/diabetes/${emailPaciente}`, {
         method: 'GET',
         headers: {
             'Authorization': `Bearer ${authToken}`,
@@ -172,8 +176,8 @@ function initializeChartDiabetes() {
                         display: true,
                         text: 'Glicemia (mg/dL)'
                     },
-                    min: 60,
-                    max: 200,
+                    min: 40,
+                    max: 300,
                     ticks: {
                         stepSize: 10,
                         callback: function(value) {

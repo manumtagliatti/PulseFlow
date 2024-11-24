@@ -1,6 +1,10 @@
 document.addEventListener('DOMContentLoaded', () => {
     const authToken = localStorage.getItem('authToken');
-    const email = 'julio@gmail.com'; // Email do paciente
+    const emailPaciente = localStorage.getItem("email-paciente");
+    if (!emailPaciente) {
+        alert("E-mail não encontrado. Por favor, insira o e-mail do seu paciente.");
+        window.location.href = "principalMedico.html"; // Redireciona para selecionar o email do paciente
+    }
 
     if (!authToken) {
         alert("Você precisa fazer login primeiro.");
@@ -9,7 +13,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     carregarNomeMedico(authToken);
-    carregarDadosGraficoEnxaqueca(email, authToken);
+    carregarDadosGraficoEnxaqueca(emailPaciente, authToken);
 
     document.getElementById('prev-month').addEventListener('click', () => {
         alterarMes(-1);
@@ -55,8 +59,8 @@ function carregarNomeMedico(authToken) {
     });
 }
 
-function carregarDadosGraficoEnxaqueca(email, authToken) {
-    fetch(`http://localhost:3000/api/enxaqueca/${email}`, {
+function carregarDadosGraficoEnxaqueca(emailPaciente, authToken) {
+    fetch(`http://localhost:3000/api/enxaqueca/${emailPaciente}`, {
         method: 'GET',
         headers: {
             'Authorization': `Bearer ${authToken}`,
@@ -169,13 +173,13 @@ function initializeChartEnxaqueca() {
                         text: 'Intensidade da Dor'
                     },
                     min: 1,
-                    max: 10,
+                    max: 13,
                     ticks: {
                         stepSize: 1,
                         callback: function(value) {
-                            if (value === 1) return 'Baixa';
+                            if (value === 3) return 'Baixa';
                             if (value === 5) return 'Média';
-                            if (value === 8) return 'Alta';
+                            if (value === 7) return 'Alta';
                             return '';
                         }
                     }
