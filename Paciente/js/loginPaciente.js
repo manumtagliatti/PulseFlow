@@ -19,10 +19,12 @@ const loginPaciente = async (event) => {
         });
 
         const data = await response.json();
-
+        
         if (response.status === 200) {
             // Armazenar o token no localStorage ou sessionStorage
             localStorage.setItem('token', data.token);
+            localStorage.setItem("email", data.email); // Salva o e-mail do paciente
+            localStorage.setItem("nome-paciente", data.nome); // Salva o e-mail do paciente
 
             alert('Login realizado com sucesso!');
             window.location.href = 'profilePaciente.html';

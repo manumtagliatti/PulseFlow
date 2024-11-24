@@ -3,17 +3,31 @@ document.addEventListener("DOMContentLoaded", () => {
     const arrowLeft = document.querySelector(".arrow-left");
     const arrowRight = document.querySelector(".arrow-right");
     const authToken = localStorage.getItem("authToken");
-    const email = "julio@gmail.com"; // Substitua pelo email correto do paciente
     let currentMonth = new Date().getMonth();
     let currentYear = new Date().getFullYear();
     let asmaChart = null;
     let registros = [];
+
+    const nomePaciente = localStorage.getItem("nome-paciente"); // Recupera o nome do paciente
+    const nomePacienteSpan = document.getElementById("nome-paciente");
+
+    if (nomePaciente) {
+        nomePacienteSpan.textContent = nomePaciente; // Preenche o campo com o nome
+    } else {
+        nomePacienteSpan.textContent = "Paciente não identificado"; // Mensagem padrão caso não encontre o nome
+    }
 
     const monthNames = [
         "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho",
         "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"
     ];
 
+    const email = localStorage.getItem("email");
+    if (!email) {
+        alert("E-mail não encontrado. Por favor, faça login novamente.");
+        window.location.href = "loginPaciente.html"; // Redireciona para o login
+    }
+    
     // Função para carregar dados do gráfico do backend
     async function carregarDadosGrafico(email, authToken) {
         try {
