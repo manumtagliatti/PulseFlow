@@ -2,13 +2,25 @@ document.addEventListener("DOMContentLoaded", () => {
     const prevMonthSpan = document.getElementById("prev-month");
     const nextMonthSpan = document.getElementById("next-month");
     const saveButton = document.querySelector(".save-button");
-    const email = "julio@gmail.com"; // Substitua pelo email correto do paciente
     const authToken = localStorage.getItem("authToken");
     let enxaquecaChart = null;
 
     let currentMonth = new Date().getMonth(); // Mês atual (0-11)
     let currentYear = new Date().getFullYear(); // Ano atual
+    const nomePaciente = localStorage.getItem("nome-paciente"); // Recupera o nome do paciente
+    const nomePacienteSpan = document.getElementById("nome-paciente");
 
+    if (nomePaciente) {
+        nomePacienteSpan.textContent = nomePaciente; // Preenche o campo com o nome
+    } else {
+        nomePacienteSpan.textContent = "Paciente não identificado"; // Mensagem padrão caso não encontre o nome
+    }
+    
+    const email = localStorage.getItem("email");
+    if (!email) {
+        alert("E-mail não encontrado. Por favor, faça login novamente.");
+        window.location.href = "loginPaciente.html"; // Redireciona para o login
+    }
     const monthNames = [
         "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho",
         "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"

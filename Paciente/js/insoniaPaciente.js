@@ -3,13 +3,27 @@ document.addEventListener("DOMContentLoaded", () => {
     const arrowLeft = document.querySelector(".arrow-left");
     const arrowRight = document.querySelector(".arrow-right");
     const mensagemSemDadosDiv = document.getElementById("mensagem-sem-dados"); // Div para a mensagem de "Sem Registros"
-    const email = "julio@gmail.com"; // Substitua pelo email correto do paciente
     const authToken = localStorage.getItem("authToken");
 
     let currentMonth = new Date().getMonth(); // Mês atual
     let currentYear = new Date().getFullYear(); // Ano atual
     let insoniaChart = null;
 
+    const nomePaciente = localStorage.getItem("nome-paciente"); // Recupera o nome do paciente
+    const nomePacienteSpan = document.getElementById("nome-paciente");
+
+    if (nomePaciente) {
+        nomePacienteSpan.textContent = nomePaciente; // Preenche o campo com o nome
+    } else {
+        nomePacienteSpan.textContent = "Paciente não identificado"; // Mensagem padrão caso não encontre o nome
+    }
+    
+    const email = localStorage.getItem("email");
+    if (!email) {
+        alert("E-mail não encontrado. Por favor, faça login novamente.");
+        window.location.href = "loginPaciente.html"; // Redireciona para o login
+    }
+    
     const monthNames = [
         "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho",
         "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"
