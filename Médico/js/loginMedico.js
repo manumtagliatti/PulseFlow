@@ -38,7 +38,7 @@ document.addEventListener("DOMContentLoaded", function () {
             if (data.success) {
                 alert("Login bem-sucedido!");
                 localStorage.setItem("authToken", data.token);  // Armazenar o token
-                window.location.href = "profileMedico.html";  // Redirecionar para o perfil
+                window.location.href = "principalMedico.html";  // Redirecionar para o perfil
             } else {
                 showAlert(data.message || "CPF ou senha incorretos.");
             }

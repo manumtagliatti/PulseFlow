@@ -3,18 +3,43 @@ let currentYear = new Date().getFullYear(); // Ano atual
 
 document.addEventListener('DOMContentLoaded', () => {
     const authToken = localStorage.getItem("authToken");
-
+    const emailPaciente = localStorage.getItem("email-paciente");
+    carregarNomeMedico(authToken);
+    if (!emailPaciente) {
+        alert("E-mail não encontrado. Por favor, insira o e-mail do seu paciente.");
+        window.location.href = "principalMedico.html"; // Redireciona para selecionar o email do paciente
+    }
     if (!authToken) {
         alert("Você precisa fazer login primeiro.");
         window.location.href = "loginMedico.html";
         return;
     }
-
-    const emailPaciente = "maria@exemplo.com";
     fetchCicloMenstrualData(emailPaciente, authToken);
 });
 
 let ciclosMenstruais = []; // Armazena todos os ciclos recebidos do backend
+function carregarNomeMedico(authToken) {
+    fetch('http://localhost:3000/api/medico/perfil', {
+        method: 'GET',
+        headers: {
+            'Authorization': `Bearer ${authToken}`,
+            'Content-Type': 'application/json'
+        }
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error("Erro ao buscar o nome do médico.");
+        }
+        return response.json();
+    })
+    .then(data => {
+        document.getElementById('nome-medico').textContent = ` Dr. ${data.medico.nomeCompleto}`;
+    })
+    .catch(error => {
+        console.error("Erro ao buscar o nome do médico:", error);
+        document.getElementById('nome-medico').textContent = 'Dr.';
+    });
+}
 
 function fetchCicloMenstrualData(email, authToken) {
     fetch(`http://localhost:3000/api/ciclo-menstrual/${email}`, {

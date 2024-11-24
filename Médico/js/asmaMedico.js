@@ -1,6 +1,11 @@
 document.addEventListener('DOMContentLoaded', () => {
     const authToken = localStorage.getItem('authToken');
-    const email = 'julio@gmail.com'; // Email do paciente
+
+    const emailPaciente = localStorage.getItem("email-paciente");
+    if (!emailPaciente) {
+        alert("E-mail não encontrado. Por favor, insira o e-mail do seu paciente.");
+        window.location.href = "principalMedico.html"; // Redireciona para selecionar o email do paciente
+    }
 
     if (!authToken) {
         alert("Você precisa fazer login primeiro.");
@@ -9,7 +14,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     carregarNomeMedico(authToken);
-    carregarDadosGraficoAsma(email, authToken);
+    carregarDadosGraficoAsma(emailPaciente, authToken);
 
     const menuIcon = document.getElementById('icon-toggle');
     const dropdownMenu = document.getElementById('menu-dropdown');
@@ -77,8 +82,8 @@ function carregarNomeMedico(authToken) {
     });
 }
 
-function carregarDadosGraficoAsma(email, authToken) {
-    fetch(`http://localhost:3000/api/asma/${email}`, {
+function carregarDadosGraficoAsma(emailPaciente, authToken) {
+    fetch(`http://localhost:3000/api/asma/${emailPaciente}`, {
         method: 'GET',
         headers: {
             'Authorization': `Bearer ${authToken}`,
@@ -196,7 +201,7 @@ function initializeChartAsma() {
                         text: 'Intensidade da Crise'
                     },
                     min: 1, // Começa no valor 1
-                    max: 9, // Termina no valor 8
+                    max: 11, // Termina no valor 15
                     ticks: {
                         stepSize: 1, // Adiciona divisores de 1 em 1
                         callback: function(value) {
