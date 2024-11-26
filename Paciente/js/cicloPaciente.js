@@ -34,6 +34,43 @@ document.addEventListener("DOMContentLoaded", () => {
         currentMonthElement.textContent = `${monthNames[currentMonth]} ${currentYear}`;
     }
 
+     //botao superior para redirecionar para a homePage e perfil
+    // Configurar o botão do dropdown
+    // Configuração do menu dropdown
+    const menuIcon = document.getElementById('icon-toggle');
+    const dropdownMenu = document.getElementById('menu-dropdown');
+    const perfilItem = dropdownMenu.querySelector('.meu-perfil');
+    const sairItem = dropdownMenu.querySelector('.sair');
+
+    if (menuIcon && dropdownMenu) {
+        // Alternar a exibição do menu ao clicar no ícone
+        menuIcon.addEventListener('click', (event) => {
+            event.stopPropagation(); // Impede que o clique feche o menu imediatamente
+            const isVisible = dropdownMenu.style.display === 'block';
+            dropdownMenu.style.display = isVisible ? 'none' : 'block';
+        });
+
+        // Fechar o menu ao clicar fora dele
+        document.addEventListener('click', (event) => {
+            if (!menuIcon.contains(event.target) && !dropdownMenu.contains(event.target)) {
+                dropdownMenu.style.display = 'none';
+            }
+        });
+
+        // Navegar para a página "Meu Perfil"
+        perfilItem.addEventListener('click', () => {
+            window.location.href = "../Paciente/profilePaciente.html";
+        });
+
+        // Navegar para a HomePage ao clicar em "Sair"
+        sairItem.addEventListener('click', () => {
+            window.location.href = "../HomePage/homepage.html";
+        });
+    } else {
+        console.error('Menu dropdown ou elementos do menu não encontrados no DOM.');
+    }
+
+
     async function fetchMenstruationDays() {
         try {
             const response = await fetch(`${baseURL}/api/ciclo-menstrual/${email}`, {

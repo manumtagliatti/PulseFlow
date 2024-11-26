@@ -26,6 +26,40 @@ document.addEventListener("DOMContentLoaded", () => {
         "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"
     ];
 
+    //menu para navegar para home-page e perfil
+    const menuIcon = document.getElementById('icon-toggle');
+    const dropdownMenu = document.getElementById('menu-dropdown');
+    const perfilItem = dropdownMenu.querySelector('.meu-perfil');
+    const sairItem = dropdownMenu.querySelector('.sair');
+
+    if (menuIcon && dropdownMenu) {
+        // Alternar a exibição do menu ao clicar no ícone
+        menuIcon.addEventListener('click', (event) => {
+            event.stopPropagation(); // Impede que o clique feche o menu imediatamente
+            const isVisible = dropdownMenu.style.display === 'block';
+            dropdownMenu.style.display = isVisible ? 'none' : 'block';
+        });
+
+        // Fechar o menu ao clicar fora dele
+        document.addEventListener('click', (event) => {
+            if (!menuIcon.contains(event.target) && !dropdownMenu.contains(event.target)) {
+                dropdownMenu.style.display = 'none';
+            }
+        });
+
+        // Navegar para a página "Meu Perfil"
+        perfilItem.addEventListener('click', () => {
+            window.location.href = "../Paciente/profilePaciente.html"; // Ajuste o caminho se necessário
+        });
+
+        // Navegar para a HomePage ao clicar em "Sair"
+        sairItem.addEventListener('click', () => {
+            window.location.href = "../HomePage/homepage.html"; // Ajuste o caminho se necessário
+        });
+    } else {
+        console.error('Menu dropdown ou elementos do menu não encontrados no DOM.');
+    }
+
     // Atualiza o título do mês no gráfico
     function atualizarLegendaMes() {
         const legendaMes = `${monthNames[currentMonth]} ${currentYear}`;
@@ -133,38 +167,48 @@ document.addEventListener("DOMContentLoaded", () => {
     // Função para atualizar o gráfico
     function atualizarGrafico(data) {
         const ctx = document.getElementById("enxaquecaChart").getContext("2d");
-
+    
         // Ordenar os dados pela data
         const sortedData = data.sort((a, b) => new Date(a.data) - new Date(b.data));
-
+    
         const dias = sortedData.map(item => new Date(item.data).getDate());
         const intensidades = sortedData.map(item => item.intensidadeDor);
         const horas = sortedData.map(item => item.hora);
-
+    
         if (enxaquecaChart) enxaquecaChart.destroy();
-
+    
+        // Garantir que sempre haja ao menos um dado padrão para exibição
+        const hasData = dias.length > 0;
+    
         enxaquecaChart = new Chart(ctx, {
             type: "line",
             data: {
-                labels: dias,
+                labels: hasData ? dias : ["1"], // "1" será um marcador padrão para eixos vazios
                 datasets: [
                     {
                         label: `${monthNames[currentMonth]} ${currentYear}`,
-                        data: intensidades,
+                        data: hasData ? intensidades : [0], // Um valor padrão (0) caso não haja dados
                         borderColor: "#2CABAA",
-                        backgroundColor: "rgba(44, 171, 170, 0.2)",
-                        fill: true
+                        backgroundColor: hasData ? "rgba(44, 171, 170, 0.2)" : "rgba(200, 200, 200, 0.2)",
+                        fill: true,
+                        tension: 0.4
                     }
                 ]
             },
             options: {
                 responsive: true,
                 plugins: {
-                    legend: { display: true },
+                    legend: {
+                        display: true,
+                        labels: {
+                            color: "#333"
+                        }
+                    },
                     tooltip: {
                         callbacks: {
-                            title: (context) => `Dia: ${context[0].label}`,
+                            title: (context) => hasData ? `Dia: ${context[0].label}` : "Sem Dados",
                             label: (context) => {
+                                if (!hasData) return "Nenhum registro disponível";
                                 const index = context.dataIndex;
                                 return [
                                     `Intensidade: ${intensidades[index]}`,
@@ -177,12 +221,27 @@ document.addEventListener("DOMContentLoaded", () => {
                 scales: {
                     y: {
                         beginAtZero: true,
-                        max: 10
+                        min: 0,
+                        max: 10,
+                        title: {
+                            display: true,
+                            text: "Intensidade da Dor",
+                            color: "#333"
+                        }
+                    },
+                    x: {
+                        title: {
+                            display: true,
+                            text: "Dias do Mês",
+                            color: "#333"
+                        }
                     }
                 }
             }
         });
     }
+    
+    
 
     // Navegar pelos meses
     function alterarMes(direcao) {
