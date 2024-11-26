@@ -15,19 +15,39 @@ document.addEventListener('DOMContentLoaded', () => {
     carregarNomeMedico(authToken);
     carregarDadosGrafico(emailPaciente, authToken);
 
-    const menuIcon = document.getElementById('icon-toggle');
-    const dropdownMenu = document.getElementById('menu-dropdown');
+    //menu para navegar para home-page e perfil
+    const menuIcon = document.getElementById('icon-toggle'); // Ícone do menu
+    const dropdownMenu = document.getElementById('menu-dropdown'); // Dropdown do menu
+    const perfilItem = dropdownMenu.querySelector('.meu-perfil'); // Link "Meu Perfil"
+    const sairItem = dropdownMenu.querySelector('.sair'); // Link "Sair"
 
     if (menuIcon && dropdownMenu) {
-        menuIcon.addEventListener('click', () => {
-            dropdownMenu.style.display = dropdownMenu.style.display === 'block' ? 'none' : 'block';
+        // Alternar a exibição do menu ao clicar no ícone
+        menuIcon.addEventListener('click', (event) => {
+            event.stopPropagation(); // Impede que o clique feche o menu imediatamente
+            const isVisible = dropdownMenu.style.display === 'block';
+            dropdownMenu.style.display = isVisible ? 'none' : 'block';
         });
 
+        // Fechar o menu ao clicar fora dele
         document.addEventListener('click', (event) => {
             if (!menuIcon.contains(event.target) && !dropdownMenu.contains(event.target)) {
                 dropdownMenu.style.display = 'none';
             }
         });
+
+        // Navegar para a página "Meu Perfil"
+        perfilItem.addEventListener('click', () => {
+            window.location.href = "profileMedico.html"; // Caminho ajustado para o perfil do médico
+        });
+
+        // Navegar para a HomePage ao clicar em "Sair"
+        sairItem.addEventListener('click', () => {
+            // Opcional: Limpar localStorage ou outros dados de sessão aqui, se necessário
+            window.location.href = "../HomePage/homepage.html"; // Caminho da homepage permanece o mesmo
+        });
+    } else {
+        console.error('Menu dropdown ou elementos do menu não encontrados no DOM.');
     }
 
     const prevMonthButton = document.getElementById('prev-month');

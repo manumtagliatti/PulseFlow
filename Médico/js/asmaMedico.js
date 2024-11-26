@@ -16,26 +16,41 @@ document.addEventListener('DOMContentLoaded', () => {
     carregarNomeMedico(authToken);
     carregarDadosGraficoAsma(emailPaciente, authToken);
 
-    const menuIcon = document.getElementById('icon-toggle');
-    const dropdownMenu = document.getElementById('menu-dropdown');
+    //menu para navegar para home page e perfil
+    const menuIcon = document.getElementById('icon-toggle'); // Ícone do menu
+    const dropdownMenu = document.getElementById('menu-dropdown'); // Dropdown do menu
+    const perfilItem = dropdownMenu.querySelector('.meu-perfil'); // Link "Meu Perfil"
+    const sairItem = dropdownMenu.querySelector('.sair'); // Link "Sair"
 
-    menuIcon.addEventListener('click', () => {
-        dropdownMenu.style.display = dropdownMenu.style.display === 'block' ? 'none' : 'block';
-    });
+    if (menuIcon && dropdownMenu) {
+        // Alternar a exibição do menu ao clicar no ícone
+        menuIcon.addEventListener('click', (event) => {
+            event.stopPropagation(); // Impede que o clique feche o menu imediatamente
+            const isVisible = dropdownMenu.style.display === 'block';
+            dropdownMenu.style.display = isVisible ? 'none' : 'block';
+        });
 
-    document.addEventListener('click', (event) => {
-        if (!menuIcon.contains(event.target) && !dropdownMenu.contains(event.target)) {
-            dropdownMenu.style.display = 'none';
-        }
-    });
+        // Fechar o menu ao clicar fora dele
+        document.addEventListener('click', (event) => {
+            if (!menuIcon.contains(event.target) && !dropdownMenu.contains(event.target)) {
+                dropdownMenu.style.display = 'none';
+            }
+        });
 
-    document.querySelector('.meu-perfil').addEventListener('click', () => {
-        window.location.href = "profileMedico.html";
-    });
+        // Navegar para a página "Meu Perfil"
+        perfilItem.addEventListener('click', () => {
+            window.location.href = "profileMedico.html"; // Novo caminho do perfil
+        });
 
-    document.querySelector('.sair').addEventListener('click', () => {
-        window.location.href = "../HomePage/homepage.html";
-    });
+        // Navegar para a HomePage ao clicar em "Sair"
+        sairItem.addEventListener('click', () => {
+            // Opcional: Limpar localStorage ou outros dados de sessão aqui, se necessário
+            window.location.href = "../HomePage/homepage.html"; // Caminho permanece o mesmo
+        });
+    } else {
+        console.error('Menu dropdown ou elementos do menu não encontrados no DOM.');
+    }
+
 
     document.getElementById('prev-month').addEventListener('click', () => {
         alterarMes(-1);
