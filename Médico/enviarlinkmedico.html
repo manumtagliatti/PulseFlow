@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enviar Link - Médico</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/enviarlinkmedico.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Painel Lateral -->
+        <div class="side-panel">
+            <h1 class="title">Redefinir Senha</h1>
+            <p class="description">Insira seu e-mail para receber um link de redefinição de senha.</p>
+            <img src="imagens/Logo.png" alt="Logo" class="logo">
+        </div>
+
+        <!-- Painel de envio -->
+        <div class="redefinir-panel">
+            <h2>Insira seu e-mail</h2>
+            <form id="form-medico" class="form-container">
+                <div class="input-container email">
+                    <input type="email" id="email-medico" placeholder="Digite seu e-mail" required>
+                </div>
+                <button type="button" onclick="enviarEmailMedico()">Enviar Link</button>
+                <div class="alert-message" id="alert-medico"></div>
+            </form>
+        </div>
+    </div>
+    <script src="js/enviarlinkmedico.js"></script>
+</body>
+</html>

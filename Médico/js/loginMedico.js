@@ -3,11 +3,18 @@ document.addEventListener("DOMContentLoaded", function () {
     const cpfInput = document.querySelector("#cpf");
     const senhaInput = document.querySelector("#senha");
     const alertMessage = document.querySelector("#alertMessage");
-    const registerBtn = document.querySelector("#register-btn"); // Referência para o botão "Cadastre-se Aqui"
+    const registerBtn = document.querySelector("#register-btn"); // Botão "Cadastre-se Aqui"
+    const forgotPasswordLink = document.querySelector("#forgot-password"); // Botão "Esqueceu a senha?"
 
     // Evento de click no botão "Cadastre-se Aqui"
     registerBtn.addEventListener("click", function () {
         window.location.href = "registromedico.html"; // Redireciona para a página de registro
+    });
+
+    // Evento de click no link "Esqueceu a senha?"
+    forgotPasswordLink.addEventListener("click", function (event) {
+        event.preventDefault(); // Evita comportamento padrão
+        window.location.href = "enviarlinkmedico.html"; // Redireciona para a página de recuperação de senha
     });
 
     form.addEventListener("submit", function (event) {
