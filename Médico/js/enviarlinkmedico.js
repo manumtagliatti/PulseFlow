@@ -37,7 +37,7 @@ function enviarEmailMedico() {
 function showAlert(message, color, alertElement) {
     alertElement.textContent = message;
     alertElement.style.color = color;
-    alertElement.style.display = "block";
+    alertElement.classList.add("show");
 
-    setTimeout(() => alertElement.style.display = "none", 5000);
+    setTimeout(() => alertElement.classList.remove("show"), 5000);
 }

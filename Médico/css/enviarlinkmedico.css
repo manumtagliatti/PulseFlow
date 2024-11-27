@@ -4,7 +4,7 @@ body, html {
     padding: 0;
     font-family: 'Montserrat', sans-serif;
     height: 100vh;
-    overflow: hidden; /* Esconde conteúdo além da viewport */
+    overflow: hidden;
 }
 
 /* Container principal */
@@ -59,6 +59,7 @@ body, html {
     padding: 20px;
 }
 
+/* Títulos e descrição */
 .redefinir-panel h2 {
     color: #2CABAA;
     font-size: 36px;
@@ -100,7 +101,7 @@ body, html {
     font-size: 18px;
     padding: 10px;
     outline: none;
-    color: #555; /* Cor do texto */
+    color: #555;
     text-align: center;
 }
 
@@ -126,15 +127,33 @@ body, html {
 
 /* Mensagem de alerta */
 .alert-message {
-    z-index: 10;
-    background-color: #FFF;
-    color: #2CABAA;
+    background-color: #DFF6DD;
+    color: #4CAF50;
     border-radius: 8px;
-    padding: 10px;
+    padding: 15px;
     width: 508px;
-    display: none;
     text-align: center;
-    font-size: 16px;
-    position: absolute;
-    top: 55%;
+    font-size: 18px;
+    margin-top: 20px;
+    display: none;
+    transition: opacity 0.5s ease-in-out;
+}
+
+.alert-message.show {
+    display: block;
+    opacity: 1;
+}
+
+/* Botão de Voltar */
+.back-button {
+    margin-top: 20px;
+    font-size: 18px;
+    color: #2CABAA;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.3s ease;
+}
+
+.back-button:hover {
+    color: #24978D;
 }
