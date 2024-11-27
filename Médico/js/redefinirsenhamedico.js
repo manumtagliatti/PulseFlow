@@ -66,6 +66,13 @@ function showAlert(message, color, alertElement) {
     // Oculta o alerta após 5 segundos
     setTimeout(() => {
         alertElement.style.display = "none";
-        alertElement.textContent = "";
     }, 5000);
+}
+
+// Função de confirmação de cancelamento
+function confirmarCancelamento() {
+    var confirmacao = confirm("Tem certeza que deseja cancelar a solicitação de redefinir a senha?");
+    if (confirmacao) {
+        window.location.href = "loginMedico.html"; // Redireciona para a página de login
+    }
 }

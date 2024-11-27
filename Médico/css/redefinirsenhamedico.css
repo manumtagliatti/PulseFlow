@@ -138,3 +138,20 @@ body, html {
     position: absolute;
     top: 55%;
 }
+
+/* Estilo para o link de cancelamento */
+.cancelar-solicitacao {
+    font-size: 16px;
+    color: #2CABAA;
+    margin-top: 20px;
+    text-align: center;
+}
+
+.cancelar-solicitacao a {
+    color: #2CABAA;
+    text-decoration: none;
+}
+
+.cancelar-solicitacao a:hover {
+    text-decoration: underline;
+}
