@@ -54,26 +54,34 @@ document.addEventListener('DOMContentLoaded', () => {
         console.error('Elemento do formulário de busca ou botão não encontrado.');
     }
 
-    document.getElementById("buscar-paciente").addEventListener("click", () => {
-        const emailInput = document.getElementById("email-paciente").value.trim();
+    document.getElementById("buscar-paciente").addEventListener("click", (event) => {
+        event.preventDefault(); // Impede o comportamento padrão do formulário
+    
+        const emailInput = document.getElementById("email-paciente").value.trim(); // Captura o valor do input
+        const authToken = localStorage.getItem("authToken"); // Obtém o token de autenticação
+    
         if (!authToken) {
             alert("Você precisa fazer login primeiro.");
-            window.location.href = "loginMedico.html";
+            window.location.href = "loginMedico.html"; // Redireciona para login se o token não existir
             return;
         }
-        
+    
         if (!emailInput) {
             alert("Por favor, insira um e-mail válido!");
             return;
         }
     
-        // Salvar o e-mail no localStorage
-        localStorage.setItem("email-paciente", emailInput);
-    
-        alert(`E-mail salvo com sucesso!`);
-        
-        // Redirecionar para outra página, se necessário
-       window.location.href = "menuMedico.html";
+        // Salva o e-mail no localStorage
+        try {
+            localStorage.setItem("email-paciente", emailInput); // Salva o e-mail do paciente
+            alert(`E-mail identificado com sucesso!`);
+            
+            // Redireciona para outra página
+            window.location.href = "menuMedico.html";
+        } catch (error) {
+            console.error("Erro ao salvar o e-mail no localStorage:", error);
+            alert("Erro ao identificar o e-mail.");
+        }
     });
      
 });

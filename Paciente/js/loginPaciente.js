@@ -63,7 +63,7 @@ const loginPaciente = async (event) => {
         if (response.status === 200) {
             // Armazenar o token no localStorage ou sessionStorage
             localStorage.setItem('token', data.token);
-            localStorage.setItem("email", data.email); // Salva o e-mail do paciente
+            localStorage.setItem("email-paciente", data.email); // Salva o e-mail do paciente
             localStorage.setItem("nome-paciente", data.nome); // Salva o nome do paciente
 
             alert('Login realizado com sucesso!');
