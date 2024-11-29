@@ -82,6 +82,12 @@ document.getElementById('register-btn').addEventListener('click', () => {
     window.location.href = 'registroPaciente.html';  // Redireciona para a página de registro
 });
 
+document.getElementById('forgot-password').addEventListener("click", function (event) {
+    event.preventDefault();
+    window.location.href = "enviarlinkpaciente.html";
+});
+
+
 // Função para formatar CPF
 const formatarCPF = (cpf) => {
     // Remove todos os caracteres não numéricos

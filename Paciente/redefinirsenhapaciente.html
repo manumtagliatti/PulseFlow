@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Redefinir Senha - Paciente</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/redefinirsenhapaciente.css">
+</head>
+<body onload="initializeRedefinirPage()">
+    <div class="container">
+        <!-- Painel Lateral -->
+        <div class="side-panel">
+            <h1 class="title">Redefinir Senha</h1>
+            <p class="description">Crie uma nova senha para sua conta.</p>
+            <img src="imagens/Logo.png" alt="Logo" class="logo">
+        </div>
+
+        <!-- Painel de redefinição -->
+        <div class="redefinir-panel">
+            <h2>Redefinir sua Senha</h2>
+            <form id="form-redefinir" class="form-container" onsubmit="alterarSenha(event)">
+                <div class="input-container">
+                    <input type="password" id="nova-senha" placeholder="Nova senha" required autocomplete="new-password">
+                </div>
+                <div class="input-container">
+                    <input type="password" id="confirma-senha" placeholder="Confirme a nova senha" required autocomplete="new-password">
+                </div>
+                <button type="submit">Alterar Senha</button>
+                <div class="alert-message" id="alert-password"></div>
+            </form>            
+            <p class="cancelar-solicitacao">
+                Se você quiser cancelar a solicitação de senha, <a href="javascript:void(0);" onclick="confirmarCancelamento()">clique aqui</a>.
+            </p>
+        </div>
+    </div>
+
+    <script src="js/redefinirsenhapaciente.js"></script>
+</body>
+</html>
