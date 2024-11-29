@@ -6,6 +6,18 @@ document.addEventListener("DOMContentLoaded", function () {
     const registerBtn = document.querySelector("#register-btn"); // Botão "Cadastre-se Aqui"
     const forgotPasswordLink = document.querySelector("#forgot-password"); // Botão "Esqueceu a senha?"
 
+    // Máscara para CPF
+    cpfInput.addEventListener("input", function () {
+        let cpf = cpfInput.value.replace(/\D/g, ""); // Remove caracteres não numéricos
+        if (cpf.length > 11) cpf = cpf.slice(0, 11); // Limita ao máximo de 11 dígitos
+
+        // Aplica a máscara
+        cpfInput.value = cpf
+            .replace(/(\d{3})(\d)/, "$1.$2") // Primeiro ponto
+            .replace(/(\d{3})(\d)/, "$1.$2") // Segundo ponto
+            .replace(/(\d{3})(\d{1,2})$/, "$1-$2"); // Traço
+    });
+
     // Evento de click no botão "Cadastre-se Aqui"
     registerBtn.addEventListener("click", function () {
         window.location.href = "registromedico.html"; // Redireciona para a página de registro
@@ -29,7 +41,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
         const loginData = {
-            cpf: cpfInput.value.trim(),
+            cpf: cpfInput.value.replace(/\D/g, ""), // Remove formatação antes de enviar
             senha: senhaInput.value.trim(),
         };
 
