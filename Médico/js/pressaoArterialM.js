@@ -1,7 +1,11 @@
 document.addEventListener('DOMContentLoaded', () => {
     const authToken = localStorage.getItem('authToken');
-    const email = 'maria@example.com'; // Email do paciente
 
+    const emailPaciente = localStorage.getItem("email-paciente");
+    if (!emailPaciente) {
+        alert("E-mail não encontrado. Por favor, insira o e-mail do seu paciente.");
+        window.location.href = "principalMedico.html"; // Redireciona para selecionar o email do paciente
+    }
     if (!authToken) {
         alert("Você precisa fazer login primeiro.");
         window.location.href = "loginMedico.html";
@@ -9,7 +13,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     carregarNomeMedico(authToken);
-    carregarDadosGraficoPressao(email, authToken);
+    carregarDadosGraficoPressao(emailPaciente, authToken);
 
     const menuIcon = document.getElementById('icon-toggle');
     const dropdownMenu = document.getElementById('menu-dropdown');
@@ -33,14 +37,14 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     document.getElementById('prev-month').addEventListener('click', () => {
-        alterarMes(-1);
+        alterarMesPressao(-1);
     });
 
     document.getElementById('next-month').addEventListener('click', () => {
-        alterarMes(1);
+        alterarMesPressao(1);
     });
 
-    updateMonthTitle();
+    updateMonthTitlePressao();
     initializeChartPressao();
 });
 
@@ -51,10 +55,10 @@ function goBack() {
 
 let chartInstancePressao;
 let pressaoData = [];
-let currentMonth = new Date().getMonth();
-let currentYear = new Date().getFullYear();
+let currentMonthPressao = new Date().getMonth();
+let currentYearPressao = new Date().getFullYear();
 
-const monthNames = [
+const monthNamesPressao = [
     "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho",
     "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"
 ];
@@ -77,13 +81,12 @@ function carregarNomeMedico(authToken) {
         document.getElementById('nome-medico').textContent = ` ${data.medico.nomeCompleto}`;
     })
     .catch(error => {
-        console.error("Erro ao buscar o nome do médico:", error);
         document.getElementById('nome-medico').textContent = 'Dr.';
     });
 }
 
-function carregarDadosGraficoPressao(email, authToken) {
-    fetch(`http://localhost:3000/api/pressaoArterial/${encodeURIComponent(email)}`, {
+function carregarDadosGraficoPressao(emailPaciente, authToken) {
+    fetch(`http://localhost:3000/api/pressaoArterial/${emailPaciente}`, {
         method: 'GET',
         headers: {
             'Authorization': `Bearer ${authToken}`,
@@ -104,27 +107,26 @@ function carregarDadosGraficoPressao(email, authToken) {
         updateChartPressao();
     })
     .catch(error => {
-        console.error("Erro ao buscar os dados de pressão arterial:", error);
-        mostrarMensagemSemDados();
+        mostrarMensagemSemDadosPressao();
     });
 }
 
-function updateMonthTitle() {
-    document.getElementById('current-month').textContent = `${monthNames[currentMonth]} ${currentYear}`;
+function updateMonthTitlePressao() {
+    document.getElementById('current-month').textContent = `${monthNamesPressao[currentMonthPressao]} ${currentYearPressao}`;
 }
 
-function alterarMes(offset) {
-    currentMonth += offset;
+function alterarMesPressao(offset) {
+    currentMonthPressao += offset;
 
-    if (currentMonth < 0) {
-        currentMonth = 11;
-        currentYear--;
-    } else if (currentMonth > 11) {
-        currentMonth = 0;
-        currentYear++;
+    if (currentMonthPressao < 0) {
+        currentMonthPressao = 11;
+        currentYearPressao--;
+    } else if (currentMonthPressao > 11) {
+        currentMonthPressao = 0;
+        currentYearPressao++;
     }
 
-    updateMonthTitle();
+    updateMonthTitlePressao();
     updateChartPressao();
 }
 
@@ -173,11 +175,11 @@ function initializeChartPressao() {
 
 function updateChartPressao() {
     const filteredData = pressaoData.filter(item => 
-        item.date.getMonth() === currentMonth && item.date.getFullYear() === currentYear
+        item.date.getMonth() === currentMonthPressao && item.date.getFullYear() === currentYearPressao
     );
 
     if (filteredData.length === 0) {
-        mostrarMensagemSemDados();
+        mostrarMensagemSemDadosPressao();
         return;
     }
 
@@ -190,7 +192,8 @@ function updateChartPressao() {
     document.getElementById('mensagem-sem-dados').style.display = 'none';
 }
 
-function mostrarMensagemSemDados() {
+function mostrarMensagemSemDadosPressao() {
+    const ctx = document.getElementById('grafico-pressao').getContext('2d');
     chartInstancePressao.data.labels = ['Sem dados'];
     chartInstancePressao.data.datasets[0].data = [null];
     chartInstancePressao.update();
