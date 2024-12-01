@@ -7,6 +7,27 @@
     font-family: 'Montserrat', sans-serif;
 }
 
+/* Botão de Voltar */
+.back-button {
+    position: absolute;
+    top: 120px;
+    left: 20px;
+    background-color: #2CABAA;
+    color: #FFF;
+    font-size: 18px;
+    font-family: 'Montserrat', sans-serif;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.back-button:hover {
+    background-color: #218f90;
+    transform: translateY(-3px);
+}
+
 html, body {
     height: 100%; /* Garante que a altura do body ocupe 100% da tela */
     overflow: hidden; /* Remove o scroll da tela */

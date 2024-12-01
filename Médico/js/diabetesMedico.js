@@ -48,6 +48,11 @@ document.addEventListener('DOMContentLoaded', () => {
     initializeChartDiabetes();
 });
 
+// Função para voltar à página menuMedico.html
+function goBack() {
+    window.location.href = 'menuMedico.html'; // Redireciona para a página menuMedico.html
+}
+
 let chartInstanceDiabetes;
 let diabetesData = [];
 let currentMonthDiabetes = new Date().getMonth();

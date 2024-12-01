@@ -69,6 +69,11 @@ document.addEventListener('DOMContentLoaded', () => {
     initializeChartInsonia();
 });
 
+// Função para voltar à página menuMedico.html
+function goBack() {
+    window.location.href = 'menuMedico.html'; // Redireciona para a página menuMedico.html
+}
+
 let chartInstanceInsonia;
 let insoniaData = [];
 let currentMonth = new Date().getMonth();

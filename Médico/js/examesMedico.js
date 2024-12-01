@@ -21,6 +21,11 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
+// Função para voltar à página menuMedico.html
+function goBack() {
+    window.location.href = 'menuMedico.html'; // Redireciona para a página menuMedico.html
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     const examsGrid = document.querySelector('.exams-grid');
     const totalCards = 8; // Número total de espaços para anexar exames

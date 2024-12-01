@@ -61,6 +61,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
 });
 
+// Função para voltar à página menuMedico.html
+function goBack() {
+    window.location.href = 'menuMedico.html'; // Redireciona para a página menuMedico.html
+}
+
 let chartInstanceEnxaqueca;
 let enxaquecaData = [];
 let currentMonth = new Date().getMonth();

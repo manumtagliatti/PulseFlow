@@ -64,6 +64,11 @@ document.addEventListener('DOMContentLoaded', () => {
     initializeChartAsma();
 });
 
+// Função para voltar à página menuMedico.html
+function goBack() {
+    window.location.href = 'menuMedico.html'; // Redireciona para a página menuMedico.html
+}
+
 let chartInstanceAsma;
 let asmaData = [];
 let currentMonth = new Date().getMonth();

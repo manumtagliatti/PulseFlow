@@ -44,6 +44,11 @@ document.addEventListener('DOMContentLoaded', () => {
     initializeChartPressao();
 });
 
+// Função para voltar à página menuMedico.html
+function goBack() {
+    window.location.href = 'menuMedico.html'; // Redireciona para a página menuMedico.html
+}
+
 let chartInstancePressao;
 let pressaoData = [];
 let currentMonth = new Date().getMonth();

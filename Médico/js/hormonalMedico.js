@@ -48,6 +48,11 @@ document.addEventListener('DOMContentLoaded', () => {
     initializeChart();
 });
 
+// Função para voltar à página menuMedico.html
+function goBack() {
+    window.location.href = 'menuMedico.html'; // Redireciona para a página menuMedico.html
+}
+
 let chartInstance;
 let hormonalData = [];
 let currentMonth = new Date().getMonth();
