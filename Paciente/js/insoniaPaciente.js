@@ -3,7 +3,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const arrowLeft = document.querySelector(".arrow-left");
     const arrowRight = document.querySelector(".arrow-right");
     const mensagemSemDadosDiv = document.getElementById("mensagem-sem-dados"); // Div para a mensagem de "Sem Registros"
-    const authToken = localStorage.getItem("authToken");
+    const authToken = localStorage.getItem("token");
 
     let currentMonth = new Date().getMonth(); // Mês atual
     let currentYear = new Date().getFullYear(); // Ano atual

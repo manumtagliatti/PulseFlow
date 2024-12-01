@@ -2,8 +2,9 @@ document.addEventListener("DOMContentLoaded", () => {
     const prevMonthSpan = document.getElementById("prev-month");
     const nextMonthSpan = document.getElementById("next-month");
     const saveButton = document.querySelector(".save-button");
-    const authToken = localStorage.getItem("authToken");
+    const authToken = localStorage.getItem("token");
     let enxaquecaChart = null;
+    const mensagemSemDados = document.getElementById("mensagem-sem-dados");
 
     let currentMonth = new Date().getMonth(); // Mês atual (0-11)
     let currentYear = new Date().getFullYear(); // Ano atual
@@ -17,8 +18,8 @@ document.addEventListener("DOMContentLoaded", () => {
     }
     
     const email = localStorage.getItem("email-paciente");
-    if (!email) {
-        alert("E-mail não encontrado. Por favor, faça login novamente.");
+    if (!email || !authToken) {
+        alert("Por favor, faça login novamente.");
         window.location.href = "loginPaciente.html"; // Redireciona para o login
     }
     const monthNames = [
@@ -85,11 +86,20 @@ document.addEventListener("DOMContentLoaded", () => {
                     "Content-Type": "application/json"
                 }
             });
-
-            if (!response.ok) throw new Error("Erro ao carregar dados");
-
+    
+            if (!response.ok) {
+                // Tratar erro 404 especificamente
+                if (response.status === 404) {
+                    console.log("Nenhum dado encontrado para este paciente.");
+                    atualizarGrafico([]);  // Passa uma lista vazia para o gráfico
+                    mensagemSemDados.style.display = "block"; // Exibe mensagem de ausência de dados
+                    return;
+                }
+                throw new Error("Erro ao carregar dados");
+            }
+    
             const data = await response.json();
-
+    
             const filteredData = data.data.filter(item => {
                 const itemDate = new Date(item.data);
                 return (
@@ -97,15 +107,19 @@ document.addEventListener("DOMContentLoaded", () => {
                     itemDate.getFullYear() === currentYear
                 );
             });
-
+    
             atualizarGrafico(filteredData || []);
-            if(filteredData.length === 0)  mensagemSemDados.style.display = "block";
-            else mensagemSemDados.style.display = "none";
-            
+            if (filteredData.length === 0) {
+                mensagemSemDados.style.display = "block";  // Exibe mensagem de ausência de dados
+            } else {
+                mensagemSemDados.style.display = "none";  // Esconde a mensagem quando houver dados
+            }
+    
         } catch (error) {
             console.error("Erro ao carregar dados:", error);
         }
     }
+    
 
     async function salvarRegistro() {
         const dataInput = document.getElementById("dataInput").value.trim();

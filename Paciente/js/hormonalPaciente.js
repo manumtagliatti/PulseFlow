@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", async () => {
-    const authToken = localStorage.getItem("authToken");
+    const authToken = localStorage.getItem("token");
     const baseURL = 'http://localhost:3000'; // Ajuste para o endereço do backend
     const email = localStorage.getItem("email-paciente");
     const nomePaciente = localStorage.getItem("nome-paciente");

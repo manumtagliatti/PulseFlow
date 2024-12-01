@@ -3,7 +3,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const prevMonthSpan = document.getElementById("prev-month");
     const nextMonthSpan = document.getElementById("next-month");
     const mensagemSemDados = document.getElementById("mensagem-sem-dados");
-    const authToken = localStorage.getItem("authToken");
+    const authToken = localStorage.getItem("token");
     const baseURL = 'http://localhost:3000';
     let diabetesChart = null;
 
