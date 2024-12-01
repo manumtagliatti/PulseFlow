@@ -101,14 +101,14 @@ function carregarNomeMedico(authToken) {
         .then(data => {
             const medicoElement = document.getElementById('nome-medico');
             if (medicoElement) {
-                medicoElement.textContent = `Dr. ${data.medico.nomeCompleto}`;
+                medicoElement.textContent = `${data.medico.nomeCompleto}`;
             }
         })
         .catch(error => {
             console.error("Erro ao buscar o nome do médico:", error);
             const medicoElement = document.getElementById('nome-medico');
             if (medicoElement) {
-                medicoElement.textContent = 'Dr.';
+                medicoElement.textContent = '';
             }
         });
 }

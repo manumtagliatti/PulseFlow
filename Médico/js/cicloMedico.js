@@ -68,11 +68,11 @@ function carregarNomeMedico(authToken) {
         return response.json();
     })
     .then(data => {
-        document.getElementById('nome-medico').textContent = ` Dr. ${data.medico.nomeCompleto}`;
+        document.getElementById('nome-medico').textContent = `${data.medico.nomeCompleto}`;
     })
     .catch(error => {
         console.error("Erro ao buscar o nome do médico:", error);
-        document.getElementById('nome-medico').textContent = 'Dr.';
+        document.getElementById('nome-medico').textContent = '';
     });
 }
 
