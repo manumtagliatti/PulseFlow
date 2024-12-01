@@ -141,8 +141,8 @@ function initializeChart() {
             datasets: [{
                 label: 'Nível Hormonal',
                 data: [],
-                borderColor: 'rgba(54, 162, 235, 1)',
-                backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                borderColor: 'rgba(44, 171, 170, 1)', // A mesma cor do gráfico de glicemia
+                backgroundColor: 'rgba(44, 171, 170, 0.2)', // A mesma cor do gráfico de glicemia
                 fill: true,
                 tension: 0.3
             }]
