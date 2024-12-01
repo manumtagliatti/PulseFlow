@@ -16,7 +16,7 @@ document.addEventListener("DOMContentLoaded", () => {
         nomePacienteSpan.textContent = "Paciente não identificado"; // Mensagem padrão caso não encontre o nome
     }
     
-    const email = localStorage.getItem("email");
+    const email = localStorage.getItem("email-paciente");
     if (!email) {
         alert("E-mail não encontrado. Por favor, faça login novamente.");
         window.location.href = "loginPaciente.html"; // Redireciona para o login
@@ -76,7 +76,6 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-    // Função para carregar dados do gráfico
     async function carregarDadosGrafico() {
         try {
             const response = await fetch(`http://localhost:3000/api/enxaqueca/${email}`, {
@@ -91,7 +90,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
             const data = await response.json();
 
-            // Filtra os dados para o mês e ano selecionados
             const filteredData = data.data.filter(item => {
                 const itemDate = new Date(item.data);
                 return (
@@ -101,12 +99,14 @@ document.addEventListener("DOMContentLoaded", () => {
             });
 
             atualizarGrafico(filteredData || []);
+            if(filteredData.length === 0)  mensagemSemDados.style.display = "block";
+            else mensagemSemDados.style.display = "none";
+            
         } catch (error) {
             console.error("Erro ao carregar dados:", error);
         }
     }
 
-    // Função para salvar o registro
     async function salvarRegistro() {
         const dataInput = document.getElementById("dataInput").value.trim();
         const horaInput = document.getElementById("horaInput").value.trim();
@@ -137,8 +137,8 @@ document.addEventListener("DOMContentLoaded", () => {
             if (!response.ok) throw new Error("Erro ao salvar o registro.");
 
             alert("Registro salvo com sucesso!");
-            limparCampos(); // Limpa os campos após o registro ser salvo
-            carregarDadosGrafico(); // Atualiza os dados do gráfico
+            limparCampos();
+            carregarDadosGrafico();
         } catch (error) {
             console.error("Erro ao salvar registro:", error);
             alert("Erro ao salvar registro.");
@@ -146,12 +146,14 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     function ajustarDataParaUTC(data) {
-        if (!data || !/^\d{2}\/\d{2}\/\d{4}$/.test(data)) {
-            throw new Error("Data inválida. O formato correto é DD/MM/AAAA.");
-        }
-        const [dia, mes, ano] = data.split("/");
-        return new Date(`${ano}-${mes}-${dia}T12:00:00Z`).toISOString(); // Ajuste para meio-dia UTC
+    if (!data || !/^\d{2}\/\d{2}\/\d{4}$/.test(data)) {
+        throw new Error("Data inválida. O formato correto é DD/MM/AAAA.");
     }
+    const [dia, mes, ano] = data.split("/");
+    const mesAjustado = parseInt(mes, 10) - 1; // Ajusta o mês para o formato JavaScript (0-11)
+    return new Date(Date.UTC(ano, mesAjustado, dia, 12, 0, 0)).toISOString(); // Ajuste para meio-dia UTC
+}
+
 
     // Função para limpar os campos de entrada
     function limparCampos() {

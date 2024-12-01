@@ -1,6 +1,6 @@
 
 document.addEventListener("DOMContentLoaded", () => {
-   
+    const mensagemSemDados = document.getElementById("mensagem-sem-dados");
     const saveButton = document.querySelector(".save-button");
     const arrowLeft = document.querySelector(".arrow-left");
     const arrowRight = document.querySelector(".arrow-right");
@@ -24,7 +24,7 @@ document.addEventListener("DOMContentLoaded", () => {
         "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"
     ];
 
-    const email = localStorage.getItem("email");
+    const email = localStorage.getItem("email-paciente");
     if (!email) {
         alert("E-mail não encontrado. Por favor, faça login novamente.");
         window.location.href = "loginPaciente.html"; // Redireciona para o login
@@ -96,6 +96,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
             // Preencher os campos com o último registro
             if (filteredData.length > 0) preencherCampos(filteredData[filteredData.length - 1]);
+
+            if(filteredData.length === 0)  mensagemSemDados.style.display = "block";
+            else mensagemSemDados.style.display = "none";
         } catch (error) {
             console.error("Erro ao carregar dados:", error);
             exibirMensagemSemDados();
@@ -160,15 +163,16 @@ document.addEventListener("DOMContentLoaded", () => {
     function atualizarGrafico(data) {
         const ctx = document.getElementById("asmaChart").getContext("2d");
     
-        const dias = data.map((item) => new Date(item.dataCrise).getDate());
-        const intensidades = data.map((item) => item.intensidadeCrise);
+        // Extrair os dias e intensidades dos registros salvos
+        const dias = data.map(item => new Date(item.dataCrise).getDate());
+        const intensidades = data.map(item => item.intensidadeCrise);
     
         if (asmaChart) asmaChart.destroy();
     
         asmaChart = new Chart(ctx, {
             type: "line",
             data: {
-                labels: dias,
+                labels: dias, // Dias com registros no eixo X
                 datasets: [
                     {
                         label: `${monthNames[currentMonth]} ${currentYear}`, // Legenda do gráfico
@@ -186,7 +190,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 responsive: true,
                 plugins: {
                     legend: {
-                        display: true, // Certifique-se de que a legenda está ativada
+                        display: true,
                         position: "top",
                         labels: {
                             color: "#333"
@@ -212,25 +216,25 @@ document.addEventListener("DOMContentLoaded", () => {
                 },
                 scales: {
                     y: {
-                        beginAtZero: false,
-                        min: 1,
-                        max: 10, // Limite máximo ajustado para 10
+                        beginAtZero: true,
+                        min: 0,
+                        max: 10, // Limite máximo para 10
                         title: {
                             display: true,
                             text: "Intensidade da Crise",
                             color: "#333"
                         },
                         ticks: {
-                            stepSize: 1, // Incremento de 1 em 1
+                            stepSize: 1, // Incrementos de 1 em 1
                             callback: function (value) {
-                                return Number.isInteger(value) ? value : null; // Apenas números inteiros
+                                return value; // Mostrar os valores diretamente
                             }
                         }
                     },
                     x: {
                         title: {
                             display: true,
-                            text: "Dias do Mês",
+                            text: "Dias com Registros",
                             color: "#333"
                         }
                     }
@@ -238,6 +242,8 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         });
     }
+    
+    
     
     function ajustarDataParaUTC(data) {
         // Ajustar para aceitar o formato brasileiro DD/MM/AAAA

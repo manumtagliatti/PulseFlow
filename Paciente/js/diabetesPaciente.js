@@ -19,7 +19,7 @@ document.addEventListener("DOMContentLoaded", () => {
         nomePacienteSpan.textContent = "Paciente não identificado"; // Mensagem padrão caso não encontre o nome
     }
     
-    const email = localStorage.getItem("email");
+    const email = localStorage.getItem("email-paciente");
     if (!email) {
         alert("E-mail não encontrado. Por favor, faça login novamente.");
         window.location.href = "loginPaciente.html"; // Redireciona para o login

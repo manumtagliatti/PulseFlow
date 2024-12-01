@@ -20,7 +20,7 @@ document.addEventListener("DOMContentLoaded", () => {
         nomePacienteSpan.textContent = "Paciente não identificado"; // Mensagem padrão caso não encontre o nome
     }
     
-    const email = localStorage.getItem("email");
+    const email = localStorage.getItem("email-paciente");
     if (!email) {
         alert("E-mail não encontrado. Por favor, faça login novamente.");
         window.location.href = "loginPaciente.html"; // Redireciona para o login
@@ -80,18 +80,18 @@ document.addEventListener("DOMContentLoaded", () => {
                     "Content-Type": "application/json",
                 },
             });
-
+    
             if (!response.ok) throw new Error("Erro ao carregar ciclos menstruais");
-
+    
             const ciclos = await response.json();
-
+    
             menstruationDays.clear(); // Limpar dias anteriores
-
+    
             // Preenche os dias do ciclo menstrual no calendário
             ciclos.data.forEach(ciclo => {
                 const startDate = new Date(ciclo.dataInicial);
                 const endDate = new Date(ciclo.dataFinal);
-
+    
                 while (startDate <= endDate) {
                     if (
                         startDate.getMonth() === currentMonth &&
@@ -102,19 +102,23 @@ document.addEventListener("DOMContentLoaded", () => {
                     startDate.setDate(startDate.getDate() + 1);
                 }
             });
-
+    
+            // Mostrar ou esconder a mensagem de "sem dados"
             if (menstruationDays.size === 0) {
                 mostrarMensagemSemDados();
             } else {
                 esconderMensagemSemDados();
             }
-
+    
+            // Gerar o calendário independentemente de haver ou não dados de menstruação
             generateCalendar();
         } catch (error) {
             console.error("Erro ao carregar ciclos menstruais:", error);
             mostrarMensagemSemDados();
+            generateCalendar(); // Gera o calendário mesmo em caso de erro
         }
     }
+    
 
     async function salvarCiclo() {
         const dataInicio = document.getElementById("data-inicio").value.trim();
@@ -225,7 +229,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function mostrarMensagemSemDados() {
         mensagemSemDados.style.display = "block";
-        calendarBody.innerHTML = ""; // Limpa o calendário para reforçar que está vazio
     }
 
     function esconderMensagemSemDados() {
