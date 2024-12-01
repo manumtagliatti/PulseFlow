@@ -1,20 +1,21 @@
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener("DOMContentLoaded", () => {
+    const mensagemSemDados = document.getElementById("mensagem-sem-dados");
+    const authToken = localStorage.getItem("token");
+    const baseURL = 'http://localhost:3000';
+    let diabetesChart = null;
 
-    fetch('/api/cliente')
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Erro ao buscar o nome do cliente');
-            }
-            return response.json();
-        })
-        .then(data => {
+    let currentMonth = new Date().getMonth();
+    let currentYear = new Date().getFullYear();
 
-            document.getElementById('nome-paciente').textContent = data.nome;
-        })
-        .catch(error => {
-            console.error('Erro:', error);
-            document.getElementById('nome-paciente').textContent = 'Cliente';
-        });
+    const nomePaciente = localStorage.getItem("nome-paciente"); // Recupera o nome do paciente
+    const nomePacienteSpan = document.getElementById("nome-paciente");
+
+    if (nomePaciente) {
+        nomePacienteSpan.textContent = nomePaciente; // Preenche o campo com o nome
+    } else {
+        nomePacienteSpan.textContent = "Paciente não identificado"; // Mensagem padrão caso não encontre o nome
+    }
+
 
     const menuIcon = document.getElementById('icon-toggle');
     const dropdownMenu = document.getElementById('menu-dropdown');

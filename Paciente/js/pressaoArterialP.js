@@ -1,211 +1,246 @@
-document.getElementById('nome-paciente').textContent = "Cliente";
+document.addEventListener("DOMContentLoaded", () => {
+    const saveButton = document.getElementById("meu-botao");
+    const prevMonthSpan = document.getElementById("prev-month");
+    const nextMonthSpan = document.getElementById("next-month");
+    const mensagemSemDados = document.getElementById("mensagem-sem-dados");
+    const authToken = localStorage.getItem("token");
+    const baseURL = 'http://localhost:3000';
+    let pressaoChart = null;
 
-async function fetchInfoPaciente() {
-    try {
-        const response = await fetch('http://localhost:3000/paciente/info');
-        if (response.ok) {
-            const paciente = await response.json();
-            document.getElementById('nome-paciente').textContent = paciente.nome || "Cliente";
-            window.pacienteEmail = paciente.email;
-        } else {
-            console.error('Erro ao buscar as informações do paciente');
-        }
-    } catch (error) {
-        console.error('Erro na requisição:', error);
+    let currentMonth = new Date().getMonth();
+    let currentYear = new Date().getFullYear();
+
+    const nomePaciente = localStorage.getItem("nome-paciente"); 
+    const nomePacienteSpan = document.getElementById("nome-paciente");
+
+    if (nomePaciente) {
+        nomePacienteSpan.textContent = nomePaciente; 
+    } else {
+        nomePacienteSpan.textContent = "Paciente não identificado"; 
     }
-}
 
-document.addEventListener('DOMContentLoaded', () => {
-    fetchInfoPaciente();
+    const email = localStorage.getItem("email-paciente");
+    if (!email) {
+        alert("E-mail não encontrado. Por favor, faça login novamente.");
+        window.location.href = "loginPaciente.html"; 
+    }
+
+    const monthNames = [
+        "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho",
+        "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"
+    ];
+
     const menuIcon = document.getElementById('icon-toggle');
     const dropdownMenu = document.getElementById('menu-dropdown');
-    menuIcon.addEventListener('click', () => {
-        dropdownMenu.style.display = dropdownMenu.style.display === 'block' ? 'none' : 'block';
-    });
-    document.addEventListener('click', (event) => {
-        if (!menuIcon.contains(event.target) && !dropdownMenu.contains(event.target)) {
-            dropdownMenu.style.display = 'none';
-        }
-    });
-});
+    const perfilItem = dropdownMenu.querySelector('.meu-perfil');
+    const sairItem = dropdownMenu.querySelector('.sair');
 
-let chartInstance;
-let currentMonthIndex = 0;
-const months = ['Janeiro 2024', 'Fevereiro 2024', 'Março 2024', 'Abril 2024', 'Maio 2024', 'Junho 2024', 'Julho 2024', 'Agosto 2024', 'Setembro 2024', 'Outubro 2024', 'Novembro 2024', 'Dezembro 2024'];
-let currentMonth = months[currentMonthIndex];
-
-document.getElementById('meu-botao').addEventListener('click', async () => {
-    const dataMedição = document.getElementById('input-data').value;
-    const pressaoArterial = document.getElementById('input-pressao').value;
-    if (!dataMedição || !pressaoArterial) {
-        alert('Por favor, insira a data da medição e a pressão arterial.');
-        return;
-    }
-    const data = {
-        data: dataMedição,
-        pressao: pressaoArterial,
-        email: window.pacienteEmail
-    };
-    try {
-        const response = await fetch('http://localhost:3000/pressao', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(data)
+    if (menuIcon && dropdownMenu) {
+        menuIcon.addEventListener('click', (event) => {
+            event.stopPropagation();
+            const isVisible = dropdownMenu.style.display === 'block';
+            dropdownMenu.style.display = isVisible ? 'none' : 'block';
         });
-        if (response.ok) {
-            alert('Pressão registrada com sucesso!');
-            fetchDadosDePressao(currentMonth);
-        } else {
-            alert('Erro ao registrar a pressão. Tente novamente.');
-        }
-    } catch (error) {
-        console.error('Erro na requisição:', error);
-        alert('Erro na conexão com o servidor.');
-    }
-});
 
-async function fetchDadosDePressao(mes) {
-    try {
-        const response = await fetch(`http://localhost:3000/pressao/${window.pacienteEmail}?mes=${mes}`);
-        if (response.ok) {
-            const dados = await response.json();
-            const labels = dados.map((item) => new Date(item.data).toLocaleDateString());
-            const dataValues = dados.map((item) => item.pressao);
-            updateChartData(labels, dataValues);
-        } else {
-            alert('Nenhum registro de pressão arterial encontrado.');
-        }
-    } catch (error) {
-        console.error('Erro na requisição:', error);
-    }
-}
+        document.addEventListener('click', (event) => {
+            if (!menuIcon.contains(event.target) && !dropdownMenu.contains(event.target)) {
+                dropdownMenu.style.display = 'none';
+            }
+        });
 
-function updateChartData(labels, data) {
-    if (chartInstance) {
-        chartInstance.data.labels = labels;
-        chartInstance.data.datasets[0].data = data;
-        chartInstance.update();
-    } else {
-        const ctx = document.getElementById('grafico-pressao').getContext('2d');
-        chartInstance = new Chart(ctx, {
-            type: 'line',
+        if (perfilItem) {
+            perfilItem.addEventListener('click', () => {
+                window.location.href = "../Paciente/profilePaciente.html";
+            });
+        }
+
+        if (sairItem) {
+            sairItem.addEventListener('click', () => {
+                window.location.href = "../HomePage/homepage.html";
+            });
+        }
+    }
+
+    function atualizarLegendaMes() {
+        const legendElement = document.getElementById("current-month");
+        if (legendElement) {
+            legendElement.textContent = `${monthNames[currentMonth]} ${currentYear}`;
+        }
+    }
+
+    async function carregarDadosGrafico() {
+        try {
+            const response = await fetch(`${baseURL}/api/pressaoArterial/${email}`, {
+                method: "GET",
+                headers: {
+                    Authorization: `Bearer ${authToken}`,
+                    "Content-Type": "application/json",
+                },
+            });
+
+            if (!response.ok) throw new Error("Erro ao carregar dados");
+
+            const data = await response.json();
+            const filteredData = data.data.filter(item => {
+                const itemDate = new Date(item.data);
+                return (
+                    itemDate.getMonth() === currentMonth &&
+                    itemDate.getFullYear() === currentYear
+                );
+            });
+
+            const sortedData = filteredData.sort((a, b) => new Date(a.data) - new Date(b.data));
+            const dias = sortedData.map(item => new Date(item.data).getDate());
+            const pressao = sortedData.map(item => item.pressao);
+            const horas = sortedData.map(item => item.hora);
+
+            if (sortedData.length === 0) {
+                mostrarMensagemSemDados();
+            } else {
+                esconderMensagemSemDados();
+            }
+
+            atualizarGrafico(dias, pressao, horas);
+        } catch (error) {
+            console.error("Erro ao carregar dados:", error);
+            mostrarMensagemSemDados();
+            atualizarGrafico([], [], []);
+        }
+    }
+
+    function salvarRegistro() {
+        const dataInput = document.getElementById("input-data").value.trim();
+        const pressaoInput = document.getElementById("input-pressao").value.trim();
+
+        if (!dataInput || !pressaoInput) {
+            alert("Preencha todos os campos!");
+            return;
+        }
+
+        const dataISO = ajustarDataParaUTC(dataInput);
+
+        fetch(`${baseURL}/api/pressaoArterial`, {
+            method: "POST",
+            headers: {
+                Authorization: `Bearer ${authToken}`,
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                email,
+                data: dataISO,
+                pressao: parseInt(pressaoInput, 10),
+            }),
+        })
+            .then(response => {
+                if (!response.ok) throw new Error("Erro ao salvar o registro.");
+                alert("Registro salvo com sucesso!");
+                limparCampos();
+                carregarDadosGrafico();
+            })
+            .catch(error => {
+                console.error("Erro ao salvar registro:", error);
+                alert("Erro ao salvar registro.");
+            });
+    }
+
+    function ajustarDataParaUTC(data) {
+        if (!data || !/^\d{4}-\d{2}-\d{2}$/.test(data)) {
+            throw new Error("Data inválida. O formato correto é YYYY-MM-DD.");
+        }
+        const [ano, mes, dia] = data.split("-");
+        return new Date(`${ano}-${mes}-${dia}T12:00:00Z`).toISOString(); 
+    }
+
+    function limparCampos() {
+        document.getElementById("input-data").value = "";
+        document.getElementById("input-pressao").value = "";
+    }
+
+    function atualizarGrafico(dias, pressao, horas) {
+        const ctx = document.getElementById("grafico-pressao").getContext("2d");
+
+        if (pressaoChart) pressaoChart.destroy();
+
+        pressaoChart = new Chart(ctx, {
+            type: "line",
             data: {
-                labels: labels,
-                datasets: [{
-                    label: 'Pressão Arterial (mmHg)',
-                    data: data,
-                    borderColor: 'rgba(44, 171, 170, 1)',
-                    backgroundColor: 'rgba(44, 171, 170, 0.2)',
-                    fill: true,
-                    pointRadius: 5,
-                    pointHoverRadius: 7,
-                    tension: 0.3
-                }]
+                labels: dias,
+                datasets: [
+                    {
+                        label: "Pressão Arterial",
+                        data: pressao,
+                        borderColor: "#2CABAA",
+                        backgroundColor: "rgba(44, 171, 170, 0.2)",
+                        fill: true,
+                        pointRadius: 5,
+                        pointBackgroundColor: "#2CABAA",
+                    },
+                ],
             },
             options: {
                 responsive: true,
                 plugins: {
-                    legend: {
-                        display: false
-                    }
+                    legend: { display: true },
+                    tooltip: {
+                        callbacks: {
+                            title: (context) => `Dia: ${context[0].label}`,
+                            label: (context) => {
+                                const index = context.dataIndex;
+                                return [
+                                    `Pressão Arterial: ${context.raw} mmHg`,
+                                    `Hora: ${horas[index]}`,
+                                ];
+                            },
+                        },
+                    },
                 },
                 scales: {
                     y: {
                         beginAtZero: true,
+                        ticks: {
+                            stepSize: 10,
+                        },
                         title: {
                             display: true,
-                            text: 'Pressão Arterial (mmHg)'
-                        }
+                            text: "Pressão Arterial (mmHg)",
+                        },
                     },
                     x: {
                         title: {
                             display: true,
-                            text: `Dias de ${currentMonth}`
-                        }
-                    }
-                }
-            }
+                            text: "Dias do Mês",
+                        },
+                    },
+                },
+            },
         });
     }
-}
 
-document.getElementById('prev-month').addEventListener('click', () => {
-    if (currentMonthIndex > 0) {
-        currentMonthIndex--;
-        currentMonth = months[currentMonthIndex];
-        document.getElementById('current-month').textContent = currentMonth;
-        fetchDadosDePressao(currentMonth);
+    function mostrarMensagemSemDados() {
+        if (mensagemSemDados) mensagemSemDados.style.display = "block";
     }
-});
 
-document.getElementById('next-month').addEventListener('click', () => {
-    if (currentMonthIndex < months.length - 1) {
-        currentMonthIndex++;
-        currentMonth = months[currentMonthIndex];
-        document.getElementById('current-month').textContent = currentMonth;
-        fetchDadosDePressao(currentMonth);
+    function esconderMensagemSemDados() {
+        if (mensagemSemDados) mensagemSemDados.style.display = "none";
     }
-});
 
-const perfilLink = document.querySelector('.meu-perfil');
-perfilLink.addEventListener('click', () => {
-    window.location.href = "profilePaciente.html";
-});
-
-const sairLink = document.querySelector('.sair');
-sairLink.addEventListener('click', () => {
-    window.location.href = "../HomePage/homepage.html";
-});
-
-window.onload = function() {
-    fetchInfoPaciente();
-    fetchDadosDePressao(currentMonth);
-
-    // Inicializa o gráfico com eixos visíveis, mas sem dados
-    const ctx = document.getElementById('grafico-pressao').getContext('2d');
-    chartInstance = new Chart(ctx, {
-        type: 'line',
-        data: {
-            labels: Array(12).fill(""), // Cria um array com placeholders
-            datasets: [{
-                label: 'Pressão Arterial (mmHg)',
-                data: [], // Sem dados iniciais
-                borderColor: 'rgba(44, 171, 170, 1)',
-                backgroundColor: 'rgba(44, 171, 170, 0.2)',
-                fill: true,
-                pointRadius: 5,
-                pointHoverRadius: 7,
-                tension: 0.3
-            }]
-        },
-        options: {
-            responsive: true,
-            plugins: {
-                legend: {
-                    display: false
-                }
-            },
-            scales: {
-                y: {
-                    beginAtZero: true,
-                    title: {
-                        display: true,
-                        text: 'Pressão Arterial (mmHg)'
-                    }
-                },
-                x: {
-                    title: {
-                        display: true,
-                        text: 'Data'
-                    }
-                }
-            }
+    function alterarMes(direcao) {
+        currentMonth += direcao;
+        if (currentMonth < 0) {
+            currentMonth = 11;
+            currentYear--;
+        } else if (currentMonth > 11) {
+            currentMonth = 0;
+            currentYear++;
         }
-    });
-};
-// Função para voltar à página menuMedico.html
-function goBack() {
-    window.location.href = 'menuPaciente.html'; // Redireciona para a página menuMedico.html
-}
+        atualizarLegendaMes();
+        carregarDadosGrafico();
+    }
+
+    if (prevMonthSpan) prevMonthSpan.addEventListener("click", () => alterarMes(-1));
+    if (nextMonthSpan) nextMonthSpan.addEventListener("click", () => alterarMes(1));
+    if (saveButton) saveButton.addEventListener("click", salvarRegistro);
+
+    atualizarLegendaMes();
+    carregarDadosGrafico();
+});
