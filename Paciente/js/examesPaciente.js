@@ -39,3 +39,7 @@ document.addEventListener('DOMContentLoaded', () => {
         examsGrid.appendChild(examCard);
     }
 });
+// Função para voltar à página menuMedico.html
+function goBack() {
+    window.location.href = 'menuPaciente.html'; // Redireciona para a página menuMedico.html
+}

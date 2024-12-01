@@ -67,7 +67,7 @@ const loginPaciente = async (event) => {
             localStorage.setItem("nome-paciente", data.nome); // Salva o nome do paciente
 
             alert('Login realizado com sucesso!');
-            window.location.href = 'profilePaciente.html'; // Redireciona após login bem-sucedido
+            window.location.href = 'menuPaciente.html'; // Redireciona após login bem-sucedido
         } else {
             alert(data.message || 'Erro ao realizar login');
         }

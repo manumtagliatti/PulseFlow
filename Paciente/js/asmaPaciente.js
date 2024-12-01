@@ -1,3 +1,7 @@
+// Função para voltar à página menuMedico.html
+function goBack() {
+    window.location.href = 'menuPaciente.html'; // Redireciona para a página menuMedico.html
+}
 
 document.addEventListener("DOMContentLoaded", () => {
     const mensagemSemDados = document.getElementById("mensagem-sem-dados");

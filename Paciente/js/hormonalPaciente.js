@@ -259,3 +259,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         document.getElementById("mensagem-sem-dados").style.display = "none";
     }
 });
+// Função para voltar à página menuMedico.html
+function goBack() {
+    window.location.href = 'menuPaciente.html'; // Redireciona para a página menuMedico.html
+}
