@@ -1,6 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
     const authToken = localStorage.getItem('authToken');
-
     const emailPaciente = localStorage.getItem("email-paciente");
     if (!emailPaciente) {
         alert("E-mail não encontrado. Por favor, insira o e-mail do seu paciente.");
@@ -216,13 +215,20 @@ function updateChartDiabetes() {
     const labels = sortedData.map(item => item.date.getDate()); // Dias ordenados
     const data = sortedData.map(item => item.nivel); // Níveis de glicemia correspondentes
 
+    // Ajuste do eixo Y com base nos dados de glicemia
+    const minGlicemia = Math.min(...data);
+    const maxGlicemia = Math.max(...data);
+
     chartInstanceDiabetes.data.labels = labels;
     chartInstanceDiabetes.data.datasets[0].data = data;
-    chartInstanceDiabetes.update();
 
+    // Ajustando o limite do eixo Y
+    chartInstanceDiabetes.options.scales.y.min = minGlicemia - (maxGlicemia - minGlicemia) * 0.1; // Margem abaixo
+    chartInstanceDiabetes.options.scales.y.max = maxGlicemia + (maxGlicemia - minGlicemia) * 0.1; // Margem acima
+
+    chartInstanceDiabetes.update();
     document.getElementById('mensagem-sem-dados').style.display = 'none'; // Oculta a mensagem de "Sem Dados"
 }
-
 
 function mostrarMensagemSemDadosDiabetes() {
     const ctx = document.getElementById('grafico-diabetes').getContext('2d');

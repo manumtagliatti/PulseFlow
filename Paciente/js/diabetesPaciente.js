@@ -63,7 +63,6 @@ document.addEventListener("DOMContentLoaded", () => {
         console.error('Menu dropdown ou elementos do menu não encontrados no DOM.');
     }
 
-
     function atualizarLegendaMes() {
         const legendElement = document.getElementById("current-month");
         if (legendElement) {
@@ -172,6 +171,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
         if (diabetesChart) diabetesChart.destroy();
 
+        // Calculando o valor mínimo e máximo das glicemias para ajustar o eixo Y
+        const minGlicemia = Math.min(...glicemias);
+        const maxGlicemia = Math.max(...glicemias);
+
         diabetesChart = new Chart(ctx, {
             type: "line",
             data: {
@@ -208,7 +211,8 @@ document.addEventListener("DOMContentLoaded", () => {
                 scales: {
                     y: {
                         beginAtZero: true,
-                        max: 300,
+                        min: minGlicemia - (maxGlicemia - minGlicemia) * 0.1, // Ajuste do mínimo com uma margem
+                        max: maxGlicemia + (maxGlicemia - minGlicemia) * 0.1, // Ajuste do máximo com uma margem
                         ticks: {
                             stepSize: 50,
                         },
