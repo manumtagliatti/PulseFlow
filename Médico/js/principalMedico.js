@@ -4,6 +4,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const perfilItem = dropdownMenu.querySelector('.meu-perfil'); // Link "Meu Perfil"
     const sairItem = dropdownMenu.querySelector('.sair'); // Link "Sair"
 
+    carregarNomeMedico();
     if (menuIcon && dropdownMenu) {
         // Alternar a exibição do menu ao clicar no ícone
         menuIcon.addEventListener('click', (event) => {
@@ -85,5 +86,28 @@ document.addEventListener('DOMContentLoaded', () => {
     });
      
 });
+
+function carregarNomeMedico(authToken) {
+    fetch('http://localhost:3000/api/medico/perfil', {
+        method: 'GET',
+        headers: {
+            'Authorization': `Bearer ${authToken}`,
+            'Content-Type': 'application/json'
+        }
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error("Erro ao buscar o nome do médico.");
+        }
+        return response.json();
+    })
+    .then(data => {
+        document.getElementById('nome-medico').textContent = ` ${data.medico.nomeCompleto}`;
+    })
+    .catch(error => {
+        console.error("Erro ao buscar o nome do médico:", error);
+        document.getElementById('nome-medico').textContent = '';
+    });
+}
 
 
