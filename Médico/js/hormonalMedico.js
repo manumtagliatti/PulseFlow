@@ -188,8 +188,18 @@ function updateChart() {
     const labels = filteredData.map(item => item.date.getDate()).sort((a, b) => a - b);
     const data = filteredData.map(item => item.dosagem);
 
+    // Calculando o valor mínimo e máximo dos dados para ajustar o eixo Y
+    const minDosagem = Math.min(...data);
+    const maxDosagem = Math.max(...data);
+
+    // Atualizando os dados no gráfico
     chartInstance.data.labels = labels;
     chartInstance.data.datasets[0].data = data;
+
+    // Ajustando os limites do eixo Y
+    chartInstance.options.scales.y.min = minDosagem - (maxDosagem - minDosagem) * 0.1; // Deixa uma margem abaixo do valor mínimo
+    chartInstance.options.scales.y.max = maxDosagem + (maxDosagem - minDosagem) * 0.1; // Deixa uma margem acima do valor máximo
+
     chartInstance.update();
     document.getElementById('mensagem-sem-dados').style.display = 'none'; // Esconde a mensagem de "Sem dados"
 }

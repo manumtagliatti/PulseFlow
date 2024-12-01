@@ -1,4 +1,4 @@
-document.addEventListener("DOMContentLoaded", async () => {
+document.addEventListener("DOMContentLoaded", async () => { 
     const authToken = localStorage.getItem("token");
     const baseURL = 'http://localhost:3000'; // Ajuste para o endereço do backend
     const email = localStorage.getItem("email-paciente");
@@ -7,7 +7,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     let currentDate = new Date(); // Data atual
     let currentMonth = currentDate.getMonth(); // Mês atual (0-11)
     let currentYear = currentDate.getFullYear(); // Ano atual
-
 
     // Verifica o token e o e-mail
     if (!authToken || !email) {
@@ -64,20 +63,6 @@ document.addEventListener("DOMContentLoaded", async () => {
         });
     }
 
-    document.addEventListener("DOMContentLoaded", async () => {
-        const salvarButton = document.getElementById("salvar-medicao");
-        const inputData = document.getElementById("input-data");
-        const inputHormonio = document.getElementById("input-hormonio");
-        const inputDosagem = document.getElementById("input-dosagem");
-    
-        if (!salvarButton || !inputData || !inputHormonio || !inputDosagem) {
-            console.error("Elementos de entrada ou botão não encontrados no DOM.");
-            return;
-        }
-    
-        salvarButton.addEventListener("click", salvarRegistro);
-    });
-    
     async function carregarDadosGrafico() {
         try {
             console.log(`Carregando dados para o e-mail: ${email}`);
@@ -107,7 +92,6 @@ document.addEventListener("DOMContentLoaded", async () => {
             atualizarGrafico([]); // Inicializa o gráfico vazio mesmo com erro
         }
     }
-    
 
     function salvarRegistro() {
         const dataInput = document.getElementById("input-data").value;
@@ -147,14 +131,14 @@ document.addEventListener("DOMContentLoaded", async () => {
                 alert("Erro ao salvar o registro.");
             });
     }
-    
+
     // Função para limpar os campos de entrada
     function limparCampos() {
         document.getElementById("input-data").value = "";
         document.getElementById("input-hormonio").value = "";
         document.getElementById("input-dosagem").value = "";
     }
-    
+
     function filtrarRegistrosPorMes(registros) {
         return registros.filter((registro) => {
             const registroData = new Date(registro.data);
@@ -172,9 +156,13 @@ document.addEventListener("DOMContentLoaded", async () => {
         const labels = registrosOrdenados.map((r) => new Date(r.data).getDate());
         const dosagens = registrosOrdenados.map((r) => r.dosagem);
         const hormonios = registrosOrdenados.map((r) => r.hormonio); // Adiciona o hormônio às tooltips
-    
+
+        // Calculando o valor mínimo e máximo das dosagens para ajustar o eixo Y
+        const minDosagem = Math.min(...dosagens);
+        const maxDosagem = Math.max(...dosagens);
+
         if (hormonalChart) hormonalChart.destroy();
-    
+
         hormonalChart = new Chart(document.getElementById("grafico-hormonal").getContext("2d"), {
             type: "line",
             data: {
@@ -210,13 +198,17 @@ document.addEventListener("DOMContentLoaded", async () => {
                     },
                 },
                 scales: {
-                    y: { title: { display: true, text: "Dosagem Hormonal" }, min: 0, max: 5 },
+                    y: { 
+                        title: { display: true, text: "Dosagem Hormonal" },
+                        min: minDosagem - (maxDosagem - minDosagem) * 0.1, // Ajusta o mínimo com uma margem
+                        max: maxDosagem + (maxDosagem - minDosagem) * 0.1, // Ajusta o máximo com uma margem
+                    },
                     x: { title: { display: true, text: "Dias do Mês" } },
                 },
             },
         });
     }
-   
+
     function alterarMes(delta) {
         currentMonth += delta;
         if (currentMonth < 0) {
@@ -230,7 +222,6 @@ document.addEventListener("DOMContentLoaded", async () => {
         atualizarLegendaMes();
         carregarDadosGrafico();
     }
-    
 
     function atualizarLegendaMes() {
         const monthNames = [
@@ -249,7 +240,6 @@ document.addEventListener("DOMContentLoaded", async () => {
         ];
         document.getElementById("current-month").textContent = `${monthNames[currentMonth]} ${currentYear}`;
     }
-    
 
     function mostrarMensagemSemDados() {
         document.getElementById("mensagem-sem-dados").style.display = "block";
