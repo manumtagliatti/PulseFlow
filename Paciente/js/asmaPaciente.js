@@ -349,6 +349,3 @@ function restaurarTexto(element, placeholder) {
         element.value = placeholder; // Restaura o texto padrão se o campo estiver vazio
     }
 }
-
-
- 

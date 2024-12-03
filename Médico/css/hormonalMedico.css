@@ -73,10 +73,10 @@ html, body {
 }
 
 #grafico-hormonal {
-    width: 100%; /* Aumenta a largura para ocupar mais espaço */
-    max-width: 1600px; /* Permite uma largura maior */
+    max-width: 100%; /* Aumenta a largura para ocupar mais espaço */
+    width: 650px; /* Permite uma largura maior */
     height: 70vh; /* Define a altura do gráfico com base na altura da viewport */
-    max-height: 92%; /* Limita a altura máxima */
+    max-height: 93%; /* Limita a altura máxima */
 }
 
 .title {
@@ -146,7 +146,7 @@ html, body {
 .month-navigation {
     display: flex;
     align-items: center;
-    justify-content: flex-end;
+    justify-content: center;
     margin-bottom: 10px; /* Espaçamento entre a navegação e o gráfico */
     width: 100%;
 }

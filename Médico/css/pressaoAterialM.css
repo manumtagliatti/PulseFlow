@@ -13,7 +13,6 @@
     background-color: #2CABAA;
     color: #FFF;
     font-size: 18px;
-    font-family: 'Montserrat', sans-serif;
     padding: 10px 20px;
     border: none;
     border-radius: 8px;
@@ -27,8 +26,8 @@
 }
 
 html, body {
-    height: 100%; /* Garante que a altura do body ocupe 100% da tela */
-    overflow: hidden; /* Remove o scroll da tela */
+    height: 100%;
+    overflow: hidden;
 }
 
 .header {
@@ -64,31 +63,30 @@ html, body {
     flex-direction: column;
     justify-content: flex-start;
     align-items: center;
-    padding-top: 20px; /* Espaço para o título */
+    padding-top: 5px; /* Espaço para o título */
     max-width: 100%;
-    height: calc(100vh - 60px); /* Ajusta para a altura total da viewport, considerando o header */
+    height: calc(100vh - 60px);
     box-sizing: border-box;
 }
 
+/* Gráfico maior */
 #grafico-pressao {
-    width: 100%; /* Aumenta a largura para ocupar mais espaço */
-    max-width: 1600px; /* Permite uma largura maior */
-    height: 70vh; /* Define a altura do gráfico com base na altura da viewport */
-    max-height: 92%; /* Limita a altura máxima */
+    max-width: 100%;
+    width: 750px; /* Ajusta a largura do gráfico */
+    height: 70vh; /* Define altura proporcional */
+    max-height: 90%; /* Limita a altura máxima */
+    margin-top: 10px; /* Espaçamento acima do gráfico */
 }
-
 
 .title {
     color: #2CABAA;
     text-align: center;
     font-family: 'Montserrat', sans-serif;
     font-size: 45px;
-    font-style: normal;
     font-weight: 600;
-    line-height: normal;
-    margin: 0; /* Remove margens extras */
-    padding-bottom: 20px; /* Espaço entre o título e o gráfico */
-    width: 100%; /* Faz com que o título ocupe toda a largura disponível */
+    margin: 0;
+    padding-bottom: 50px; /* Aumenta o espaço abaixo do título */
+    width: 100%;
 }
 
 .menu-dropdown {
@@ -142,11 +140,12 @@ html, body {
     font-weight: 400;
 }
 
+/* Centraliza e ajusta o texto do mês */
 .month-navigation {
     display: flex;
     align-items: center;
-    justify-content: flex-end;
-    margin-bottom: 10px; /* Espaçamento entre a navegação e o gráfico */
+    justify-content: center; /* Centraliza horizontalmente */
+    margin-bottom: 30px; /* Espaçamento abaixo do mês */
     width: 100%;
 }
 
@@ -155,15 +154,12 @@ html, body {
     background: none;
     border: none;
     cursor: pointer;
-    margin: 0 5px; /* Espaçamento entre as setas e o texto do mês */
+    margin: 0 10px; /* Espaçamento ajustado */
 }
 
 #current-month {
     color: #161F48;
     font-family: 'Montserrat', sans-serif;
-    font-size: 17px;
-    font-style: normal;
-    font-weight: 400;
-    line-height: normal;
+    font-size: 20px; /* Tamanho maior para destaque */
+    font-weight: 500;
 }
-

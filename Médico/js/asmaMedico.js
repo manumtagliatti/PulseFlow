@@ -218,24 +218,15 @@ function initializeChartAsma() {
                 y: {
                     title: {
                         display: true,
-                        text: 'Intensidade da Crise'
+                        text: 'Intensidade da Dor'
                     },
-                    min: 1, // Começa no valor 1
-                    max: 11, // Termina no valor 15
+                    min: 1,
+                    max: 10,
                     ticks: {
-                        stepSize: 1, // Adiciona divisores de 1 em 1
+                        stepSize: 1,
                         callback: function(value) {
-                            // Adiciona rótulos específicos
-                            if (value === 3) return 'Leve';
-                            if (value === 5) return 'Moderada';
-                            if (value === 7) return 'Severa';
-                            return ''; // Outros valores sem rótulos
+                            return value <= 10 ? value.toString() : '';
                         }
-                    },
-                    grid: {
-                        drawTicks: true,
-                        color: 'rgba(200, 200, 200, 0.3)', // Linhas de grade neutras
-                        drawBorder: true // Mantém a borda visível
                     }
                 }
             }

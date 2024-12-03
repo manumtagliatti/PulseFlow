@@ -134,8 +134,8 @@ h1 {
 }
 
 .chart-section canvas {
-    width: 550px;
-    height: 200px;
+    width: 650px;
+    height: 500px;
 }
 
 .arrow-left, .arrow-right {

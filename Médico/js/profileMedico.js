@@ -54,7 +54,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Função para voltar à página menuMedico.html
     function goBack() {
-        window.location.href = 'principalMedico.html'; // Redireciona para a página principalMedico.html
+        window.location.href = 'menuMedico.html'; // Redireciona para a página principalMedico.html
     }
 
     // Event listener para o botão de voltar

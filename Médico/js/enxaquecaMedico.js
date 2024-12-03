@@ -213,14 +213,11 @@ function initializeChartEnxaqueca() {
                         text: 'Intensidade da Dor'
                     },
                     min: 1,
-                    max: 13,
+                    max: 10, // Alterado de 13 para 10
                     ticks: {
                         stepSize: 1,
                         callback: function(value) {
-                            if (value === 3) return 'Baixa';
-                            if (value === 5) return 'Média';
-                            if (value === 7) return 'Alta';
-                            return '';
+                            return value <= 10 ? value.toString() : ''; // Apenas mostra valores de 1 a 10
                         }
                     }
                 }
