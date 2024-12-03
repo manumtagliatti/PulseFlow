@@ -4,15 +4,30 @@ const medicoLogado = "Dimas Augusto";  // Aqui você pode pegar o nome real de u
 // Definindo o nome no campo correto
 document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('nome-medico').textContent = medicoLogado;
-    
+
+    // Carregar valores salvos nos inputs ao carregar a página
+    document.querySelector('.input-fields').querySelectorAll('input').forEach(input => {
+        const savedValue = localStorage.getItem(input.placeholder);
+        if (savedValue) {
+            input.value = savedValue;
+        }
+    });
+
+    // Salvar os valores dos inputs no localStorage quando alterados
+    document.querySelector('.input-fields').querySelectorAll('input').forEach(input => {
+        input.addEventListener('change', () => {
+            localStorage.setItem(input.placeholder, input.value);
+        });
+    });
+
     // Toggle para exibir/ocultar o menu
     const menuIcon = document.getElementById('icon-toggle');
     const dropdownMenu = document.getElementById('menu-dropdown');
-    
+
     menuIcon.addEventListener('click', () => {
         dropdownMenu.style.display = dropdownMenu.style.display === 'block' ? 'none' : 'block';
     });
-    
+
     // Fecha o menu se clicar fora dele
     document.addEventListener('click', (event) => {
         if (!menuIcon.contains(event.target) && !dropdownMenu.contains(event.target)) {
@@ -39,6 +54,7 @@ document.addEventListener('DOMContentLoaded', () => {
         examsGrid.appendChild(examCard);
     }
 });
+
 // Função para voltar à página menuMedico.html
 function goBack() {
     window.location.href = 'menuPaciente.html'; // Redireciona para a página menuMedico.html
