@@ -1,4 +1,4 @@
-* {
+* { 
     margin: 0;
     padding: 0;
     box-sizing: border-box;
@@ -192,11 +192,14 @@ h1 {
 .input-fields input[type="text"],
 .input-fields input[type="file"] {
     padding: 10px;
-    width: 350px;
+    width: 294px; /* Ajustado conforme solicitado */
+    height: 60px; /* Ajustado conforme solicitado */
     font-size: 15px;
     margin-top: 5px;
     border: 1px solid #ddd;
-    border-radius: 5px;
+    border-radius: 12px; /* Ajustado conforme solicitado */
+    background: #E1E0E0; /* Ajustado conforme solicitado */
+    flex-shrink: 0; /* Ajustado conforme solicitado */
 }
 
 .save-button {
