@@ -119,7 +119,7 @@
 
 .calendar-navigation {
     display: flex;
-    justify-content: flex-end; /* Posiciona o mês no canto direito */
+    justify-content: center; /* Posiciona o mês no canto direito */
     align-items: center;
     margin-bottom: 10px; /* Espaçamento entre o mês e o calendário */
     margin-top: 10px; /* Espaçamento entre o título e o mês */

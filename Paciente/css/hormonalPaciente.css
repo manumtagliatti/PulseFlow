@@ -161,6 +161,7 @@ html, body {
 .chart-section {
     width: 100%;
     max-width: 840px;
+    height: 450px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -168,7 +169,7 @@ html, body {
 
 #grafico-glicemia {
     max-width: 840px;
-    max-height: 440px;
+    max-height: 550px;
     width: 100%;
     height: auto;
 }
